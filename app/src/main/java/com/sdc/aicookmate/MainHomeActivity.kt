@@ -168,15 +168,15 @@ fun ChuchunList() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)
+            .padding(1.dp)
     )
     {
-
 
         Row(
             modifier = Modifier
                 .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.Bottom
         ) {
 
 
@@ -186,16 +186,21 @@ fun ChuchunList() {
                 fontWeight = FontWeight.Bold,
                 color = Color.Black
             )
+            Box() {
+                Text(
+                    "더보기>",
+                    fontSize = 14.sp,
+                    color = Color.Gray,
+                    modifier = Modifier
+                        .padding(bottom = 4.dp)
 
-            Text(
-                "더보기>",
-                fontSize = 14.sp,
-                color = Color.Gray
-            )
+                )
+            }
             Spacer(modifier = Modifier.width(10.dp))
         }
     }
 }
+
 
 @Composable
 fun ChuChunCard() {
@@ -218,6 +223,7 @@ fun RecipeCard(imageRes: Int, description: String) {
         modifier = Modifier
             .width(150.dp)
             .height(130.dp)
+
     ) {
         Image(
             painter = painterResource(id = imageRes),
@@ -225,7 +231,7 @@ fun RecipeCard(imageRes: Int, description: String) {
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(80.dp)
+                .height(140.dp)
         )
         Text(
             text = description,
@@ -281,6 +287,36 @@ fun CategorySelector() {
                 isSelected = selectedCategory == "양식",
                 onClick = { selectedCategory = "양식" }
             )
+            CategoryItem(
+                iconRes = R.drawable.ic_boonsik,
+                label = "분식",
+                isSelected = selectedCategory == "분식",
+                onClick = { selectedCategory = "분식" }
+            )
+            CategoryItem(
+                iconRes = R.drawable.ic_desert,
+                label = "디저트",
+                isSelected = selectedCategory == "디저트",
+                onClick = { selectedCategory = "디저트" }
+            )
+            CategoryItem(
+                iconRes = R.drawable.ic_sallad,
+                label = "샐러드",
+                isSelected = selectedCategory == "샐러드",
+                onClick = { selectedCategory = "샐러드" }
+            )
+            CategoryItem(
+                iconRes = R.drawable.ic_baking,
+                label = "베이킹",
+                isSelected = selectedCategory == "베이킹",
+                onClick = { selectedCategory = "베이킹" }
+            )
+            CategoryItem(
+                iconRes = R.drawable.ic_snack,
+                label = "스낵",
+                isSelected = selectedCategory == "스낵",
+                onClick = { selectedCategory = "스낵" }
+            )
         }
     }
 }
@@ -330,13 +366,16 @@ fun BestRecipe() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)
+            .padding(1.dp)
+
     )
     {
         Row(
             modifier = Modifier
                 .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.Bottom
+
         ) {
 
             Text(
@@ -349,7 +388,9 @@ fun BestRecipe() {
             Text(
                 "더보기>",
                 fontSize = 14.sp,
-                color = Color.Gray
+                color = Color.Gray,
+                modifier = Modifier
+                    .padding(bottom = 4.dp)
             )
             Spacer(modifier = Modifier.width(10.dp))
         }
@@ -377,6 +418,7 @@ fun BestCard(imageRes: Int, description: String) {
         modifier = Modifier
             .width(150.dp)
             .height(130.dp)
+
     ) {
         Image(
             painter = painterResource(id = imageRes),
@@ -384,7 +426,7 @@ fun BestCard(imageRes: Int, description: String) {
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(80.dp)
+                .height(140.dp)
         )
         Text(
             text = description,
