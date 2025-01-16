@@ -56,20 +56,6 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.sdc.aicookmate.ui.theme.AiCookMateTheme
 
-class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            AiCookMateTheme {
-                val navController = rememberNavController()
-                MainScreen(navController = navController)
-            }
-        }
-    }
-}
-
-
 @Composable
 fun MainScreen(navController: NavController) {
     Scaffold(
@@ -461,7 +447,7 @@ fun BottomBar(navController: NavController) {
                 contentDescription = "메인 홈 아이콘",
                 modifier = Modifier
                     .size(40.dp)
-                    .clickable { /*  */ }
+                    .clickable { navController.navigate("main") }
             )
             Image(
                 painter = painterResource(id = R.drawable.ic_cart),
@@ -489,7 +475,7 @@ fun BottomBar(navController: NavController) {
                 contentDescription = "마이페이지 아이콘",
                 modifier = Modifier
                     .size(40.dp)
-                    .clickable { navController.navigate("mypage") }
+                    .clickable { navController.navigate("myPage") }
             )
         }
     }
