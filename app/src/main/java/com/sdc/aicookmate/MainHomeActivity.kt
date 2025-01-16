@@ -52,6 +52,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.sdc.aicookmate.ui.theme.AiCookMateTheme
 
 class MainActivity : ComponentActivity() {
@@ -60,7 +62,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             AiCookMateTheme {
-                MainScreen()
+                val navController = rememberNavController()
+                MainScreen(navController = navController)
             }
         }
     }
@@ -68,9 +71,9 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-fun MainScreen() {
+fun MainScreen(navController: NavController) {
     Scaffold(
-        bottomBar = { BottomBar() }
+        bottomBar = { BottomBar(navController) }
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -439,7 +442,7 @@ fun BestCard(imageRes: Int, description: String) {
 }
 
 @Composable
-fun BottomBar() {
+fun BottomBar(navController: NavController) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -458,35 +461,35 @@ fun BottomBar() {
                 contentDescription = "메인 홈 아이콘",
                 modifier = Modifier
                     .size(40.dp)
-                    .clickable { /* 홈 클릭 시 동작 */ }
+                    .clickable { /*  */ }
             )
             Image(
                 painter = painterResource(id = R.drawable.ic_cart),
                 contentDescription = "카트 아이콘",
                 modifier = Modifier
                     .size(40.dp)
-                    .clickable { /* 카트 클릭 시 동작 */ }
+                    .clickable { /*  */ }
             )
             Image(
                 painter = painterResource(id = R.drawable.ic_kitchen),
-                contentDescription = "찜 레시피 아이콘",
-                modifier = Modifier
-                    .size(40.dp)
-                    .clickable { /* 찜 레시피 클릭 시 동작 */ }
-            )
-            Image(
-                painter = painterResource(id = R.drawable.ic_bookheart),
-                contentDescription = "마이페이지 아이콘",
-                modifier = Modifier
-                    .size(40.dp)
-                    .clickable { /* 마이페이지 클릭 시 동작 */ }
-            )
-            Image(
-                painter = painterResource(id = R.drawable.ic_person),
                 contentDescription = "냉장고 아이콘",
                 modifier = Modifier
                     .size(40.dp)
-                    .clickable { /* 냉장고 클릭 시 동작 */ }
+                    .clickable { /* */ }
+            )
+            Image(
+                painter = painterResource(id = R.drawable.ic_bookheart),
+                contentDescription = "찜 레시피 아이콘",
+                modifier = Modifier
+                    .size(40.dp)
+                    .clickable { /*  */ }
+            )
+            Image(
+                painter = painterResource(id = R.drawable.ic_person),
+                contentDescription = "마이페이지 아이콘",
+                modifier = Modifier
+                    .size(40.dp)
+                    .clickable { navController.navigate("mypage") }
             )
         }
     }
