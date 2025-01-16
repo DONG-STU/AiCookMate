@@ -57,5 +57,9 @@ fun NavSys() {
         composable("shopping"){
             FoodShoppingScreen(navController)
         }
+        composable("recipe"){
+            RecipeScreen(navController)
+        }
+
     }
 }
