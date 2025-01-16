@@ -471,7 +471,7 @@ fun BottomBar(navController: NavController) {
                 contentDescription = "찜 레시피 아이콘",
                 modifier = Modifier
                     .size(40.dp)
-                    .clickable { /*  */ }
+                    .clickable { navController.navigate("recipe") }
             )
             Image(
                 painter = painterResource(id = R.drawable.ic_person),

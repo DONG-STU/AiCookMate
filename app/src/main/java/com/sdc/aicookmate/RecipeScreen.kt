@@ -1,84 +1,362 @@
 package com.sdc.aicookmate
-//
-//import android.os.Bundle
-//import androidx.activity.ComponentActivity
-//import androidx.activity.compose.setContent
-//import androidx.activity.enableEdgeToEdge
-//import androidx.compose.foundation.horizontalScroll
-//import androidx.compose.foundation.layout.Arrangement
-//import androidx.compose.foundation.layout.Column
-//import androidx.compose.foundation.layout.Row
-//import androidx.compose.foundation.layout.fillMaxWidth
-//import androidx.compose.foundation.layout.padding
-//import androidx.compose.foundation.rememberScrollState
-//import androidx.compose.foundation.verticalScroll
-//import androidx.compose.material.icons.Icons
-//import androidx.compose.material.icons.filled.Search
-//import androidx.compose.material3.Icon
-//import androidx.compose.material3.OutlinedTextField
-//import androidx.compose.material3.Scaffold
-//import androidx.compose.material3.Text
-//import androidx.compose.runtime.Composable
-//import androidx.compose.runtime.getValue
-//import androidx.compose.runtime.mutableStateOf
-//import androidx.compose.runtime.remember
-//import androidx.compose.runtime.setValue
-//import androidx.compose.ui.Modifier
-//import androidx.compose.ui.graphics.Color
-//import androidx.compose.ui.text.font.FontWeight
-//import androidx.compose.ui.unit.dp
-//import androidx.compose.ui.unit.sp
-//import com.sdc.aicookmate.ui.theme.AiCookMateTheme
-//
-//
-//
+
+
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicText
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.test.isSelected
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.sdc.aicookmate.ui.theme.AiCookMateTheme
+
+
+@Composable
+fun RecipeScreen(navController: NavController) {
+    Scaffold(
+        bottomBar = { BottomBar(navController) }
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .padding(paddingValues)
+        ) {
+
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.White)
+                    .padding(16.dp)
+            ) {
+
+
+                OutlinedTextField(
+                    value = "",
+                    onValueChange = {},
+                    leadingIcon = { Icon(Icons.Default.Search, "검색") },
+                    placeholder = { Text("재료나 요리명을 검색하세요") },
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(30.dp)
+                )
+
+                Spacer(modifier = Modifier.height(3.dp))
+
+                FoodCategories()
+
+//                RecentButton()
+
+
+                FoodItems()
+
+            }
+        }
+    }
+}
+
+
+@Composable
+fun FoodCategories() {
+    val categories = listOf(
+        "찜조림" to R.drawable.ic_sallad3,
+        "국/탕/찌개" to R.drawable.ic_sallad3,
+        "볶음/구이" to R.drawable.ic_sallad3,
+        "밥/죽" to R.drawable.ic_sallad3,
+        "면/만두" to R.drawable.ic_sallad3,
+        "간편요리" to R.drawable.ic_sallad3,
+        "야식" to R.drawable.ic_sallad3,
+        "다이어트" to R.drawable.ic_sallad3,
+        "인플루언서" to R.drawable.ic_sallad3
+    )
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 5.dp),
+        verticalArrangement = Arrangement.spacedBy(0.dp)
+
+    ) {
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(15.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+
+        ) {
+            FoodCategoryItem(
+                title = categories[0].first,
+                iconRes = categories[0].second
+            )
+            FoodCategoryItem(
+                title = categories[1].first,
+                iconRes = categories[1].second
+            )
+            FoodCategoryItem(
+                title = categories[2].first,
+                iconRes = categories[2].second
+            )
+        }
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(15.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            FoodCategoryItem(
+                title = categories[3].first,
+                iconRes = categories[3].second
+            )
+            FoodCategoryItem(
+                title = categories[4].first,
+                iconRes = categories[4].second
+            )
+            FoodCategoryItem(
+                title = categories[5].first,
+                iconRes = categories[5].second
+            )
+        }
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(15.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            FoodCategoryItem(
+                title = categories[6].first,
+                iconRes = categories[6].second
+            )
+            FoodCategoryItem(
+                title = categories[7].first,
+                iconRes = categories[7].second
+            )
+            FoodCategoryItem(
+                title = categories[8].first,
+                iconRes = categories[8].second
+            )
+        }
+    }
+}
+
+@Composable
+fun FoodCategoryItem(title: String, iconRes: Int) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.width(80.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .size(80.dp)
+                .clip(RoundedCornerShape(percent = 20))
+                .background(Color.White)
+                .border(
+                    width = 0.5.dp,
+                    color = Color.LightGray,
+                    shape = RoundedCornerShape(percent = 20)
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(50.dp)
+                        .clip(CircleShape)
+
+                ) {
+                    Image(
+                        painter = painterResource(id = iconRes),
+                        contentDescription = null,
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Crop
+                    )
+                }
+                Spacer(modifier = Modifier.height(2.dp))
+                Text(
+                    text = title,
+                    style = TextStyle(
+                        fontSize = 11.sp,
+                        color = Color.Black,
+                        fontWeight = FontWeight.Bold
+                    )
+                )
+            }
+        }
+    }
+}
+
+
+@Composable
+fun FoodItems() {
+    val foodItems = listOf(
+        FoodItem(
+            "맛있는 비빔밥",
+            "30분",
+            R.drawable.ic_sallad1
+        ),
+        FoodItem(
+            "매콤달콤 불고기",
+            "45분",
+            R.drawable.ic_sallad2
+        ),
+        FoodItem(
+            "일품한 김치찌개",
+            "40분",
+            R.drawable.ic_sallad3
+        )
+    )
+
+    LazyColumn(
+        verticalArrangement = Arrangement.spacedBy(1.dp)
+    ) {
+        items(foodItems.size) { index ->
+            FoodItemCard(foodItems[index])
+        }
+    }
+}
+
+@Composable
+fun FoodItemCard(foodItem: FoodItem) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(12.dp))
+    ) {
+
+        Image(
+            painter = painterResource(id = foodItem.imageRes),
+            contentDescription = null,
+            modifier = Modifier
+                .fillMaxSize()
+                .height(150.dp),
+            contentScale = ContentScale.Crop
+        )
+    }
+
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color.White)
+            .padding(5.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column {
+
+                androidx.compose.foundation.text.BasicText(
+                    text = foodItem.title,
+                    style = TextStyle(
+                        fontSize = 16.sp,
+                        color = Color.Black
+                    )
+                )
+
+                Spacer(modifier = Modifier.height(1.dp))
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_time),
+                        contentDescription = null,
+                        modifier = Modifier.size(16.dp),
+                        colorFilter = ColorFilter.tint(Color.Gray)
+                    )
+                    Box(
+                        modifier = Modifier
+                            .padding(bottom = 3.dp)
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            BasicText(
+                                text = foodItem.duration,
+                                style = TextStyle(
+                                    fontSize = 16.sp,
+                                    color = Color.Gray
+                                )
+                            )
+                            DifficultyStars(DifficultyLevel.BEGINNER)
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+data class FoodItem(
+    val title: String,
+    val duration: String,
+    val imageRes: Int
+)
+
+
+enum class DifficultyLevel(val text: String) {
+    BEGINNER("☆초급"),
+    INTERMEDIATE("☆중급"),
+    ADVANCED("☆고급")
+}
+
+@Composable
+fun DifficultyStars(level: DifficultyLevel) {
+    Text(
+        text = level.text,
+        style = TextStyle(
+            fontSize = 16.sp,
+            color = Color.Gray,
+            fontWeight = FontWeight.Normal
+        )
+    )
+}
+
 //@Composable
-//fun RecipeScreen() {
-//    Scaffold(
-//        bottomBar = { BottomBar() }
-//    ) { paddingValues ->
-//        Column(
-//            modifier = Modifier
-//                .padding(paddingValues)
-//                .verticalScroll(rememberScrollState())
-//        ) {
-//            Column {
-//
-//                OutlinedTextField(
-//                    value = "",
-//                    onValueChange = {},
-//                    leadingIcon = { Icon(Icons.Default.Search, "검색") },
-//                    placeholder = { Text("레시피 검색") },
-//                    modifier = Modifier.fillMaxWidth()
-//                )
-//
-//            }
-//
-//        }
-//
-//    }
-//}
-//
-//
-//@Composable
-//fun CategorySelector9() {
-//    var selectedCategory by remember { mutableStateOf("한식") }
-//    Column {
-//        Text(
-//            "카테고리",
-//            fontSize = 28.sp,
-//            fontWeight = FontWeight.Bold,
-//            color = Color.Black,
-//            modifier = Modifier
-//                .padding(bottom = 8.dp)
-//        )
-//
-//        Row(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .horizontalScroll(rememberScrollState()),
-//            horizontalArrangement = Arrangement.spacedBy(12.dp)
-//        ) {
-//        }
-//    }
-//}
+//fun RecentButton() {
+////    Row() {
+////        Button(onClick = { /*TODO*/ }, modifier = Modifier
+////            .clip(RoundedCornerShape(20.dp))
+////            .background(
+////                if (isSelected) Color.Black
+////                else Color.White
+////            ) { Text("최신순") }
+////                Spacer (modifier = Modifier.padding(5.dp))
+////                Button (onClick = { /*TODO*/ }) { Text("인기순") }
+////    }
+////}
