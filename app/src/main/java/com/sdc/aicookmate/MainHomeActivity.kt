@@ -222,6 +222,7 @@ fun RecipeCard(imageRes: Int, description: String) {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(140.dp)
+                .clip(RoundedCornerShape(13.dp))
         )
         Text(
             text = description,
@@ -417,6 +418,7 @@ fun BestCard(imageRes: Int, description: String) {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(140.dp)
+                .clip(RoundedCornerShape(13.dp))
         )
         Text(
             text = description,
