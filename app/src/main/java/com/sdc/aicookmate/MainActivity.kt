@@ -54,6 +54,8 @@ fun NavSys() {
         composable("myPage"){
             MyPageScreen(navController)
         }
-
+        composable("shopping"){
+            FoodShoppingScreen(navController)
+        }
     }
 }
