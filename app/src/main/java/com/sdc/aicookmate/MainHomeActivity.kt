@@ -78,7 +78,8 @@ fun MainScreen(navController: NavController) {
                     onValueChange = {},
                     leadingIcon = { Icon(Icons.Default.Search, "검색") },
                     placeholder = { Text("레시피 검색") },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(30.dp)
                 )
 
                 Spacer(modifier = Modifier.height(20.dp))
@@ -165,7 +166,7 @@ fun ChuchunList() {
             modifier = Modifier
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.Bottom
+            verticalAlignment = Alignment.Bottom
         ) {
 
 
@@ -363,7 +364,7 @@ fun BestRecipe() {
             modifier = Modifier
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.Bottom
+            verticalAlignment = Alignment.Bottom
 
         ) {
 
@@ -454,14 +455,14 @@ fun BottomBar(navController: NavController) {
                 contentDescription = "카트 아이콘",
                 modifier = Modifier
                     .size(40.dp)
-                    .clickable { /*  */ }
+                    .clickable { navController.navigate("shopping") }
             )
             Image(
                 painter = painterResource(id = R.drawable.ic_kitchen),
                 contentDescription = "냉장고 아이콘",
                 modifier = Modifier
                     .size(40.dp)
-                    .clickable { /* */ }
+                    .clickable { }
             )
             Image(
                 painter = painterResource(id = R.drawable.ic_bookheart),
