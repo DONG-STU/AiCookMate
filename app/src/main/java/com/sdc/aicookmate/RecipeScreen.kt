@@ -30,17 +30,7 @@ package com.sdc.aicookmate
 //import androidx.compose.ui.unit.sp
 //import com.sdc.aicookmate.ui.theme.AiCookMateTheme
 //
-//class RecipeScreenActivity : ComponentActivity() {
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//        enableEdgeToEdge()
-//        setContent {
-//            AiCookMateTheme {
-//                RecipeScreen()
-//            }
-//        }
-//    }
-//}
+//
 //
 //@Composable
 //fun RecipeScreen() {

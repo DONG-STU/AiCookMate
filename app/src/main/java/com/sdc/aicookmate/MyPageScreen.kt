@@ -59,17 +59,6 @@ import com.sdc.aicookmate.ui.theme.AiCookMateTheme
 
 
 
-class MyPageActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            AiCookMateTheme {
-            }
-        }
-    }
-}
-
 
 @Composable
 fun MyPageScreen(navController: NavController) {
@@ -92,12 +81,8 @@ fun MyPageScreen(navController: NavController) {
                 Button(onClick = { /*TODO*/ }) {
                     Text("후기 관리")
                 }
-
                 RecentRecipeSection()
-
                 MenuList()
-
-
             }
         }
     }
