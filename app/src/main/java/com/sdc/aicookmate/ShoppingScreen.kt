@@ -1,8 +1,5 @@
 package com.sdc.aicookmate
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -10,7 +7,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -92,26 +88,26 @@ fun FoodShoppingScreen(navController: NavController) {
                         onValueChange = {},
                         leadingIcon = { Icon(Icons.Default.Search, "검색") },
                         placeholder = { Text("찾으시려는 레시피를 입력해주세요") },
-                        modifier = Modifier.weight(1f),
-                                shape = RoundedCornerShape(30.dp)
+                        modifier = Modifier.weight(0.80f),
+                        shape = RoundedCornerShape(30.dp)
                     )
 
                     Image(
                         painter = painterResource(id = R.drawable.ic_cart),
                         contentDescription = "장바구니",
                         modifier = Modifier
-                            .size(45.dp)
-                            .padding(start = 8.dp)
+                            .size(40.dp)
+                            .clickable {/**/ }
+
                     )
                 }
                 Spacer(
                     modifier = Modifier
-                        .padding(16.dp)
+                        .padding(12.dp)
                 )
                 Column(
                     modifier = Modifier.fillMaxSize()
                 ) {
-
                     LazyColumn {
                         item { BannerSection() }
                         item { CategorySection() }
@@ -119,20 +115,20 @@ fun FoodShoppingScreen(navController: NavController) {
                         item { PlanSection() }
                     }
                 }
-
             }
         }
     }
 }
 
-
 @Composable
-fun BannerSection() {
+fun BannerSection(
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
+            .padding(horizontal = 10.dp)
             .background(Color.Black)
-            .padding(16.dp)
+
     ) {
         Column {
             Text(
@@ -151,6 +147,7 @@ fun BannerSection() {
                 )
             )
             Spacer(modifier = Modifier.height(8.dp))
+
             Box(
                 modifier = Modifier
                     .background(
@@ -158,6 +155,7 @@ fun BannerSection() {
                         RoundedCornerShape(24.dp)
                     )
                     .padding(horizontal = 16.dp, vertical = 8.dp)
+                    .clickable {/**/ }
             ) {
                 Text(
                     text = "자세히 보기",
@@ -234,34 +232,44 @@ fun HotDealsSection() {
             .padding(16.dp)
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            modifier = Modifier.fillMaxWidth()
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            Column {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = "♥",
+                        color = Color.Red,
+                        fontSize = 16.sp
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = "기획전",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
                 Text(
-                    text = "♥",
-                    color = Color.Red,
-                    fontSize = 16.sp
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(
-                    text = "핫딜",
-                    fontSize = 16.sp
+                    "특별한 기획전을 확인하세요",
+                    fontSize = 14.sp,
                 )
             }
+
             Text(
                 text = "더보기 ›",
                 color = Color.Gray,
-                fontSize = 14.sp
+                fontSize = 14.sp,
+                modifier = Modifier.clickable {/**/ }
             )
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
+
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             HotDealItem(
                 modifier = Modifier.weight(1f),
@@ -278,13 +286,20 @@ fun HotDealsSection() {
                 imageRes = R.drawable.ic_sallad2
             )
         }
-        Row {
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
             HotDealItem(
                 modifier = Modifier.weight(1f),
                 name = "동그랑땡",
                 description = "신선한 국내산",
                 price = "12,900원",
-                imageRes = R.drawable.ic_sallad2
+                imageRes = R.drawable.ic_sallad3
             )
             HotDealItem(
                 modifier = Modifier.weight(1f),
@@ -305,25 +320,35 @@ fun HotDealItem(
     price: String,
     imageRes: Int
 ) {
-    Column(modifier = modifier) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.Start
+    ) {
         Image(
             painter = painterResource(id = imageRes),
             contentDescription = name,
+            contentScale = ContentScale.Crop,
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxSize()
                 .aspectRatio(1f)
-                .clip(RoundedCornerShape(8.dp))
+                .clip(RoundedCornerShape(12.dp))
         )
         Spacer(modifier = Modifier.height(8.dp))
-        Text(text = name, fontSize = 14.sp)
+        Text(
+            text = name, fontSize = 14.sp,
+            modifier = Modifier.fillMaxWidth()
+        )
         Text(
             text = description,
             fontSize = 12.sp,
-            color = Color.Gray
+            color = Color.Gray,
+            modifier = Modifier.fillMaxWidth()
         )
         Text(
             text = price,
-            fontSize = 14.sp
+            fontSize = 14.sp,
+            modifier = Modifier.fillMaxWidth()
+
         )
     }
 }
@@ -337,34 +362,44 @@ fun PlanSection() {
             .padding(16.dp)
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            modifier = Modifier.fillMaxWidth()
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            Column {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = "♥",
+                        color = Color.Red,
+                        fontSize = 16.sp
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = "기획전",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
                 Text(
-                    text = "♥",
-                    color = Color.Red,
-                    fontSize = 16.sp
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(
-                    text = "기획전",
-                    fontSize = 16.sp
+                    "특별한 기획전을 확인하세요",
+                    fontSize = 14.sp,
                 )
             }
+
             Text(
                 text = "더보기 ›",
                 color = Color.Gray,
-                fontSize = 14.sp
+                fontSize = 14.sp,
+                modifier = Modifier.clickable {/**/ }
             )
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
+
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             PlanDealItem(
                 modifier = Modifier.weight(1f),
@@ -381,13 +416,20 @@ fun PlanSection() {
                 imageRes = R.drawable.ic_sallad2
             )
         }
-        Row {
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
             PlanDealItem(
                 modifier = Modifier.weight(1f),
                 name = "동그랑땡",
                 description = "신선한 국내산",
                 price = "12,900원",
-                imageRes = R.drawable.ic_sallad2
+                imageRes = R.drawable.ic_sallad3
             )
             PlanDealItem(
                 modifier = Modifier.weight(1f),
@@ -408,25 +450,35 @@ fun PlanDealItem(
     price: String,
     imageRes: Int
 ) {
-    Column(modifier = modifier) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.Start
+    ) {
         Image(
             painter = painterResource(id = imageRes),
             contentDescription = name,
+            contentScale = ContentScale.Crop,
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxSize()
                 .aspectRatio(1f)
-                .clip(RoundedCornerShape(8.dp))
+                .clip(RoundedCornerShape(12.dp))
         )
         Spacer(modifier = Modifier.height(8.dp))
-        Text(text = name, fontSize = 14.sp)
+        Text(
+            text = name, fontSize = 14.sp,
+            modifier = Modifier.fillMaxWidth()
+        )
         Text(
             text = description,
             fontSize = 12.sp,
-            color = Color.Gray
+            color = Color.Gray,
+            modifier = Modifier.fillMaxWidth()
         )
         Text(
             text = price,
-            fontSize = 14.sp
+            fontSize = 14.sp,
+            modifier = Modifier.fillMaxWidth()
+
         )
     }
 }
