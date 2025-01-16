@@ -1,6 +1,7 @@
 package com.sdc.aicookmate
 
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -70,8 +71,26 @@ fun RecipeScreen(navController: NavController) {
 
                 FoodCategories()
 
-//                RecentButton()
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    RecentButton(
+                        text = "최신순",
+                        isSelected = true,
+                        onClick = { /**/ }
+                    )
 
+                    Spacer(modifier = Modifier.width(8.dp))
+
+                    RecentButton(
+                        text = "인기순",
+                        isSelected = false,
+                        onClick = { /**/ }
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(6.dp))
 
                 FoodItems()
 
@@ -84,15 +103,15 @@ fun RecipeScreen(navController: NavController) {
 @Composable
 fun FoodCategories() {
     val categories = listOf(
-        "찜조림" to R.drawable.ic_sallad3,
-        "국/탕/찌개" to R.drawable.ic_sallad3,
-        "볶음/구이" to R.drawable.ic_sallad3,
-        "밥/죽" to R.drawable.ic_sallad3,
-        "면/만두" to R.drawable.ic_sallad3,
-        "간편요리" to R.drawable.ic_sallad3,
-        "야식" to R.drawable.ic_sallad3,
-        "다이어트" to R.drawable.ic_sallad3,
-        "인플루언서" to R.drawable.ic_sallad3
+        "찜조림" to R.drawable.ic_zzim,
+        "국/탕/찌개" to R.drawable.ic_gook,
+        "볶음/구이" to R.drawable.ic_bokuem,
+        "밥/죽" to R.drawable.ic_rice,
+        "면/만두" to R.drawable.ic_noodle,
+        "간편요리" to R.drawable.ic_quick,
+        "야식" to R.drawable.ic_chicken,
+        "다이어트" to R.drawable.ic_diet,
+        "인플루언서" to R.drawable.ic_influencer
     )
 
     Column(
@@ -106,7 +125,7 @@ fun FoodCategories() {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(15.dp),
+                .padding(8.dp),
             horizontalArrangement = Arrangement.SpaceBetween
 
         ) {
@@ -127,7 +146,7 @@ fun FoodCategories() {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(15.dp),
+                .padding(8.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             FoodCategoryItem(
@@ -147,7 +166,7 @@ fun FoodCategories() {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(15.dp),
+                .padding(8.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             FoodCategoryItem(
@@ -347,16 +366,32 @@ fun DifficultyStars(level: DifficultyLevel) {
     )
 }
 
-//@Composable
-//fun RecentButton() {
-////    Row() {
-////        Button(onClick = { /*TODO*/ }, modifier = Modifier
-////            .clip(RoundedCornerShape(20.dp))
-////            .background(
-////                if (isSelected) Color.Black
-////                else Color.White
-////            ) { Text("최신순") }
-////                Spacer (modifier = Modifier.padding(5.dp))
-////                Button (onClick = { /*TODO*/ }) { Text("인기순") }
-////    }
-////}
+@Composable
+fun RecentButton(
+    text: String,
+    isSelected: Boolean = false,
+    onClick: () -> Unit
+) {
+    Button(
+        onClick = onClick,
+        colors = ButtonDefaults.buttonColors(
+            containerColor = if (isSelected) Color.Black else Color.White,
+            contentColor = if (isSelected) Color.White else Color.Black
+        ),
+        shape = RoundedCornerShape(8.dp),
+        border = BorderStroke(
+            width = 1.dp,
+            color = if (isSelected) Color.Black else Color.Gray.copy(alpha = 0.3f)
+        ),
+        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+        modifier = Modifier.height(36.dp)
+    ) {
+        Text(
+            text = text,
+            style = TextStyle(
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Medium
+            )
+        )
+    }
+}
