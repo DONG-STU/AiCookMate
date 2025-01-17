@@ -5,6 +5,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -39,15 +40,15 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.sdc.aicookmate.ui.theme.AiCookMateTheme
 
-@Preview
-@Composable
-fun mainpreview() {
-    RecipeScreen()
-}
+//@Preview
+//@Composable
+//fun mainpreview() {
+//    RecipeScreen()
+//}
 
 
 @Composable
-fun RecipeScreen() {
+fun RecipeScreen(navController: NavController) {
 //    Scaffold(
 //        bottomBar = { BottomBar(navController) }
 //    ) { paddingValues ->
@@ -78,7 +79,7 @@ fun RecipeScreen() {
 
         Spacer(modifier = Modifier.height(3.dp))
 
-        FoodCategories()
+        FoodCategories(navController)
 
         Spacer(modifier = Modifier.height(3.dp))
 
@@ -103,14 +104,14 @@ fun RecipeScreen() {
 
         Spacer(modifier = Modifier.height(6.dp))
 
-        FoodItems()
+        FoodItems(navController)
 
     }
 }
 
 
 @Composable
-fun FoodCategories() {
+fun FoodCategories(navController: NavController) {
     val categories = listOf(
         "찜조림" to R.drawable.ic_zzim,
         "국/탕/찌개" to R.drawable.ic_gook,
@@ -138,14 +139,17 @@ fun FoodCategories() {
 
         ) {
             FoodCategoryItem(
+                navController,
                 title = categories[0].first,
                 iconRes = categories[0].second
             )
             FoodCategoryItem(
+                navController,
                 title = categories[1].first,
                 iconRes = categories[1].second
             )
             FoodCategoryItem(
+                navController,
                 title = categories[2].first,
                 iconRes = categories[2].second
             )
@@ -158,14 +162,17 @@ fun FoodCategories() {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             FoodCategoryItem(
+                navController,
                 title = categories[3].first,
                 iconRes = categories[3].second
             )
             FoodCategoryItem(
+                navController,
                 title = categories[4].first,
                 iconRes = categories[4].second
             )
             FoodCategoryItem(
+                navController,
                 title = categories[5].first,
                 iconRes = categories[5].second
             )
@@ -178,14 +185,17 @@ fun FoodCategories() {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             FoodCategoryItem(
+                navController,
                 title = categories[6].first,
                 iconRes = categories[6].second
             )
             FoodCategoryItem(
+                navController,
                 title = categories[7].first,
                 iconRes = categories[7].second
             )
             FoodCategoryItem(
+                navController,
                 title = categories[8].first,
                 iconRes = categories[8].second
             )
@@ -194,7 +204,7 @@ fun FoodCategories() {
 }
 
 @Composable
-fun FoodCategoryItem(title: String, iconRes: Int) {
+fun FoodCategoryItem(navController: NavController,title: String, iconRes: Int) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.width(100.dp)
@@ -204,6 +214,7 @@ fun FoodCategoryItem(title: String, iconRes: Int) {
                 .size(100.dp)
                 .clip(RoundedCornerShape(percent = 20))
                 .background(Color.White)
+                .clickable { navController.navigate("recipeScreen2") }
                 .border(
                     width = 0.5.dp,
                     color = Color.LightGray,
@@ -247,7 +258,7 @@ fun FoodCategoryItem(title: String, iconRes: Int) {
 
 
 @Composable
-fun FoodItems() {
+fun FoodItems(navController: NavController) {
     val foodItems = listOf(
         FoodItem(
             "맛있는 미역국",
@@ -270,17 +281,18 @@ fun FoodItems() {
         verticalArrangement = Arrangement.spacedBy(1.dp)
     ) {
         items(foodItems.size) { index ->
-            FoodItemCard(foodItems[index])
+            FoodItemCard(navController,foodItems[index])
         }
     }
 }
 
 @Composable
-fun FoodItemCard(foodItem: FoodItem) {
+fun FoodItemCard(navController: NavController,foodItem: FoodItem) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
+            .clickable { navController.navigate("recipeExplain") }
     ) {
 
         Image(

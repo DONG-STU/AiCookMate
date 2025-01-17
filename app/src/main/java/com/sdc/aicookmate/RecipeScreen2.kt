@@ -72,7 +72,7 @@ fun RecipeScreen2(navController: NavController) {
                     .padding(paddingValues)
             ) {
 
-                CategoryRow()
+                CategoryRow(navController)
 
                 OutlinedTextField(
                     value = "",
@@ -85,7 +85,7 @@ fun RecipeScreen2(navController: NavController) {
 
                 Spacer(modifier = Modifier.height(10.dp))
 
-                FoodItems()
+                FoodItems(navController)
 
             }
         }
@@ -94,7 +94,7 @@ fun RecipeScreen2(navController: NavController) {
 
 
 @Composable
-fun CategoryRow() {
+fun CategoryRow(navController: NavController) {
     val categories = listOf("찜/조림", "국/탕/찌개", "볶음/구이", "밥/죽", "면/만두", "간편요리", "야식", "다이어트", "인플루언서")
 
     LazyRow(
@@ -105,10 +105,7 @@ fun CategoryRow() {
             Text(
                 text = category,
                 modifier = Modifier
-                    .padding(horizontal = 12.dp, vertical = 6.dp)
-                    .clickable {
-                        /**/
-                    },
+                    .padding(horizontal = 12.dp, vertical = 6.dp),
                 color = Color.Black,
                 fontSize = 14.sp,
 

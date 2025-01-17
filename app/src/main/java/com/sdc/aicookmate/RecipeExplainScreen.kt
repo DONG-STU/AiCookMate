@@ -55,15 +55,15 @@ import androidx.navigation.compose.rememberNavController
 import com.sdc.aicookmate.ui.theme.AiCookMateTheme
 import java.time.format.TextStyle
 
-@Preview
-@Composable
-fun RecipeExplainScreenPreview() {
-    RecipeExplainScreen()
-}
+//@Preview
+//@Composable
+//fun RecipeExplainScreenPreview() {
+//    RecipeExplainScreen()
+//}
 
 
 @Composable
-fun RecipeExplainScreen() {
+fun RecipeExplainScreen(navController: NavController) {
 //        Scaffold(
 //            bottomBar = { BottomBar(/**/) }
 //        ) { paddingValues ->
@@ -179,7 +179,7 @@ fun RecipeExplainScreen() {
                                 style = androidx.compose.ui.text.TextStyle(fontSize = 14.sp)
                             )
 
-                            FoodItems()
+                            FoodItems(navController)
                         }
                     }
                 }
