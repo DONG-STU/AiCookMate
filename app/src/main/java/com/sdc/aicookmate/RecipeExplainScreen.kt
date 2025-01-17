@@ -22,6 +22,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -57,127 +58,132 @@ import java.time.format.TextStyle
 @Preview
 @Composable
 fun RecipeExplainScreenPreview() {
-    RecipeExpainScreen()
+    RecipeExplainScreen()
 }
 
 
-    @Composable
-    fun RecipeExplainScreen() {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color(0xFFFFFBF0))
-                .padding(16.dp)
-        ) {
-
-            Text(
-                text = "생일 축하합니다~♬ 참 쉬운 미역국 끓이기!",
-                style = androidx.compose.ui.text.TextStyle(
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            )
-
-            Text(
-                text = "미역국 끓이는 건 어렵지 않습니다!\n집에서 쉽게 만들 수 있는 미역국 가족, 친구 생일에 직접 끓여 보세요~",
-                modifier = Modifier.padding(vertical = 8.dp),
-                style = TextStyle(
-                    fontSize = 14.sp,
-                    color = Color.Gray
-                )
-            )
-
-
-            Row(
+@Composable
+fun RecipeExplainScreen() {
+        Scaffold(
+            bottomBar = { BottomBar(/**/) }
+        ) { paddingValues ->
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 16.dp),
-                horizontalArrangement = Arrangement.spacedBy(24.dp)
+                    .padding(paddingValues)
+                    .background(Color(0xFFFCF6E0))
             ) {
-                Text("2인분")
-                Text("30분 이내")
-                Text("초급")
-            }
-
-
-            Image(
-                painter = painterResource(id = R.drawable.banner),
-                contentDescription = null,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(80.dp),
-                contentScale = ContentScale.FillWidth
-            )
-
-
-            Text(
-                text = "[재료]",
-                modifier = Modifier.padding(vertical = 16.dp),
-                style = TextStyle(
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            )
-
-            val ingredients = listOf(
-                "소고기(양지) 1/2컵(100g)",
-                "자른미역 1/3컵(10g)",
-                "참기름 2큰술(14g)",
-                "국간장 5큰술(30g)",
-                "물 약4컵(1.3L)",
-                "다진마늘 2/3큰술(10g)",
-                "멸치액젓 1과1/2큰술(15g)"
-            )
-
-            ingredients.forEach { ingredient ->
-                Row(
+                Column(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 4.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
+                        .fillMaxSize()
+                        .background(Color(0xFFFFFBF0))
+                        .padding(16.dp)
                 ) {
-                    Text(ingredient)
-                    Icon(
-                        imageVector = Icons.Default.CheckCircle,
-                        contentDescription = null,
-                        tint = Color.Gray
+
+                    Text(
+                        text = "생일 축하합니다~♬ 참 쉬운 미역국 끓이기!",
+                        style = androidx.compose.ui.text.TextStyle(
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold
+                        )
                     )
+
+                    Text(
+                        text = "미역국 끓이는 건 어렵지 않습니다!\n집에서 쉽게 만들 수 있는 미역국 가족, 친구 생일에 직접 끓여 보세요~",
+                        modifier = Modifier.padding(vertical = 8.dp),
+                        style = androidx.compose.ui.text.TextStyle(
+                            fontSize = 14.sp,
+                            color = Color.Gray
+                        )
+                    )
+
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(24.dp)
+                    ) {
+                        Text("2인분")
+                        Text("30분 이내")
+                        Text("초급")
+                    }
+
+
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_banner),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(80.dp),
+                        contentScale = ContentScale.FillWidth
+                    )
+
+
+                    Text(
+                        text = "[재료]",
+                        modifier = Modifier.padding(vertical = 16.dp),
+                        style = androidx.compose.ui.text.TextStyle(
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    )
+
+                    val ingredients = listOf(
+                        "소고기(양지) 1/2컵(100g)",
+                        "자른미역 1/3컵(10g)",
+                        "참기름 2큰술(14g)",
+                        "국간장 5큰술(30g)",
+                        "물 약4컵(1.3L)",
+                        "다진마늘 2/3큰술(10g)",
+                        "멸치액젓 1과1/2큰술(15g)"
+                    )
+
+                    ingredients.forEach { ingredient ->
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 4.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text(ingredient)
+                            Icon(
+                                imageVector = Icons.Default.CheckCircle,
+                                contentDescription = null,
+                                tint = Color.Gray
+                            )
+                        }
+
+
+                        Text(
+                            text = "[조리방법]",
+                            modifier = Modifier.padding(vertical = 16.dp),
+                            style = androidx.compose.ui.text.TextStyle(
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        )
+
+                        val steps = listOf(
+                            "1. 미역은 물에 불려 준비한다.",
+                            "2. 냄비에 참기름을 두르고 소고기를 넣어 중약불에서 볶아준다.",
+                            "3. 소고기가 익으면 불린 미역을 넣어 함께 볶아준다.",
+                            "4. 볶아진 미역에 국간장을 넣어 볶고 물을 넣어 끓여준다.",
+                            "5. 물이 끓으면 다진 마늘을 넣어 끓여준다.",
+                            "6. 마지막에 액젓을 이용하여 간을 맞춰 완성한다."
+                        )
+
+                        steps.forEach { step ->
+                            Text(
+                                text = step,
+                                modifier = Modifier.padding(vertical = 4.dp),
+                                style = androidx.compose.ui.text.TextStyle(fontSize = 14.sp)
+                            )
+
+                            FoodItems()
+                        }
+                    }
                 }
-
-
-            Text(
-                text = "[조리방법]",
-                modifier = Modifier.padding(vertical = 16.dp),
-                style = TextStyle(
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            )
-
-            val steps = listOf(
-                "1. 미역은 물에 불려 준비한다.",
-                "2. 냄비에 참기름을 두르고 소고기를 넣어 중약불에서 볶아준다.",
-                "3. 소고기가 익으면 불린 미역을 넣어 함께 볶아준다.",
-                "4. 볶아진 미역에 국간장을 넣어 볶고 물을 넣어 끓여준다.",
-                "5. 물이 끓으면 다진 마늘을 넣어 끓여준다.",
-                "6. 마지막에 액젓을 이용하여 간을 맞춰 완성한다."
-            )
-
-            steps.forEach { step ->
-                Text(
-                    text = step,
-                    modifier = Modifier.padding(vertical = 4.dp),
-                    style = TextStyle(fontSize = 14.sp)
-                )
             }
         }
     }
-
-    @Preview(showBackground = true)
-    @Composable
-    fun RecipeExplainScreenPreview() {
-        RecipeExplainScreen(rememberNavController())
-    }
-
-
 }
