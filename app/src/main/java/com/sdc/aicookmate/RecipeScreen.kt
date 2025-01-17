@@ -39,66 +39,72 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.sdc.aicookmate.ui.theme.AiCookMateTheme
 
+@Preview
+@Composable
+fun mainpreview() {
+    RecipeScreen()
+}
+
 
 @Composable
-fun RecipeScreen(navController: NavController) {
-    Scaffold(
-        bottomBar = { BottomBar(navController) }
-    ) { paddingValues ->
-        Column(
+fun RecipeScreen() {
+//    Scaffold(
+//        bottomBar = { BottomBar(navController) }
+//    ) { paddingValues ->
+//        Column(
+//            modifier = Modifier
+//                .padding(paddingValues)
+//                .background(Color(0xFFFCF6E0))
+//        ){
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+
+
+        OutlinedTextField(
+            value = "",
+            onValueChange = {},
+            leadingIcon = { Icon(Icons.Default.Search, "검색") },
+            placeholder = { Text("재료나 요리명을 검색하세요", fontSize = 14.sp, color = Color.Gray) },
             modifier = Modifier
-                .padding(paddingValues)
-                .background(Color(0xFFFCF6E0))
+                .fillMaxWidth()
+                .height(56.dp)
+                .background(Color.White, RoundedCornerShape(30.dp)),
+            shape = RoundedCornerShape(30.dp)
+        )
+
+        Spacer(modifier = Modifier.height(3.dp))
+
+        FoodCategories()
+
+        Spacer(modifier = Modifier.height(3.dp))
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.End
         ) {
+            RecentButton(
+                text = "최신순",
+                isSelected = true,
+                onClick = { /**/ }
+            )
 
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp)
+            Spacer(modifier = Modifier.width(8.dp))
 
-            ) {
-
-
-                OutlinedTextField(
-                    value = "",
-                    onValueChange = {},
-                    leadingIcon = { Icon(Icons.Default.Search, "검색") },
-                    placeholder = { Text("재료나 요리명을 검색하세요") },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(Color.White, RoundedCornerShape(30.dp)),
-                    shape = RoundedCornerShape(30.dp)
-                )
-
-                Spacer(modifier = Modifier.height(3.dp))
-
-                FoodCategories()
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End
-                ) {
-                    RecentButton(
-                        text = "최신순",
-                        isSelected = true,
-                        onClick = { /**/ }
-                    )
-
-                    Spacer(modifier = Modifier.width(8.dp))
-
-                    RecentButton(
-                        text = "인기순",
-                        isSelected = false,
-                        onClick = { /**/ }
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(6.dp))
-
-                FoodItems()
-
-            }
+            RecentButton(
+                text = "인기순",
+                isSelected = false,
+                onClick = { /**/ }
+            )
         }
+
+        Spacer(modifier = Modifier.height(6.dp))
+
+        FoodItems()
+
     }
 }
 
@@ -119,8 +125,7 @@ fun FoodCategories() {
 
     Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 5.dp),
+            .fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(0.dp)
 
     ) {
@@ -192,11 +197,11 @@ fun FoodCategories() {
 fun FoodCategoryItem(title: String, iconRes: Int) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.width(80.dp)
+        modifier = Modifier.width(100.dp)
     ) {
         Box(
             modifier = Modifier
-                .size(80.dp)
+                .size(100.dp)
                 .clip(RoundedCornerShape(percent = 20))
                 .background(Color.White)
                 .border(
@@ -213,26 +218,28 @@ fun FoodCategoryItem(title: String, iconRes: Int) {
             ) {
                 Box(
                     modifier = Modifier
-                        .size(50.dp)
-                        .clip(CircleShape)
+                        .size(100.dp)
 
                 ) {
                     Image(
                         painter = painterResource(id = iconRes),
                         contentDescription = null,
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = Modifier
+                            .size(80.dp)
+                            .align(Alignment.TopCenter),
                         contentScale = ContentScale.Crop
                     )
-                }
-                Spacer(modifier = Modifier.height(2.dp))
-                Text(
-                    text = title,
-                    style = TextStyle(
-                        fontSize = 11.sp,
-                        color = Color.Black,
-                        fontWeight = FontWeight.Bold
+
+                    Text(
+                        text = title,
+                        modifier = Modifier.align(Alignment.BottomCenter),
+                        style = TextStyle(
+                            fontSize = 16.sp,
+                            color = Color.Black,
+                            fontWeight = FontWeight.Bold
+                        )
                     )
-                )
+                }
             }
         }
     }
