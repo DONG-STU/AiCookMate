@@ -46,7 +46,7 @@ fun GptScreenPreview() {
 
 @Composable
 fun GptScreen() {
-    val bottomScrollState = rememberLazyListState()
+    val scrollState = rememberLazyListState()
     var remainingCount by remember { mutableStateOf(3) }
 
     Column(
@@ -90,7 +90,7 @@ fun GptScreen() {
                             .fillMaxWidth()
                             .weight(0.2f)
                     ) {
-                        // 첫 번째 박스는 비워둡니다
+                        Text("hi",modifier=Modifier.padding(8.dp))
                     }
 
                     Box(
@@ -100,45 +100,37 @@ fun GptScreen() {
                             .background(Color(0xFF90AA8D))
                     )
 
-                    // 중간 박스 - 스크롤 없이 고정된 내용
+                    // 2,3번째 박스를 합친 LazyColumn
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .weight(0.6f)
-                    ) {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(8.dp)
-                        ) {
-                            // 고정된 내용을 표시
-                            Text(
-                                text = "Middle Content",
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(vertical = 8.dp)
-                            )
-                            // 필요한 고정 콘텐츠를 여기에 추가
-                        }
-                    }
-
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(1.dp)
-                            .background(Color(0xFF90AA8D))
-                    )
-
-                    // 마지막 박스 - 스크롤 가능
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(0.2f)
+                            .weight(0.8f)  // 0.6f + 0.2f
                     ) {
                         LazyColumn(
-                            state = bottomScrollState,
+                            state = scrollState,
                             modifier = Modifier.fillMaxSize()
                         ) {
+                            // Middle Items (20개)
+                            items(20) { index ->
+                                Text(
+                                    text = "Middle Item $index",
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(8.dp)
+                                )
+                            }
+
+                            // 구분선
+                            item {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(1.dp)
+                                        .background(Color(0xFF90AA8D))
+                                )
+                            }
+
+                            // Bottom Items (10개)
                             items(10) { index ->
                                 Text(
                                     text = "Bottom Item $index",
