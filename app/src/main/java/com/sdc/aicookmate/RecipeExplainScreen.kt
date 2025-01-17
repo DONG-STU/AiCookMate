@@ -55,11 +55,6 @@ import androidx.navigation.compose.rememberNavController
 import com.sdc.aicookmate.ui.theme.AiCookMateTheme
 import java.time.format.TextStyle
 
-//@Preview
-//@Composable
-//fun RecipeExplainScreenPreview() {
-//    RecipeExplainScreen()
-//}
 
 
 @Composable
