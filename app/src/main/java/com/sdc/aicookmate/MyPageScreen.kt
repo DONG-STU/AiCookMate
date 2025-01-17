@@ -30,6 +30,7 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -49,16 +50,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.motionEventSpy
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.sdc.aicookmate.ui.theme.AiCookMateTheme
-
-
-
 
 @Composable
 fun MyPageScreen(navController: NavController) {
@@ -66,64 +66,90 @@ fun MyPageScreen(navController: NavController) {
         bottomBar = { BottomBar(navController) }
     ) { paddingValues ->
         Column(
-            modifier = androidx.compose.ui.Modifier
+            modifier = Modifier
                 .padding(paddingValues)
                 .verticalScroll(rememberScrollState())
+                .background(Color(0xFFF8F8F8))
         )
         {
-            Row {
-                Button(onClick = { /*TODO*/ }) {
-                    Text("스크랩 레시피")
+            Spacer(modifier = Modifier.height(16.dp))
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.Absolute.SpaceEvenly
+            ) {
+                Button(
+                    onClick = { /*TODO*/ },
+                    colors = ButtonDefaults.buttonColors(containerColor = colorResource(R.color.contentcolorgreen)),
+                    shape = RoundedCornerShape(10),
+                    modifier = Modifier
+                        .padding(horizontal = 4.dp)
+                        .height(60.dp)
+                ) {
+                    Text("스크랩 레시피", fontSize = 14.sp)
                 }
-                Button(onClick = { /*TODO*/ }) {
-                    Text("스크랩 레시피")
+                Button(
+                    onClick = { /*TODO*/ },
+                    colors = ButtonDefaults.buttonColors(containerColor = colorResource(R.color.contentcolorgreen)),
+                    shape = RoundedCornerShape(10),
+                    modifier = Modifier
+                        .padding(horizontal = 4.dp)
+                        .height(60.dp)
+                ) {
+                    Text("  구독 목록  ", fontSize = 14.sp)
                 }
-                Button(onClick = { /*TODO*/ }) {
-                    Text("후기 관리")
+                Button(
+                    onClick = { /*TODO*/ },
+                    colors = ButtonDefaults.buttonColors(containerColor = colorResource(R.color.contentcolorgreen)),
+                    shape = RoundedCornerShape(10),
+                    modifier = Modifier
+                        .padding(horizontal = 4.dp)
+                        .height(60.dp)
+                ) {
+                    Text("  후기 관리  ", fontSize = 14.sp)
                 }
-                RecentRecipeSection()
-                MenuList()
-            }
-        }
+            }//로우
+            RecentRecipeSection()
+
+            MenuList()
+        } //컬럼
     }
 }
 
 
-    @Composable
-    fun RecentRecipeSection() {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        ) {
-            Text(
-                "최근에 본 레시피",
-                modifier = Modifier.padding(vertical = 16.dp),
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold
-            )
+@Composable
+fun RecentRecipeSection() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    ) {
+        Text(
+            "최근에 본 레시피",
+            modifier = Modifier.padding(bottom = 16.dp),
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold
+        )
 
 
-            RecentRecipeCard(
-                imageUrl = "recipe_image_url",
-                title = "맛있는 비빔밥",
-                views = "조회수",
-                viewCount = "32회"
-            )
+        RecentRecipeCard(
+            imageUrl = "recipe_image_url",
+            title = "맛있는 비빔밥",
+            views = "조회수",
+            viewCount = "32회"
+        )
 
-            Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
-            RecentRecipeCard(
-                imageUrl = "recipe_image_url",
-                title = "맛있는 비빔밥",
-                views = "조회수",
-                viewCount = "32회"
-            )
-
-            MenuList()
-
-        }
+        RecentRecipeCard(
+            imageUrl = "recipe_image_url",
+            title = "맛있는 비빔밥",
+            views = "조회수",
+            viewCount = "32회"
+        )
     }
+}
 
 @Composable
 fun RecentRecipeCard(
@@ -135,8 +161,10 @@ fun RecentRecipeCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 4.dp),
-        shape = RoundedCornerShape(8.dp),
+            .padding(vertical = 4.dp)
+            .height(140.dp),
+        shape = RoundedCornerShape(15.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Row(
             modifier = Modifier
@@ -187,15 +215,15 @@ fun MenuList() {
         "🎉 이벤트",
         "고객센터",
         "📝 자주 묻는 질문",
-        "1:1 문의하기",
-        "❤️ 찜 목록",
-        "주문/배송 내역",
-        "교환/반품/취소",
-        "간편결제"
+        "1:1 문의하기"
     )
 
     Column(
-        modifier = Modifier.padding(top = 16.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 16.dp)
+            .background(Color.White)
+            .clip(RoundedCornerShape(8.dp))
     ) {
         menuItems.forEach { item ->
             ClickableMenuItem(text = item)
@@ -210,7 +238,7 @@ fun ClickableMenuItem(text: String) {
         modifier = Modifier
             .fillMaxWidth()
             .clickable { /* 클릭 이벤트 처리 */ }
-            .padding(vertical = 12.dp)
+            .padding(vertical = 12.dp, horizontal = 16.dp)
     ) {
         Text(
             text = text,
