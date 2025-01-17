@@ -64,14 +64,14 @@ fun RecipeExplainScreenPreview() {
 
 @Composable
 fun RecipeExplainScreen() {
-        Scaffold(
-            bottomBar = { BottomBar(/**/) }
-        ) { paddingValues ->
-            Column(
-                modifier = Modifier
-                    .padding(paddingValues)
-                    .background(Color(0xFFFCF6E0))
-            ) {
+//        Scaffold(
+//            bottomBar = { BottomBar(/**/) }
+//        ) { paddingValues ->
+//            Column(
+//                modifier = Modifier
+//                    .padding(paddingValues)
+//                    .background(Color(0xFFFCF6E0))
+//            ) {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -149,7 +149,7 @@ fun RecipeExplainScreen() {
                             Icon(
                                 imageVector = Icons.Default.CheckCircle,
                                 contentDescription = null,
-                                tint = Color.Gray
+                                tint = Color.Black
                             )
                         }
 
@@ -184,6 +184,3 @@ fun RecipeExplainScreen() {
                     }
                 }
             }
-        }
-    }
-}
