@@ -1,23 +1,16 @@
 package com.sdc.aicookmate
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -27,43 +20,25 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.input.pointer.motionEventSpy
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import com.sdc.aicookmate.ui.theme.AiCookMateTheme
 
 @Composable
 fun MyPageScreen(navController: NavController) {
@@ -73,7 +48,8 @@ fun MyPageScreen(navController: NavController) {
         Column(
             modifier = Modifier
                 .padding(paddingValues)
-                .background(Color(0xFFF8F8F8))
+                .background(Color(0xFFFCF6E0))
+                .fillMaxSize()
         ) {
             ActionButtons(
                 buttons = listOf("스크랩 레시피", "구독 목록", "후기 관리"),
@@ -91,7 +67,7 @@ fun MyPageScreen(navController: NavController) {
                 )
             )
 
-            MenuList(
+            NoticeList(
                 menuItems = listOf(
                     "📢 공지사항",
                     "🎉 이벤트",
@@ -100,6 +76,13 @@ fun MyPageScreen(navController: NavController) {
                     "1:1 문의하기"
                 )
             )
+            Text(text = "We Contact", fontSize = 12.sp, fontWeight = FontWeight.Bold)
+            Row (modifier = Modifier.fillMaxWidth()) {
+//                IconButton(onClick = {}) {
+//                    Icon
+//                }
+
+            }
         }
     }
 }
@@ -138,7 +121,6 @@ fun ActionButtons(buttons: List<String>, onButtonClick: (String) -> Unit) {
 }
 
 
-
 data class Recipe(val title: String, val views: String, val viewCount: String)
 
 
@@ -160,8 +142,9 @@ fun RecentRecipeSection(recipes: List<Recipe>) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
-            .height(300.dp)
+            .height(290.dp)
             .verticalScroll(rememberScrollState())
+            .background(Color(0xFFFFFFFF))
     ) {
 
         recipes.forEach { recipe ->
@@ -176,18 +159,20 @@ fun RecentRecipeSection(recipes: List<Recipe>) {
 }
 
 @Composable
-fun MenuList(menuItems: List<String>) {
+fun NoticeList(menuItems: List<String>) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 16.dp)
+            .padding(top = 9.dp)
+            .padding(horizontal = 16.dp)
             .background(Color.White)
             .clip(RoundedCornerShape(8.dp))
     ) {
         menuItems.forEach { item ->
             ClickableMenuItem(text = item)
         }
-    }}
+    }
+}
 
 @Composable
 fun RecentRecipeCard(
@@ -199,7 +184,7 @@ fun RecentRecipeCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 4.dp)
+            .padding(vertical = 5.dp, horizontal = 15.dp)
             .height(140.dp)
             .border(
                 BorderStroke(
