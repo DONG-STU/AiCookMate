@@ -66,5 +66,14 @@ fun NavSys() {
         composable("Recipe"){
             RecipeScreen(navController)
         }
+        composable("selectRecipeScreen") {
+            SelectRecipeScreen(navController)
+        }
+        composable("refigeratorScreen") {
+            Refrigerator(navController)
+        }
+        composable("GptScreen") {
+            GptScreen(navController)
+        }
     }
 }

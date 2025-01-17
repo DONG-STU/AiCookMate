@@ -36,16 +36,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 
 
 @Preview
 @Composable
 fun GptScreenPreview() {
-    GptScreen()
+  //  GptScreen()
 }
 
 @Composable
-fun GptScreen() {
+fun GptScreen(navController: NavController) {
     val scrollState = rememberLazyListState()
     var remainingCount by remember { mutableStateOf(3) }
 

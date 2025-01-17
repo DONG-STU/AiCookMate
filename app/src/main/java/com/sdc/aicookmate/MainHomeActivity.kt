@@ -464,7 +464,7 @@ fun BottomBar(navController: NavController) {
                 contentDescription = "냉장고 아이콘",
                 modifier = Modifier
                     .size(40.dp)
-                    .clickable { }
+                    .clickable {navController.navigate("refigeratorScreen") }
             )
             Image(
                 painter = painterResource(id = R.drawable.ic_bookheart),
