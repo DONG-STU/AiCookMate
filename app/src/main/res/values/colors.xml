@@ -9,4 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="background">#FFFCF6E0</color>
     <color name="contentcolorgreen">#FF82BB92</color>
+    <color name="refrigeratorPostIt">#FFFFF677</color>
+    <color name="refrigeratorPost">#FFFF8F8F</color>
 </resources>

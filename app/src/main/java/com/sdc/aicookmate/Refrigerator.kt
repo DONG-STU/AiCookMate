@@ -3,6 +3,7 @@ package com.sdc.aicookmate
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,6 +18,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -30,11 +32,13 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -104,6 +108,11 @@ fun Refrigerator() {
                     .background(Color.Black)
                     .height(1.dp)
             )
+            Row {
+                PostIt("시바아")
+                PostIt("이게되네")
+                PostIt("ㄹㅇㅋㅋ")
+            }
         }
         Spacer(modifier = Modifier.height(10.dp))
 
@@ -120,6 +129,18 @@ fun Refrigerator() {
                 contentScale = ContentScale.FillBounds,
                 modifier = Modifier.fillMaxSize()
             )
+            Column(modifier = Modifier.padding(5.dp)) {
+                Row(modifier = Modifier.padding(5.dp)) {
+                    PostIt("양파")
+                    PostIt("대파")
+                    PostIt("시금치")
+                    PostIt("콩나물시금치")
+
+                }
+                Row(modifier = Modifier.padding(5.dp)) {
+                    PostIt("아무튼졸라긴거적음")
+                }
+            }
         }
 
         // 버튼 Row
@@ -176,3 +197,37 @@ fun Refrigerator() {
 
 
 //}
+
+@Composable
+fun PostIt(text: String) {
+    var imgSize by remember { mutableIntStateOf(0) }
+    when {
+        text.length < 4 -> imgSize = 60
+        text.length < 7 -> imgSize = 90
+        text.length < 10 -> imgSize = 120
+    }
+    Box(
+        modifier = Modifier
+            .size(imgSize.dp)
+            .padding(5.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Image(
+            painter = painterResource(R.drawable.post_it_pink),
+            contentDescription = "포스트잇", modifier = Modifier.size(imgSize.dp)
+        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceAround,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 3.dp)
+        ) {
+            Text(text, fontSize = 10.sp)
+            Image(
+                painter = painterResource(R.drawable.postit_close_btn),
+                contentDescription = "닫기", modifier = Modifier.size(10.dp)
+            )
+        }
+    }
+}
