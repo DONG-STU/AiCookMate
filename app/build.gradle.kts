@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
 }
+val openaiApiKey: String = project.findProperty("OPENAI_API_KEY") as String?
+    ?: throw IllegalArgumentException("OpenAI API Key not found in gradle.properties")
 
 android {
     namespace = "com.sdc.aicookmate"
@@ -17,10 +19,12 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
-
-
     buildTypes {
+        debug {
+            buildConfigField("String", "OPENAI_API_KEY", "\"${project.findProperty("OPENAI_API_KEY")}\"")
+        }
         release {
+            buildConfigField("String", "OPENAI_API_KEY", "\"${project.findProperty("OPENAI_API_KEY")}\"")
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -28,6 +32,10 @@ android {
             )
         }
     }
+    buildFeatures {
+        buildConfig = true // BuildConfig 필드 활성화
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -60,8 +68,9 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-    implementation ("androidx.compose.material3:material3:1.1.1")
+    implementation("androidx.compose.material3:material3:1.1.1")
     val nav_version = "2.8.4"
+
 
     // Jetpack Compose integration
     implementation("androidx.navigation:navigation-compose:$nav_version")
@@ -80,5 +89,7 @@ dependencies {
     // Retrofit and Gson for OpenAI GPT integration
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
+
 
 }

@@ -42,7 +42,7 @@ import androidx.navigation.NavController
 @Preview
 @Composable
 fun GptScreenPreview() {
-  //  GptScreen()
+    //  GptScreen()
 }
 
 @Composable
