@@ -23,16 +23,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 
 
-@Preview
+//@Preview
+//@Composable
+//fun RecipeSearchScreenPreview() {
+//    RecipeSearchScreen()
+//}
+
 @Composable
-fun RecipeSearchScreenPreview() {
-    RecipeSearchScreen()
-}
-
-@Composable
-fun RecipeSearchScreen() {
+fun RecipeSearchScreen(navController: NavController) {
     Column(modifier = Modifier.background(Color(0xFFFCF6E0))) {
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -49,7 +50,7 @@ fun RecipeSearchScreen() {
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        FoodCategories()
+        FoodCategories(navController)
 
         Spacer(modifier = Modifier.height(300.dp))
 
