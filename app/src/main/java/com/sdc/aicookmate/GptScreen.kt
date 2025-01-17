@@ -7,20 +7,29 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
+
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -38,6 +47,9 @@ fun GptScreenPreview() {
 @Composable
 fun GptScreen() {
 
+    val scrollState = rememberLazyListState()
+    var remainingCount by remember { mutableStateOf(3) }
+
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.SpaceBetween
@@ -48,9 +60,7 @@ fun GptScreen() {
                 contentDescription = "뒤로가기",
                 modifier = Modifier
                     .size(40.dp)
-                    .clickable {
-                        /**/
-                    }
+                    .clickable { /* */ }
             )
 
             Text(
@@ -60,7 +70,6 @@ fun GptScreen() {
                     fontWeight = FontWeight.Bold
                 )
             )
-
 
             Box(
                 modifier = Modifier
@@ -76,9 +85,13 @@ fun GptScreen() {
                 Column(
                     modifier = Modifier.fillMaxSize()
                 ) {
-
-                    Spacer(modifier = Modifier.weight(1f))
-
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(0.2f)
+                    ) {
+                        // 첫 번째 박스는 비워둡니다
+                    }
 
                     Box(
                         modifier = Modifier
@@ -87,8 +100,26 @@ fun GptScreen() {
                             .background(Color(0xFF90AA8D))
                     )
 
-                    Spacer(modifier = Modifier.weight(1f))
-
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(0.6f)
+                    ) {
+                        // 중간 LazyColumn - 스크롤 상태 공유
+                        LazyColumn(
+                            state = scrollState,
+                            modifier = Modifier.fillMaxSize()
+                        ) {
+                            items(20) { index ->
+                                Text(
+                                    text = "Middle Item $index",
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(8.dp)
+                                )
+                            }
+                        }
+                    }
 
                     Box(
                         modifier = Modifier
@@ -97,33 +128,93 @@ fun GptScreen() {
                             .background(Color(0xFF90AA8D))
                     )
 
-                    Spacer(modifier = Modifier.weight(1f))
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(0.2f)
+                    ) {
+                        // 마지막 LazyColumn - 스크롤 상태 공유
+                        LazyColumn(
+                            state = scrollState,
+                            modifier = Modifier.fillMaxSize()
+                        ) {
+                            items(10) { index ->
+                                Text(
+                                    text = "Bottom Item $index",
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(8.dp)
+                                )
+                            }
+                        }
+                    }
                 }
+
             }
-
-
-
-
-        Button(
-            onClick = {},
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color(136, 193, 136),
-                contentColor = Color.Black
-            ), modifier = Modifier
-                .fillMaxWidth()
-                .height(80.dp)
-                .padding(12.dp),
-            shape = RoundedCornerShape(8.dp)
-        ) {
-
-            Text(
-                "레시피 다시추천 받기", style = TextStyle(
-                    fontSize = 16.sp,
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold
-                )
-            )
+            RecipeRecommendationButton()
         }
     }
+}
+
+
+@Composable
+fun RecipeRecommendationButton(
+    modifier: Modifier = Modifier
+) {
+    // 남은 횟수를 관리할 상태 생성
+    var remainingCount by remember { mutableStateOf(3) }
+
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Button(
+            onClick = {
+                if (remainingCount > 0) {
+                    remainingCount--
+                }
+            },
+            enabled = remainingCount > 0,
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(136, 193, 136),
+                contentColor = Color.Black,
+                disabledContainerColor = Color(136, 193, 136).copy(alpha = 0.5f)
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(80.dp)
+                .padding(horizontal = 12.dp, vertical = 4.dp),
+            shape = RoundedCornerShape(8.dp)
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Row {
+                    Text(
+                        "레시피 다시추천 받기",
+                        style = TextStyle(
+                            fontSize = 16.sp,
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold
+                        )
+                    )
+                    Image(
+                        painterResource(id = R.drawable.ic_swap),
+                        contentDescription = "새로고침", modifier = Modifier
+                            .size(24.dp)
+                                ,colorFilter = ColorFilter.tint(Color.White)
+                    )
+                }
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    "남은 횟수: $remainingCount",
+                    style = TextStyle(
+                        fontSize = 12.sp,
+                        color = Color.White,
+                        fontWeight = FontWeight.Normal
+                    )
+                )
+            }
+        }
     }
 }
