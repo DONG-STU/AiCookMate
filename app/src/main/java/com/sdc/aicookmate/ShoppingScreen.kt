@@ -75,6 +75,7 @@ fun FoodShoppingScreen(navController: NavController) {
         Column(
             modifier = Modifier
                 .padding(paddingValues)
+                .background(Color(0xFFFCF6E0))
         ) {
             Column(
                 modifier = Modifier
@@ -88,7 +89,9 @@ fun FoodShoppingScreen(navController: NavController) {
                         onValueChange = {},
                         leadingIcon = { Icon(Icons.Default.Search, "검색") },
                         placeholder = { Text("찾으시려는 레시피를 입력해주세요") },
-                        modifier = Modifier.weight(0.80f),
+                        modifier = Modifier
+                            .weight(0.80f)
+                            .background(Color.White, RoundedCornerShape(30.dp)),
                         shape = RoundedCornerShape(30.dp)
                     )
 
@@ -126,7 +129,6 @@ fun BannerSection(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 10.dp)
             .background(Color.Black)
 
     ) {
@@ -181,7 +183,7 @@ fun CategorySection() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color.White)
+            .background(Color(0xFFFCF6E0))
             .padding(16.dp)
     ) {
         Row(
@@ -228,7 +230,7 @@ fun HotDealsSection() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color.White)
+            .background(Color(0xFFFCF6E0))
             .padding(16.dp)
     ) {
         Row(
@@ -358,7 +360,7 @@ fun PlanSection() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color.White)
+            .background(Color(0xFFFCF6E0))
             .padding(16.dp)
     ) {
         Row(

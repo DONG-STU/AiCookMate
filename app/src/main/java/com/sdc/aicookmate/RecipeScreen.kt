@@ -48,13 +48,14 @@ fun RecipeScreen(navController: NavController) {
         Column(
             modifier = Modifier
                 .padding(paddingValues)
+                .background(Color(0xFFFCF6E0))
         ) {
 
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color.White)
                     .padding(16.dp)
+
             ) {
 
 
@@ -63,7 +64,9 @@ fun RecipeScreen(navController: NavController) {
                     onValueChange = {},
                     leadingIcon = { Icon(Icons.Default.Search, "검색") },
                     placeholder = { Text("재료나 요리명을 검색하세요") },
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Color.White, RoundedCornerShape(30.dp)),
                     shape = RoundedCornerShape(30.dp)
                 )
 
@@ -240,7 +243,7 @@ fun FoodCategoryItem(title: String, iconRes: Int) {
 fun FoodItems() {
     val foodItems = listOf(
         FoodItem(
-            "맛있는 비빔밥",
+            "맛있는 미역국",
             "30분",
             R.drawable.ic_sallad1
         ),
