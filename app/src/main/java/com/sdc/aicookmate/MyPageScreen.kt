@@ -162,6 +162,7 @@ fun ActionButtons(buttons: List<String>, onButtonClick: (String) -> Unit) {
                 ) {
                     Text(
                         text = buttonText,
+                        color = Color.White,
                         fontSize = 14.sp,
                         maxLines = 1 // 텍스트가 여러 줄로 늘어나는 것을 방지
                     )
@@ -374,8 +375,6 @@ fun RecentRecipeCard(
                                     color = Color.Black
                                 )
                             }
-
-
                         }
                     }
                 }
