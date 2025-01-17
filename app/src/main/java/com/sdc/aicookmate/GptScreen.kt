@@ -46,8 +46,7 @@ fun GptScreenPreview() {
 
 @Composable
 fun GptScreen() {
-
-    val scrollState = rememberLazyListState()
+    val bottomScrollState = rememberLazyListState()
     var remainingCount by remember { mutableStateOf(3) }
 
     Column(
@@ -85,6 +84,7 @@ fun GptScreen() {
                 Column(
                     modifier = Modifier.fillMaxSize()
                 ) {
+                    // 첫 번째 박스
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -100,24 +100,25 @@ fun GptScreen() {
                             .background(Color(0xFF90AA8D))
                     )
 
+                    // 중간 박스 - 스크롤 없이 고정된 내용
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
                             .weight(0.6f)
                     ) {
-                        // 중간 LazyColumn - 스크롤 상태 공유
-                        LazyColumn(
-                            state = scrollState,
-                            modifier = Modifier.fillMaxSize()
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(8.dp)
                         ) {
-                            items(20) { index ->
-                                Text(
-                                    text = "Middle Item $index",
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(8.dp)
-                                )
-                            }
+                            // 고정된 내용을 표시
+                            Text(
+                                text = "Middle Content",
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 8.dp)
+                            )
+                            // 필요한 고정 콘텐츠를 여기에 추가
                         }
                     }
 
@@ -128,14 +129,14 @@ fun GptScreen() {
                             .background(Color(0xFF90AA8D))
                     )
 
+                    // 마지막 박스 - 스크롤 가능
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
                             .weight(0.2f)
                     ) {
-                        // 마지막 LazyColumn - 스크롤 상태 공유
                         LazyColumn(
-                            state = scrollState,
+                            state = bottomScrollState,
                             modifier = Modifier.fillMaxSize()
                         ) {
                             items(10) { index ->
@@ -149,21 +150,22 @@ fun GptScreen() {
                         }
                     }
                 }
-
             }
-            RecipeRecommendationButton()
+
+            RecipeRecommendationButton(
+                remainingCount = remainingCount,
+                onCountDecrease = { remainingCount-- }
+            )
         }
     }
 }
 
-
 @Composable
 fun RecipeRecommendationButton(
+    remainingCount: Int,
+    onCountDecrease: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    // 남은 횟수를 관리할 상태 생성
-    var remainingCount by remember { mutableStateOf(3) }
-
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -171,7 +173,7 @@ fun RecipeRecommendationButton(
         Button(
             onClick = {
                 if (remainingCount > 0) {
-                    remainingCount--
+                    onCountDecrease()
                 }
             },
             enabled = remainingCount > 0,
@@ -200,9 +202,9 @@ fun RecipeRecommendationButton(
                     )
                     Image(
                         painterResource(id = R.drawable.ic_swap),
-                        contentDescription = "새로고침", modifier = Modifier
-                            .size(24.dp)
-                                ,colorFilter = ColorFilter.tint(Color.White)
+                        contentDescription = "새로고침",
+                        modifier = Modifier.size(24.dp),
+                        colorFilter = ColorFilter.tint(Color.White)
                     )
                 }
                 Spacer(modifier = Modifier.height(4.dp))
