@@ -16,11 +16,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -40,7 +38,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -64,17 +62,17 @@ fun MyPageScreen(navController: NavController) {
 
             RecentRecipeSection(
                 recipes = listOf(
-                    Recipe("맛있는 비빔밥", "조회수", "32회"),
-                    Recipe("고소한 김치찌개", "조회수", "45회"),
-                    Recipe("맛있는 비빔밥", "조회수", "45회"),
-                    Recipe("고소한 김치찌개", "조회수", "45회"),
-                    Recipe("맛있는 비빔밥", "조회수", "45회")
+                    Recipe("맛있는 비빔밥", "조회수", "32회", "일단 먹어보세요 진짜 맛있어요 구라에요 먹지마요 나 혼자 먹을거에요"),
+                    Recipe("고소한 김치찌개", "조회수", "45회", "일단 먹어보세요 진짜 맛있어요 구라에요 먹지마요 나 혼자 먹을거에요"),
+                    Recipe("맛있는 비빔밥", "조회수", "45회", "일단 먹어보세요 진짜 맛있어요 구라에요 먹지마요 나 혼자 먹을거에요"),
+                    Recipe("고소한 김치찌개", "조회수", "45회", "일단 먹어보세요 진짜 맛있어요 구라에요 먹지마요 나 혼자 먹을거에요"),
+                    Recipe("맛있는 비빔밥", "조회수", "45회", "일단 먹어보세요 진짜 맛있어요 구라에요 먹지마요 나 혼자 먹을거에요")
 
                 )
             )
 
             NoticeList(
-                menuItems = listOf(
+                noticeItems = listOf(
                     "📢 공지사항",
                     "🎉 이벤트",
                     "고객센터",
@@ -174,7 +172,7 @@ fun ActionButtons(buttons: List<String>, onButtonClick: (String) -> Unit) {
 }
 
 
-data class Recipe(val title: String, val views: String, val viewCount: String)
+data class Recipe(val title: String, val views: String, val viewCount: String, val descript: String)
 
 
 @Composable
@@ -204,15 +202,15 @@ fun RecentRecipeSection(recipes: List<Recipe>) {
     ) {
 
         recipes.forEach { recipe ->
-
             val isSaved = savedRecipes[recipe.title] ?: false
 
             RecentRecipeCard(
                 title = recipe.title,
                 views = recipe.views,
                 viewCount = recipe.viewCount,
+                descript = recipe.descript,
                 isSaved = isSaved,
-                onSaveClick = { newState -> savedRecipes[recipe.title] }
+                onSaveClick = { newState -> savedRecipes[recipe.title] = newState }
             )
             Spacer(modifier = Modifier.height(8.dp))
         }
@@ -220,7 +218,7 @@ fun RecentRecipeSection(recipes: List<Recipe>) {
 }
 
 @Composable
-fun NoticeList(menuItems: List<String>) {
+fun NoticeList(noticeItems: List<String>) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -229,7 +227,7 @@ fun NoticeList(menuItems: List<String>) {
             .background(Color.White)
             .clip(RoundedCornerShape(8.dp))
     ) {
-        menuItems.forEach { item ->
+        noticeItems.forEach { item ->
             ClickableMenuItem(text = item)
         }
     }
@@ -239,6 +237,7 @@ fun NoticeList(menuItems: List<String>) {
 fun RecentRecipeCard(
 //    imageUrl: String,
     title: String,
+    descript: String,
     views: String,
     viewCount: String,
     isSaved: Boolean,
@@ -285,11 +284,16 @@ fun RecentRecipeCard(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .weight(0.35f)
+                        .weight(0.4f)
                 ) {
-                    Box(modifier = Modifier.fillMaxWidth()) {
-                        Text(text = title, modifier = Modifier.align(Alignment.BottomStart),
-                            color = Color.Black)
+                    Box(modifier = Modifier
+                        .fillMaxWidth()) {
+                        Text(modifier = Modifier.align(Alignment.BottomStart),
+                            text = title,
+                            color = Color.Black,
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.SemiBold
+                        )
 
                         IconButton(modifier = Modifier.align(Alignment.TopEnd),
                             onClick = { onSaveClick(!isSaved) } // 저장 상태 토글
@@ -301,7 +305,7 @@ fun RecentRecipeCard(
                                 ),
                                 contentDescription = null,
                                 tint = Color.Unspecified, // 기본 색상 유지
-                                modifier = Modifier.size(24.dp)
+                                modifier = Modifier.size(25.dp)
                             )
                         }
                     }
@@ -309,10 +313,15 @@ fun RecentRecipeCard(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .weight(0.6f)
+                        .weight(0.55f)
                 ) {
-                    Text(text = "dngkgkkdslhsdfkjshdfiulsdhgiusiudyfiusrehfosudhflskdnflskd",
-                        color = Color.Black)
+                    Text(
+                        text = descript,
+                        color = Color.Black,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.padding(end = 8.dp)
+                    )
                 }
 
                 Column(
@@ -323,23 +332,50 @@ fun RecentRecipeCard(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
+                            .padding(bottom = 5.dp)
                     ) {
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .weight(0.5f)
                         ) {
-                            Text(text = "tlqkf",
-                                color = Color.Black)
+
+                            Row(modifier = Modifier.fillMaxWidth()) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_cookingtime),
+                                    contentDescription = null,
+                                    tint = Color.Black,
+                                    modifier = Modifier
+                                        .size(24.dp)
+                                )
+
+                                Text(
+                                    text = views,
+                                    color = Color.Black
+                                )
+                            }
                         }
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .weight(0.5f)
                         ) {
-                            Text(text = "tlqkf",
-                                color = Color.Black
-                            )
+                            Row(modifier = Modifier.fillMaxWidth()) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_difficultlevel),
+                                    contentDescription = null,
+                                    tint = Color.Black,
+                                    modifier = Modifier
+                                        .size(24.dp)
+                                )
+
+                                Text(
+                                    text = viewCount,
+                                    color = Color.Black
+                                )
+                            }
+
+
                         }
                     }
                 }
