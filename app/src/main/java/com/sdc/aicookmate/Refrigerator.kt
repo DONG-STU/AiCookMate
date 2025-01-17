@@ -61,97 +61,118 @@ fun ShowScreen() {
 @Composable
 fun Refrigerator() {
     var inputText by remember { mutableStateOf("") }
-//    Scaffold(
-//        bottomBar = { BottomBar(navController) }
-//    ) { paddingValues ->
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Color(0xFFFCF6E0))
+    ) {
+        // 상단 여백
+        Spacer(modifier = Modifier.height(10.dp))
+
+        // 검색 필드
+        OutlinedTextField(
+            value = inputText,
+            onValueChange = { inputText = it },
+            leadingIcon = { Icon(Icons.Default.Search, "검색") },
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = Color.White,
+                unfocusedContainerColor = Color.White,
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp)
+                .height(60.dp) // 검색 필드 높이 고정
+                .border(3.dp, Color.LightGray, RoundedCornerShape(10.dp)),
+            shape = RoundedCornerShape(10.dp)
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+
+        // 즐겨찾기 박스
         Column(
             modifier = Modifier
-                .fillMaxSize()
-//                .padding(paddingValues)
-//                .verticalScroll(rememberScrollState())
-                .background(color = Color(0xFFFCF6E0))
+                .fillMaxWidth()
+                .height(180.dp) // 즐겨찾기 박스 높이 고정
+                .padding(horizontal = 20.dp)
+                .border(1.dp, Color.Black, RoundedCornerShape(10.dp))
+                .background(Color(0xFFFFFCCB))
         ) {
-            Spacer(modifier = Modifier.weight(0.5f))
-            OutlinedTextField(
-                value = inputText,
-                onValueChange = { inputText = it },
-                leadingIcon = { Icon(Icons.Default.Search, "검색") },
-                colors = TextFieldDefaults.colors(
-                    focusedContainerColor = Color.White,
-                    unfocusedContainerColor = Color.White,
-                ),
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 20.dp)
-                    .border(3.dp, Color.LightGray, RoundedCornerShape(10.dp))
-                    .weight(1.3f),
-                shape = RoundedCornerShape(10.dp)
-            )
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .weight(3f)
-                    .padding(20.dp)
-                    .border(1.dp, Color.Black, RoundedCornerShape(10.dp))
-                    .background(Color.White)
-            ) {
-                Text("즐겨찾기", fontSize = 15.sp, modifier = Modifier.padding(10.dp))
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(Color.Black)
-                        .height(1.dp)
-                )
-            }
+            Text("즐겨찾기", fontSize = 15.sp, modifier = Modifier.padding(10.dp))
             Box(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .weight(14f)
-                    .padding(horizontal = 10.dp)
+                    .fillMaxWidth()
+                    .background(Color.Black)
+                    .height(1.dp)
+            )
+        }
+        Spacer(modifier = Modifier.height(10.dp))
+
+        // 냉장고 이미지
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f) // 남은 공간을 냉장고 이미지가 차지
+                .padding(horizontal = 10.dp)
+        ) {
+            Image(
+                painter = painterResource(R.drawable.refrigerator),
+                contentDescription = "냉장고",
+                contentScale = ContentScale.FillBounds,
+                modifier = Modifier.fillMaxSize()
+            )
+        }
+
+        // 버튼 Row
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(80.dp) // 버튼 Row 높이 고정
+                .padding(horizontal = 10.dp)
+        ) {
+            Button(
+                onClick = {},
+                shape = RoundedCornerShape(10.dp), // 모서리를 둥글게 설정
+                modifier = Modifier
+                    .weight(1f) // 버튼 균등 배치
+                    .border(3.dp, Color.LightGray, RoundedCornerShape(10.dp)) // 둥근 외곽선
+                    .height(60.dp), // 버튼 높이 고정
+                colors = ButtonDefaults.buttonColors(containerColor = colorResource(R.color.contentcolorgreen))
             ) {
                 Image(
-                    painter = painterResource(R.drawable.refrigerator),
-                    contentDescription = "냉장고",
-                    contentScale = ContentScale.FillBounds,
-                    modifier = Modifier.fillMaxSize()
+                    painter = painterResource(R.drawable.scan_camera),
+                    contentDescription = "냉장고 스캔",
+                    contentScale = ContentScale.Fit,
+                    modifier = Modifier.size(24.dp)
                 )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text("냉장고 스캔", fontSize = 14.sp)
             }
-            Row(
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically,
+
+            Spacer(modifier = Modifier.width(20.dp))
+            Button(
+                onClick = {},
+                shape = RoundedCornerShape(10.dp), // 모서리를 둥글게 설정
                 modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(horizontal = 10.dp)
-                    .weight(3f)
+                    .weight(1f) // 버튼 균등 배치
+                    .border(3.dp, Color.LightGray, RoundedCornerShape(10.dp)) // 둥근 외곽선
+                    .height(60.dp), // 버튼 높이 고정
+                colors = ButtonDefaults.buttonColors(containerColor = colorResource(R.color.contentcolorgreen))
             ) {
-                Button(
-                    onClick = {},
-                    shape = RectangleShape,
-                    modifier = Modifier.weight(5f)
-                        .wrapContentHeight(),
-                    colors = ButtonDefaults.buttonColors(containerColor = colorResource(R.color.contentcolorgreen))
-                ) {
-                    Image(painter = painterResource(R.drawable.scan_camera),
-                        contentDescription = "냉장고 스캔",
-                        contentScale = ContentScale.FillBounds,
-                        modifier = Modifier.size(40.dp))
-                    Text("냉장고 스캔", fontSize = 17.sp)
-                }
-                Spacer(modifier = Modifier.weight(1f))
-                Button(
-                    onClick = {},
-                    shape = RectangleShape,
-                    modifier = Modifier.weight(5f)
-                        .wrapContentHeight(),
-                    colors = ButtonDefaults.buttonColors(containerColor = colorResource(R.color.contentcolorgreen))
-                ) {
-                    Image(painter = painterResource(R.drawable.scan_reciept),
-                        contentDescription = "영수증 스캔",
-                        contentScale = ContentScale.FillBounds,
-                        modifier = Modifier.size(40.dp))
-                    Text("영수증 스캔", fontSize = 17.sp)
-                }
+                Image(
+                    painter = painterResource(R.drawable.scan_reciept),
+                    contentDescription = "영수증 스캔",
+                    contentScale = ContentScale.Fit,
+                    modifier = Modifier.size(24.dp)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text("영수증 스캔", fontSize = 14.sp)
             }
         }
+        Spacer(modifier = Modifier.height(5.dp))
     }
+}
+
+
 //}
