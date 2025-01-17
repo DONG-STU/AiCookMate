@@ -1,9 +1,6 @@
 package com.sdc.aicookmate
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -65,6 +62,7 @@ fun MainScreen(navController: NavController) {
             modifier = Modifier
                 .padding(paddingValues)
                 .verticalScroll(rememberScrollState())
+                .background(Color(0xFFFCF6E0))
         ) {
             Column(
                 modifier = Modifier
@@ -78,7 +76,9 @@ fun MainScreen(navController: NavController) {
                     onValueChange = {},
                     leadingIcon = { Icon(Icons.Default.Search, "검색") },
                     placeholder = { Text("레시피 검색") },
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Color.White, RoundedCornerShape(30.dp)),
                     shape = RoundedCornerShape(30.dp)
                 )
 
@@ -471,7 +471,7 @@ fun BottomBar(navController: NavController) {
                 contentDescription = "찜 레시피 아이콘",
                 modifier = Modifier
                     .size(40.dp)
-                    .clickable {navController.navigate("Recipe")}
+                    .clickable { navController.navigate("Recipe") }
             )
             Image(
                 painter = painterResource(id = R.drawable.ic_person),
