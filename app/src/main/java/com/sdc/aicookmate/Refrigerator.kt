@@ -59,11 +59,11 @@ import androidx.navigation.NavController
 @Preview(showBackground = true)
 @Composable
 fun ShowScreen() {
-    Refrigerator()
+    //Refrigerator()
 }
 
 @Composable
-fun Refrigerator() {
+fun Refrigerator(navController: NavController) {
     var inputText by remember { mutableStateOf("") }
 
     Column(
@@ -189,6 +189,27 @@ fun Refrigerator() {
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text("영수증 스캔", fontSize = 14.sp)
+            }
+            Spacer(modifier = Modifier.width(20.dp))
+            Button(
+                onClick = {
+                    navController.navigate("selectRecipeScreen")
+                },
+                shape = RoundedCornerShape(10.dp), // 모서리를 둥글게 설정
+                modifier = Modifier
+                    .weight(1f) // 버튼 균등 배치
+                    .border(3.dp, Color.LightGray, RoundedCornerShape(10.dp)) // 둥근 외곽선
+                    .height(60.dp), // 버튼 높이 고정
+                colors = ButtonDefaults.buttonColors(containerColor = colorResource(R.color.contentcolorgreen))
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.scan_reciept),
+                    contentDescription = "영수증 스캔",
+                    contentScale = ContentScale.Fit,
+                    modifier = Modifier.size(24.dp)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text("GPT 추천", fontSize = 14.sp)
             }
         }
         Spacer(modifier = Modifier.height(5.dp))

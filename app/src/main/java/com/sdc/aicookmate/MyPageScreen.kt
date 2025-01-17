@@ -20,14 +20,18 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,6 +40,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -50,6 +55,7 @@ fun MyPageScreen(navController: NavController) {
                 .padding(paddingValues)
                 .background(Color(0xFFFCF6E0))
                 .fillMaxSize()
+                .verticalScroll(rememberScrollState())
         ) {
             ActionButtons(
                 buttons = listOf("스크랩 레시피", "구독 목록", "후기 관리"),
@@ -76,11 +82,58 @@ fun MyPageScreen(navController: NavController) {
                     "1:1 문의하기"
                 )
             )
-            Text(text = "We Contact", fontSize = 12.sp, fontWeight = FontWeight.Bold)
-            Row (modifier = Modifier.fillMaxWidth()) {
-//                IconButton(onClick = {}) {
-//                    Icon
-//                }
+            Text(
+                text = "We Contact", fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(horizontal = 16.dp),
+                color = Color.Black
+            )
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 9.dp, horizontal = 16.dp)
+            ) {
+
+                Button(
+                    onClick = {},
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0x00ffffff)),
+                    modifier = Modifier
+                        .size(45.dp)
+                        .weight(1f)
+                ) {
+                    Image(
+                        painter = painterResource(R.drawable.ic_instagram),
+                        contentDescription = null,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
+                Button(
+                    onClick = {},
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0x00ffffff)),
+                    modifier = Modifier
+                        .size(45.dp)
+                        .weight(1f)
+                ) {
+                    Image(
+                        painter = painterResource(R.drawable.ic_discord),
+                        contentDescription = null,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
+                Button(
+                    onClick = {},
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0x00ffffff)),
+                    modifier = Modifier
+                        .size(45.dp)
+                        .weight(1f)
+                ) {
+                    Image(
+                        painter = painterResource(R.drawable.ic_facebook),
+                        contentDescription = null,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
 
             }
         }
@@ -126,6 +179,8 @@ data class Recipe(val title: String, val views: String, val viewCount: String)
 
 @Composable
 fun RecentRecipeSection(recipes: List<Recipe>) {
+    val savedRecipes = remember { mutableStateMapOf<String, Boolean>() }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -134,7 +189,8 @@ fun RecentRecipeSection(recipes: List<Recipe>) {
             "최근에 본 레시피",
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(start = 10.dp)
+            modifier = Modifier.padding(start = 10.dp),
+            color = Color.Black
         )
     }
 
@@ -142,16 +198,21 @@ fun RecentRecipeSection(recipes: List<Recipe>) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
-            .height(290.dp)
+            .height(370.dp)
             .verticalScroll(rememberScrollState())
             .background(Color(0xFFFFFFFF))
     ) {
 
         recipes.forEach { recipe ->
+
+            val isSaved = savedRecipes[recipe.title] ?: false
+
             RecentRecipeCard(
                 title = recipe.title,
                 views = recipe.views,
-                viewCount = recipe.viewCount
+                viewCount = recipe.viewCount,
+                isSaved = isSaved,
+                onSaveClick = { newState -> savedRecipes[recipe.title] }
             )
             Spacer(modifier = Modifier.height(8.dp))
         }
@@ -179,66 +240,114 @@ fun RecentRecipeCard(
 //    imageUrl: String,
     title: String,
     views: String,
-    viewCount: String
+    viewCount: String,
+    isSaved: Boolean,
+    onSaveClick: (Boolean) -> Unit
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 5.dp, horizontal = 15.dp)
-            .height(140.dp)
+            .height(110.dp)
             .border(
                 BorderStroke(
-                    width = 3.dp,
+                    width = 2.dp,
                     color = colorResource(R.color.contentcolorgreen)
                 ),
                 shape = RoundedCornerShape(15.dp)
             ),
         shape = RoundedCornerShape(15.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+//        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         colors = CardDefaults
             .cardColors(containerColor = Color.White)
     ) {
         Row(
-            modifier = Modifier
-                .padding(8.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxSize()
         ) {
             Image(
                 painter = painterResource(id = R.drawable.recipe1),
                 contentDescription = null,
                 modifier = Modifier
-                    .size(80.dp)
-                    .clip(RoundedCornerShape(4.dp)),
+                    .fillMaxSize()
+                    .clip(RoundedCornerShape(15.dp))
+                    .weight(0.4f),
                 contentScale = ContentScale.Crop
             )
 
+            Spacer(modifier = Modifier.weight(0.02f))
+
             Column(
                 modifier = Modifier
-                    .padding(start = 12.dp)
-                    .weight(1f)
+                    .fillMaxSize()
+                    .weight(0.58f)
             ) {
-                Text(
-                    text = title,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Medium
-                )
-                Row {
-                    Text(
-                        text = views,
-                        fontSize = 12.sp,
-                        color = Color.Gray
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(
-                        text = viewCount,
-                        fontSize = 12.sp,
-                        color = Color.Gray
-                    )
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(0.35f)
+                ) {
+                    Box(modifier = Modifier.fillMaxWidth()) {
+                        Text(text = title, modifier = Modifier.align(Alignment.BottomStart),
+                            color = Color.Black)
+
+                        IconButton(modifier = Modifier.align(Alignment.TopEnd),
+                            onClick = { onSaveClick(!isSaved) } // 저장 상태 토글
+                        ) {
+                            Icon(
+                                painter = painterResource(
+                                    if (isSaved) R.drawable.ic_aftersavebutton // 저장됨 아이콘
+                                    else R.drawable.ic_beforesavebutton // 저장 전 아이콘
+                                ),
+                                contentDescription = null,
+                                tint = Color.Unspecified, // 기본 색상 유지
+                                modifier = Modifier.size(24.dp)
+                            )
+                        }
+                    }
+                }
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(0.6f)
+                ) {
+                    Text(text = "dngkgkkdslhsdfkjshdfiulsdhgiusiudyfiusrehfosudhflskdnflskd",
+                        color = Color.Black)
+                }
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(0.25f)
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(0.5f)
+                        ) {
+                            Text(text = "tlqkf",
+                                color = Color.Black)
+                        }
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(0.5f)
+                        ) {
+                            Text(text = "tlqkf",
+                                color = Color.Black
+                            )
+                        }
+                    }
                 }
             }
         }
     }
 }
+
 
 @Composable
 fun ClickableMenuItem(text: String) {
@@ -251,7 +360,8 @@ fun ClickableMenuItem(text: String) {
         Text(
             text = text,
             fontSize = 14.sp,
-            modifier = Modifier.align(Alignment.CenterStart)
+            modifier = Modifier.align(Alignment.CenterStart),
+            color = Color.Black
         )
     }
 }
