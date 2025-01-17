@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -16,6 +17,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -30,6 +32,7 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -48,6 +51,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.motionEventSpy
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
@@ -68,92 +73,125 @@ fun MyPageScreen(navController: NavController) {
         Column(
             modifier = Modifier
                 .padding(paddingValues)
-                .verticalScroll(rememberScrollState())
                 .background(Color(0xFFF8F8F8))
-        )
-        {
-            Spacer(modifier = Modifier.height(16.dp))
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                horizontalArrangement = Arrangement.Absolute.SpaceEvenly
-            ) {
-                Button(
-                    onClick = { /*TODO*/ },
-                    colors = ButtonDefaults.buttonColors(containerColor = colorResource(R.color.contentcolorgreen)),
-                    shape = RoundedCornerShape(10),
-                    modifier = Modifier
-                        .padding(horizontal = 4.dp)
-                        .height(60.dp)
-                ) {
-                    Text("스크랩 레시피", fontSize = 14.sp)
-                }
-                Button(
-                    onClick = { /*TODO*/ },
-                    colors = ButtonDefaults.buttonColors(containerColor = colorResource(R.color.contentcolorgreen)),
-                    shape = RoundedCornerShape(10),
-                    modifier = Modifier
-                        .padding(horizontal = 4.dp)
-                        .height(60.dp)
-                ) {
-                    Text("  구독 목록  ", fontSize = 14.sp)
-                }
-                Button(
-                    onClick = { /*TODO*/ },
-                    colors = ButtonDefaults.buttonColors(containerColor = colorResource(R.color.contentcolorgreen)),
-                    shape = RoundedCornerShape(10),
-                    modifier = Modifier
-                        .padding(horizontal = 4.dp)
-                        .height(60.dp)
-                ) {
-                    Text("  후기 관리  ", fontSize = 14.sp)
-                }
-            }//로우
-            RecentRecipeSection()
+        ) {
+            ActionButtons(
+                buttons = listOf("스크랩 레시피", "구독 목록", "후기 관리"),
+                onButtonClick = { /* TODO */ }
+            )
 
-            MenuList()
-        } //컬럼
+            RecentRecipeSection(
+                recipes = listOf(
+                    Recipe("맛있는 비빔밥", "조회수", "32회"),
+                    Recipe("고소한 김치찌개", "조회수", "45회"),
+                    Recipe("맛있는 비빔밥", "조회수", "45회"),
+                    Recipe("고소한 김치찌개", "조회수", "45회"),
+                    Recipe("맛있는 비빔밥", "조회수", "45회")
+
+                )
+            )
+
+            MenuList(
+                menuItems = listOf(
+                    "📢 공지사항",
+                    "🎉 이벤트",
+                    "고객센터",
+                    "📝 자주 묻는 질문",
+                    "1:1 문의하기"
+                )
+            )
+        }
+    }
+}
+
+@Composable
+fun ActionButtons(buttons: List<String>, onButtonClick: (String) -> Unit) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp) // 버튼 간 간격 조정
+    ) {
+        buttons.forEach { buttonText ->
+            Button(
+                onClick = { onButtonClick(buttonText) },
+                colors = ButtonDefaults.buttonColors(containerColor = colorResource(R.color.contentcolorgreen)),
+                shape = RoundedCornerShape(10),
+                modifier = Modifier
+                    .weight(1f) // 버튼 크기를 동일하게 설정
+                    .height(60.dp),
+                contentPadding = PaddingValues(0.dp) // 텍스트가 정확히 가운데 정렬되도록 패딩 제거
+            ) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center // 텍스트를 완전히 가운데 정렬
+                ) {
+                    Text(
+                        text = buttonText,
+                        fontSize = 14.sp,
+                        maxLines = 1 // 텍스트가 여러 줄로 늘어나는 것을 방지
+                    )
+                }
+            }
+        }
     }
 }
 
 
+
+data class Recipe(val title: String, val views: String, val viewCount: String)
+
+
 @Composable
-fun RecentRecipeSection() {
+fun RecentRecipeSection(recipes: List<Recipe>) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+    ) {
+        Text(
+            "최근에 본 레시피",
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(start = 10.dp)
+        )
+    }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
+            .height(300.dp)
+            .verticalScroll(rememberScrollState())
     ) {
-        Text(
-            "최근에 본 레시피",
-            modifier = Modifier.padding(bottom = 16.dp),
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Bold
-        )
 
-
-        RecentRecipeCard(
-            imageUrl = "recipe_image_url",
-            title = "맛있는 비빔밥",
-            views = "조회수",
-            viewCount = "32회"
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        RecentRecipeCard(
-            imageUrl = "recipe_image_url",
-            title = "맛있는 비빔밥",
-            views = "조회수",
-            viewCount = "32회"
-        )
+        recipes.forEach { recipe ->
+            RecentRecipeCard(
+                title = recipe.title,
+                views = recipe.views,
+                viewCount = recipe.viewCount
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+        }
     }
 }
 
 @Composable
+fun MenuList(menuItems: List<String>) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 16.dp)
+            .background(Color.White)
+            .clip(RoundedCornerShape(8.dp))
+    ) {
+        menuItems.forEach { item ->
+            ClickableMenuItem(text = item)
+        }
+    }}
+
+@Composable
 fun RecentRecipeCard(
-    imageUrl: String,
+//    imageUrl: String,
     title: String,
     views: String,
     viewCount: String
@@ -162,9 +200,18 @@ fun RecentRecipeCard(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp)
-            .height(140.dp),
+            .height(140.dp)
+            .border(
+                BorderStroke(
+                    width = 3.dp,
+                    color = colorResource(R.color.contentcolorgreen)
+                ),
+                shape = RoundedCornerShape(15.dp)
+            ),
         shape = RoundedCornerShape(15.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        colors = CardDefaults
+            .cardColors(containerColor = Color.White)
     ) {
         Row(
             modifier = Modifier
@@ -209,31 +256,7 @@ fun RecentRecipeCard(
 }
 
 @Composable
-fun MenuList() {
-    val menuItems = listOf(
-        "📢 공지사항",
-        "🎉 이벤트",
-        "고객센터",
-        "📝 자주 묻는 질문",
-        "1:1 문의하기"
-    )
-
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 16.dp)
-            .background(Color.White)
-            .clip(RoundedCornerShape(8.dp))
-    ) {
-        menuItems.forEach { item ->
-            ClickableMenuItem(text = item)
-        }
-    }
-}
-
-@Composable
 fun ClickableMenuItem(text: String) {
-
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -245,6 +268,6 @@ fun ClickableMenuItem(text: String) {
             fontSize = 14.sp,
             modifier = Modifier.align(Alignment.CenterStart)
         )
-
     }
 }
+
