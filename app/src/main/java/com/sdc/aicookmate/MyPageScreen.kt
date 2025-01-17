@@ -30,6 +30,7 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -68,37 +69,49 @@ fun MyPageScreen(navController: NavController) {
             modifier = Modifier
                 .padding(paddingValues)
                 .verticalScroll(rememberScrollState())
+                .background(Color(0xFFF8F8F8))
         )
         {
+            Spacer(modifier = Modifier.height(16.dp))
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp)
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.Absolute.SpaceEvenly
             ) {
                 Button(
                     onClick = { /*TODO*/ },
                     colors = ButtonDefaults.buttonColors(containerColor = colorResource(R.color.contentcolorgreen)),
                     shape = RoundedCornerShape(10),
-                    modifier = Modifier.padding(horizontal = 10.dp)
+                    modifier = Modifier
+                        .padding(horizontal = 4.dp)
+                        .height(60.dp)
                 ) {
-                    Text("스크랩 레시피")
+                    Text("스크랩 레시피", fontSize = 14.sp)
                 }
                 Button(
                     onClick = { /*TODO*/ },
                     colors = ButtonDefaults.buttonColors(containerColor = colorResource(R.color.contentcolorgreen)),
-                    shape = RoundedCornerShape(10)
+                    shape = RoundedCornerShape(10),
+                    modifier = Modifier
+                        .padding(horizontal = 4.dp)
+                        .height(60.dp)
                 ) {
-                    Text("스크랩 레시피")
+                    Text("  구독 목록  ", fontSize = 14.sp)
                 }
                 Button(
                     onClick = { /*TODO*/ },
                     colors = ButtonDefaults.buttonColors(containerColor = colorResource(R.color.contentcolorgreen)),
-                    shape = RoundedCornerShape(10)
+                    shape = RoundedCornerShape(10),
+                    modifier = Modifier
+                        .padding(horizontal = 4.dp)
+                        .height(60.dp)
                 ) {
-                    Text("후기 관리")
+                    Text("  후기 관리  ", fontSize = 14.sp)
                 }
             }//로우
             RecentRecipeSection()
+
             MenuList()
         } //컬럼
     }
@@ -114,7 +127,7 @@ fun RecentRecipeSection() {
     ) {
         Text(
             "최근에 본 레시피",
-            modifier = Modifier.padding(vertical = 16.dp),
+            modifier = Modifier.padding(bottom = 16.dp),
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold
         )
@@ -148,8 +161,10 @@ fun RecentRecipeCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 4.dp),
-        shape = RoundedCornerShape(8.dp),
+            .padding(vertical = 4.dp)
+            .height(140.dp),
+        shape = RoundedCornerShape(15.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Row(
             modifier = Modifier
@@ -204,7 +219,11 @@ fun MenuList() {
     )
 
     Column(
-        modifier = Modifier.padding(top = 16.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 16.dp)
+            .background(Color.White)
+            .clip(RoundedCornerShape(8.dp))
     ) {
         menuItems.forEach { item ->
             ClickableMenuItem(text = item)
@@ -219,7 +238,7 @@ fun ClickableMenuItem(text: String) {
         modifier = Modifier
             .fillMaxWidth()
             .clickable { /* 클릭 이벤트 처리 */ }
-            .padding(vertical = 12.dp)
+            .padding(vertical = 12.dp, horizontal = 16.dp)
     ) {
         Text(
             text = text,
