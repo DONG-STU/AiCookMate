@@ -49,16 +49,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.motionEventSpy
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.sdc.aicookmate.ui.theme.AiCookMateTheme
-
-
-
 
 @Composable
 fun MyPageScreen(navController: NavController) {
@@ -66,64 +65,78 @@ fun MyPageScreen(navController: NavController) {
         bottomBar = { BottomBar(navController) }
     ) { paddingValues ->
         Column(
-            modifier = androidx.compose.ui.Modifier
+            modifier = Modifier
                 .padding(paddingValues)
                 .verticalScroll(rememberScrollState())
         )
         {
-            Row {
-                Button(onClick = { /*TODO*/ }) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            ) {
+                Button(
+                    onClick = { /*TODO*/ },
+                    colors = ButtonDefaults.buttonColors(containerColor = colorResource(R.color.contentcolorgreen)),
+                    shape = RoundedCornerShape(10),
+                    modifier = Modifier.padding(horizontal = 10.dp)
+                ) {
                     Text("스크랩 레시피")
                 }
-                Button(onClick = { /*TODO*/ }) {
+                Button(
+                    onClick = { /*TODO*/ },
+                    colors = ButtonDefaults.buttonColors(containerColor = colorResource(R.color.contentcolorgreen)),
+                    shape = RoundedCornerShape(10)
+                ) {
                     Text("스크랩 레시피")
                 }
-                Button(onClick = { /*TODO*/ }) {
+                Button(
+                    onClick = { /*TODO*/ },
+                    colors = ButtonDefaults.buttonColors(containerColor = colorResource(R.color.contentcolorgreen)),
+                    shape = RoundedCornerShape(10)
+                ) {
                     Text("후기 관리")
                 }
-                RecentRecipeSection()
-                MenuList()
-            }
-        }
+            }//로우
+            RecentRecipeSection()
+            MenuList()
+        } //컬럼
     }
 }
 
 
-    @Composable
-    fun RecentRecipeSection() {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        ) {
-            Text(
-                "최근에 본 레시피",
-                modifier = Modifier.padding(vertical = 16.dp),
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold
-            )
+@Composable
+fun RecentRecipeSection() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    ) {
+        Text(
+            "최근에 본 레시피",
+            modifier = Modifier.padding(vertical = 16.dp),
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold
+        )
 
 
-            RecentRecipeCard(
-                imageUrl = "recipe_image_url",
-                title = "맛있는 비빔밥",
-                views = "조회수",
-                viewCount = "32회"
-            )
+        RecentRecipeCard(
+            imageUrl = "recipe_image_url",
+            title = "맛있는 비빔밥",
+            views = "조회수",
+            viewCount = "32회"
+        )
 
-            Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
-            RecentRecipeCard(
-                imageUrl = "recipe_image_url",
-                title = "맛있는 비빔밥",
-                views = "조회수",
-                viewCount = "32회"
-            )
-
-            MenuList()
-
-        }
+        RecentRecipeCard(
+            imageUrl = "recipe_image_url",
+            title = "맛있는 비빔밥",
+            views = "조회수",
+            viewCount = "32회"
+        )
     }
+}
 
 @Composable
 fun RecentRecipeCard(
@@ -187,11 +200,7 @@ fun MenuList() {
         "🎉 이벤트",
         "고객센터",
         "📝 자주 묻는 질문",
-        "1:1 문의하기",
-        "❤️ 찜 목록",
-        "주문/배송 내역",
-        "교환/반품/취소",
-        "간편결제"
+        "1:1 문의하기"
     )
 
     Column(
