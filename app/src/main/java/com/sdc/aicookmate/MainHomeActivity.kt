@@ -1,6 +1,5 @@
 package com.sdc.aicookmate
 
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -8,17 +7,16 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -26,32 +24,25 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.motionEventSpy
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import com.sdc.aicookmate.ui.theme.AiCookMateTheme
 
 @Composable
 fun MainScreen(navController: NavController) {
@@ -67,14 +58,14 @@ fun MainScreen(navController: NavController) {
             Column(
                 modifier = Modifier
                     .padding(horizontal = 20.dp)
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
             ) {
                 Spacer(modifier = Modifier.height(16.dp))
 
                 OutlinedTextField(
                     value = "",
                     onValueChange = {},
-                    leadingIcon = { Icon(Icons.Default.Search, "검색") },
+                    leadingIcon = { Icon(Icons.Default.Search, contentDescription = "검색") },
                     placeholder = { Text("레시피 검색") },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -83,9 +74,11 @@ fun MainScreen(navController: NavController) {
                 )
 
                 Spacer(modifier = Modifier.height(20.dp))
-                RefrigeratorButton()
-                Spacer(modifier = Modifier.height(24.dp))
 
+                // 냉장고 관리하기 버튼
+                RefrigeratorButton(navController)
+
+                Spacer(modifier = Modifier.height(24.dp))
                 ChuchunList()
                 Spacer(modifier = Modifier.height(12.dp))
                 ChuChunCard()
@@ -98,7 +91,6 @@ fun MainScreen(navController: NavController) {
                 Spacer(modifier = Modifier.height(12.dp))
                 BestListCard()
 
-
                 Spacer(modifier = Modifier.height(16.dp))
             }
         }
@@ -106,14 +98,17 @@ fun MainScreen(navController: NavController) {
 }
 
 @Composable
-fun RefrigeratorButton() {
-
+fun RefrigeratorButton(navController: NavController) {
     Button(
-        onClick = {},
+        onClick = {
+            // 냉장고 화면으로 이동
+            navController.navigate("refigeratorScreen")
+        },
         colors = ButtonDefaults.buttonColors(
             containerColor = Color(136, 193, 136),
             contentColor = Color.Black
-        ), modifier = Modifier
+        ),
+        modifier = Modifier
             .fillMaxWidth()
             .height(110.dp),
         shape = RoundedCornerShape(8.dp)
@@ -122,7 +117,7 @@ fun RefrigeratorButton() {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start,
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .padding(horizontal = 10.dp)
         ) {
             Image(
@@ -145,9 +140,8 @@ fun RefrigeratorButton() {
 
             Image(
                 painter = painterResource(id = R.drawable.ic_arrow),
-                contentDescription = "냉장고 아이콘",
-                modifier = Modifier
-                    .size(16.dp)
+                contentDescription = "화살표 아이콘",
+                modifier = Modifier.size(16.dp)
             )
         }
     }
@@ -159,38 +153,29 @@ fun ChuchunList() {
         modifier = Modifier
             .fillMaxWidth()
             .padding(1.dp)
-    )
-    {
-
+    ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.Bottom
         ) {
-
-
             Text(
                 "오늘의 추천 레시피",
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black
             )
-            Box() {
-                Text(
-                    "더보기>",
-                    fontSize = 14.sp,
-                    color = Color.Gray,
-                    modifier = Modifier
-                        .padding(bottom = 4.dp)
-
-                )
-            }
+            Text(
+                "더보기>",
+                fontSize = 14.sp,
+                color = Color.Gray,
+                modifier = Modifier
+                    .padding(bottom = 4.dp)
+            )
             Spacer(modifier = Modifier.width(10.dp))
         }
     }
 }
-
 
 @Composable
 fun ChuChunCard() {
@@ -206,14 +191,12 @@ fun ChuChunCard() {
     }
 }
 
-
 @Composable
 fun RecipeCard(imageRes: Int, description: String) {
     Column(
         modifier = Modifier
             .width(150.dp)
             .height(130.dp)
-
     ) {
         Image(
             painter = painterResource(id = imageRes),
@@ -237,14 +220,14 @@ fun RecipeCard(imageRes: Int, description: String) {
 @Composable
 fun CategorySelector() {
     var selectedCategory by remember { mutableStateOf("한식") }
+
     Column {
         Text(
             "카테고리",
             fontSize = 28.sp,
             fontWeight = FontWeight.Bold,
             color = Color.Black,
-            modifier = Modifier
-                .padding(bottom = 8.dp)
+            modifier = Modifier.padding(bottom = 8.dp)
         )
 
         Row(
@@ -253,7 +236,6 @@ fun CategorySelector() {
                 .horizontalScroll(rememberScrollState()),
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-
             CategoryItem(
                 iconRes = R.drawable.ic_korean,
                 label = "한식",
@@ -340,9 +322,7 @@ fun CategoryItem(
             contentDescription = label,
             modifier = Modifier.size(40.dp)
         )
-
         Spacer(modifier = Modifier.height(4.dp))
-
         Text(
             text = label,
             fontSize = 12.sp,
@@ -358,30 +338,23 @@ fun BestRecipe() {
         modifier = Modifier
             .fillMaxWidth()
             .padding(1.dp)
-
-    )
-    {
+    ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.Bottom
-
         ) {
-
             Text(
                 "실시간 베스트 레시피",
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black
             )
-
             Text(
                 "더보기>",
                 fontSize = 14.sp,
                 color = Color.Gray,
-                modifier = Modifier
-                    .padding(bottom = 4.dp)
+                modifier = Modifier.padding(bottom = 4.dp)
             )
             Spacer(modifier = Modifier.width(10.dp))
         }
@@ -402,14 +375,12 @@ fun BestListCard() {
     }
 }
 
-
 @Composable
 fun BestCard(imageRes: Int, description: String) {
     Column(
         modifier = Modifier
             .width(150.dp)
             .height(130.dp)
-
     ) {
         Image(
             painter = painterResource(id = imageRes),
@@ -432,6 +403,7 @@ fun BestCard(imageRes: Int, description: String) {
 
 @Composable
 fun BottomBar(navController: NavController) {
+    // 여기서 Box + Row 조합
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -464,7 +436,7 @@ fun BottomBar(navController: NavController) {
                 contentDescription = "냉장고 아이콘",
                 modifier = Modifier
                     .size(40.dp)
-                    .clickable {navController.navigate("refigeratorScreen") }
+                    .clickable { navController.navigate("refigeratorScreen") }
             )
             Image(
                 painter = painterResource(id = R.drawable.ic_bookheart),
