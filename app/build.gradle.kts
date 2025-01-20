@@ -4,8 +4,16 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     id("com.google.devtools.ksp")
 }
-val openaiApiKey: String = project.findProperty("OPENAI_API_KEY") as String?
-    ?: throw IllegalArgumentException("OpenAI API Key not found in gradle.properties")
+
+// ================================================================
+//  local.properties에서 OPENAI_API_KEY 읽어와서 openAiKey 변수에 저장
+// ================================================================
+val localProps = Properties()
+val localFile = rootProject.file("local.properties")
+if (localFile.exists()) {
+    localProps.load(FileInputStream(localFile))
+}
+val openAiKey = localProps.getProperty("OPENAI_API_KEY", "")
 
 android {
     namespace = "com.sdc.aicookmate"
@@ -22,22 +30,23 @@ android {
     }
     buildTypes {
         debug {
-            buildConfigField(
-                "String",
-                "OPENAI_API_KEY",
-                "\"${System.getenv("OPENAI_API_KEY") ?: ""}\""
-            )
+            // BuildConfig.OPENAI_API_KEY 에 local.properties 키 값 주입
+            buildConfigField("String", "OPENAI_API_KEY", "\"$openAiKey\"")
         }
         release {
-            buildConfigField(
-                "String",
-                "OPENAI_API_KEY",
-                "\"${System.getenv("OPENAI_API_KEY") ?: ""}\""
+            buildConfigField("String", "OPENAI_API_KEY", "\"$openAiKey\"")
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
             )
         }
     }
+
+    // BuildConfig 및 Compose 설정
     buildFeatures {
-        buildConfig = true // BuildConfig 필드 활성화
+        buildConfig = true
+        compose = true
     }
 
     compileOptions {
@@ -107,6 +116,4 @@ dependencies {
     // See Add the KSP plugin to your project
     ksp("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
-
-    implementation ("com.google.mlkit:text-recognition-korean:16.0.1")
 }

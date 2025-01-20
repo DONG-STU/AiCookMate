@@ -52,7 +52,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
-import coil3.compose.rememberAsyncImagePainter
+import coil.compose.rememberAsyncImagePainter
+
 import com.sdc.aicookmate.ui.theme.AiCookMateTheme
 
 //@Preview
