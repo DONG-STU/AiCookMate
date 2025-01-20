@@ -36,10 +36,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 
-@Preview
 @Composable
-fun GptScreen() {
+fun GptScreen(navController: NavController) {
     val scrollState = rememberLazyListState()
     var remainingCount by remember { mutableStateOf(3) }
     var recipeName by remember { mutableStateOf("") }
@@ -120,7 +120,7 @@ fun GptScreen() {
                     remainingCount--
                     if (remainingCount >= 0) {
                         fetchRecipe(
-                            prompt = "내가 가진 재료는 '양파, 돼지고기, 간장, 고추장, 메이플시럽'이고 '찜/탕'을 요리하려고 해. 레시피를 만들어줘.",
+                            prompt = "내가 가진 재료는 '$ingreidentsSelected'이고 '$titleSelected'을 요리하려고 해. 레시피를 만들어줘.",
                             onSuccess = { response ->
                                 recipeName = response.choices[0].message.content.substringBefore("\n")
                                 recipeIngredients = response.choices[0].message.content
@@ -137,6 +137,68 @@ fun GptScreen() {
                     }
                 }
             )
+        }
+    }
+}
+
+
+@Composable
+fun RecipeRecommendationButton(
+    remainingCount: Int,
+    onCountDecrease: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Button(
+            onClick = {
+                if (remainingCount > 0) {
+                    onCountDecrease()
+                }
+            },
+            enabled = remainingCount > 0,
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(136, 193, 136),
+                contentColor = Color.Black,
+                disabledContainerColor = Color(136, 193, 136).copy(alpha = 0.5f)
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(80.dp)
+                .padding(horizontal = 12.dp, vertical = 4.dp),
+            shape = RoundedCornerShape(8.dp)
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Row {
+                    Text(
+                        "레시피 다시추천 받기",
+                        style = TextStyle(
+                            fontSize = 16.sp,
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold
+                        )
+                    )
+                    Image(
+                        painterResource(id = R.drawable.ic_swap),
+                        contentDescription = "새로고침",
+                        modifier = Modifier.size(24.dp),
+                        colorFilter = ColorFilter.tint(Color.White)
+                    )
+                }
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    "남은 횟수: $remainingCount",
+                    style = TextStyle(
+                        fontSize = 12.sp,
+                        color = Color.White,
+                        fontWeight = FontWeight.Normal
+                    )
+                )
+            }
         }
     }
 }

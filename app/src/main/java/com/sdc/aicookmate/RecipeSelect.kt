@@ -33,6 +33,8 @@ fun SelectRecipeScreen(navController: NavController){
     GPTFoodCategories(navController)
 }
 
+var titleSelected = ""
+
 @Composable
 fun GPTFoodCategories(navController: NavController) {
     val categories = listOf(
@@ -64,17 +66,17 @@ fun GPTFoodCategories(navController: NavController) {
             GPTFoodCategoryItem(
                 navController,
                 title = categories[0].first,
-                iconRes = categories[0].second
+                iconRes = categories[0].second,
             )
             GPTFoodCategoryItem(
                 navController,
                 title = categories[1].first,
-                iconRes = categories[1].second
+                iconRes = categories[1].second,
             )
             GPTFoodCategoryItem(
                 navController,
                 title = categories[2].first,
-                iconRes = categories[2].second
+                iconRes = categories[2].second,
             )
         }
 
@@ -87,17 +89,17 @@ fun GPTFoodCategories(navController: NavController) {
             GPTFoodCategoryItem(
                 navController,
                 title = categories[3].first,
-                iconRes = categories[3].second
+                iconRes = categories[3].second,
             )
             GPTFoodCategoryItem(
                 navController,
                 title = categories[4].first,
-                iconRes = categories[4].second
+                iconRes = categories[4].second,
             )
             GPTFoodCategoryItem(
                 navController,
                 title = categories[5].first,
-                iconRes = categories[5].second
+                iconRes = categories[5].second,
             )
         }
 
@@ -110,24 +112,24 @@ fun GPTFoodCategories(navController: NavController) {
             GPTFoodCategoryItem(
                 navController,
                 title = categories[6].first,
-                iconRes = categories[6].second
+                iconRes = categories[6].second,
             )
             GPTFoodCategoryItem(
                 navController,
                 title = categories[7].first,
-                iconRes = categories[7].second
+                iconRes = categories[7].second,
             )
             GPTFoodCategoryItem(
                 navController,
                 title = categories[8].first,
-                iconRes = categories[8].second
+                iconRes = categories[8].second,
             )
         }
     }
 }
 
 @Composable
-fun GPTFoodCategoryItem(navController: NavController,title: String, iconRes: Int) {
+fun GPTFoodCategoryItem(navController: NavController, title: String, iconRes: Int) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.width(100.dp)
@@ -138,8 +140,8 @@ fun GPTFoodCategoryItem(navController: NavController,title: String, iconRes: Int
                 .clip(RoundedCornerShape(percent = 20))
                 .background(Color.White)
                 .clickable {
+                    titleSelected = title
                     navController.navigate("GptScreen")
-
                 }
                 .border(
                     width = 0.5.dp,
