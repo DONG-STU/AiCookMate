@@ -12,12 +12,16 @@ import androidx.room.PrimaryKey
 //    val views: Int
 //)
 
-@Entity(tableName = "recipes")
+@Entity(tableName = "recipes", indices = [Index(value = ["title"], unique = true)])
 data class Recipe(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0, // 자동 생성되는 기본 키
-    val title: String,
-    val description: String,
-    val views: Int
+    @PrimaryKey(autoGenerate = true) val id: Int = 0, // 고유 식별자 추가
+    val title: String,        // 레시피 제목
+    val thumbnail: String,    // 레시피 썸네일 URL
+    val servings: String,     // 인분 정보
+    val timeRequired: String, // 소요 시간
+    val difficulty: String,   // 난이도
+    val description: String,  // 레시피 설명
+    val url: String           // 레시피 상세 URL
 )
 
 @Entity(tableName = "recent_recipes")
