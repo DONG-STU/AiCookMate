@@ -204,7 +204,7 @@ fun FoodCategories(navController: NavController) {
 }
 
 @Composable
-fun FoodCategoryItem(navController: NavController,title: String, iconRes: Int) {
+fun FoodCategoryItem(navController: NavController, title: String, iconRes: Int) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.width(100.dp)
@@ -214,7 +214,13 @@ fun FoodCategoryItem(navController: NavController,title: String, iconRes: Int) {
                 .size(100.dp)
                 .clip(RoundedCornerShape(percent = 20))
                 .background(Color.White)
-                .clickable { navController.navigate("recipeScreen2") }
+                .clickable {
+                    if (title == "인플루언서") {
+                        navController.navigate("influencerScreen")
+                    } else {
+                        navController.navigate("recipeScreen2")
+                    }
+                }
                 .border(
                     width = 0.5.dp,
                     color = Color.LightGray,
@@ -281,13 +287,13 @@ fun FoodItems(navController: NavController) {
         verticalArrangement = Arrangement.spacedBy(1.dp)
     ) {
         items(foodItems.size) { index ->
-            FoodItemCard(navController,foodItems[index])
+            FoodItemCard(navController, foodItems[index])
         }
     }
 }
 
 @Composable
-fun FoodItemCard(navController: NavController,foodItem: FoodItem) {
+fun FoodItemCard(navController: NavController, foodItem: FoodItem) {
     Column(
         modifier = Modifier
             .fillMaxWidth()

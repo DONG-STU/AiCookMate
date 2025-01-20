@@ -41,6 +41,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
 @Composable
 fun NavSys() {
     val navController = rememberNavController()
@@ -81,5 +82,12 @@ fun NavSys() {
         composable("ScanReceiptImage") {
             ScanReceiptImage(navController)
         }
+        composable("InfluencerScreen") {
+            InfluencerScreen(navController)
+        }
+        composable("InfluencerScreen2") {
+            InfluencerScreen2(navController)
+        }
+
     }
 }
