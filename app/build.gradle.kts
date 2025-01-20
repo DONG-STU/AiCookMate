@@ -125,4 +125,6 @@ dependencies {
     implementation ("com.google.code.gson:gson:2.10.1")
     implementation (platform ("com.google.firebase:firebase-bom:32.7.1"))
     implementation ("com.google.firebase:firebase-firestore-ktx")
+
+    implementation ("com.google.mlkit:text-recognition-korean:16.0.1")
 }
