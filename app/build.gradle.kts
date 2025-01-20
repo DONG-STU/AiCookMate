@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("com.google.devtools.ksp")
+
 }
 val openaiApiKey: String = project.findProperty("OPENAI_API_KEY") as String?
     ?: throw IllegalArgumentException("OpenAI API Key not found in gradle.properties")
@@ -21,10 +23,18 @@ android {
     }
     buildTypes {
         debug {
-            buildConfigField("String", "OPENAI_API_KEY", "\"${project.findProperty("OPENAI_API_KEY")}\"")
+            buildConfigField(
+                "String",
+                "OPENAI_API_KEY",
+                "\"${System.getenv("OPENAI_API_KEY") ?: ""}\""
+            )
         }
         release {
-            buildConfigField("String", "OPENAI_API_KEY", "\"${project.findProperty("OPENAI_API_KEY")}\"")
+            buildConfigField(
+                "String",
+                "OPENAI_API_KEY",
+                "\"${System.getenv("OPENAI_API_KEY") ?: ""}\""
+            )
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -91,5 +101,11 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
 
+    //Room
+    val room_version = "2.6.1"
+
+    implementation("androidx.room:room-runtime:$room_version")
+    ksp("androidx.room:room-compiler:$room_version")
+    implementation("androidx.room:room-ktx:$room_version")
 
 }
