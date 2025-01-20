@@ -35,6 +35,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -54,7 +55,9 @@ import androidx.navigation.compose.rememberNavController
 import com.sdc.aicookmate.ui.theme.AiCookMateTheme
 
 @Composable
-fun MainScreen(navController: NavController) {
+fun MainScreen(navController: NavController, viewModel: RecipeViewModel = RecipeViewModel()) {
+    val recipes by viewModel.recipes.collectAsState()
+
     Scaffold(
         bottomBar = { BottomBar(navController) }
     ) { paddingValues ->
@@ -82,28 +85,36 @@ fun MainScreen(navController: NavController) {
                     shape = RoundedCornerShape(30.dp)
                 )
 
-                Spacer(modifier = Modifier.height(20.dp))
-                RefrigeratorButton()
-                Spacer(modifier = Modifier.height(24.dp))
-
-                ChuchunList()
-                Spacer(modifier = Modifier.height(12.dp))
-                ChuChunCard()
-                Spacer(modifier = Modifier.height(32.dp))
-
-                CategorySelector()
-                Spacer(modifier = Modifier.height(32.dp))
-
-                BestRecipe()
-                Spacer(modifier = Modifier.height(12.dp))
-                BestListCard()
-
-
-                Spacer(modifier = Modifier.height(16.dp))
+//                Spacer(modifier = Modifier.height(20.dp))
+//                RefrigeratorButton()
+//                Spacer(modifier = Modifier.height(24.dp))
+//
+//                ChuchunList()
+//                Spacer(modifier = Modifier.height(12.dp))
+//                ChuChunCard()
+//                Spacer(modifier = Modifier.height(32.dp))
+//
+//                CategorySelector()
+//                Spacer(modifier = Modifier.height(32.dp))
+//
+//                BestRecipe()
+//                Spacer(modifier = Modifier.height(12.dp))
+//                BestListCard()
+//
+//                Spacer(modifier = Modifier.height(16.dp))
             }
+
+            // Firestore 데이터 추가
+            Text(
+                text = "추천 레시피",
+                modifier = Modifier.padding(horizontal = 20.dp)
+            )
+//            Spacer(modifier = Modifier.height(8.dp))
+            RecipeList(recipes = recipes) // RecipeList 표시
         }
     }
 }
+
 
 @Composable
 fun RefrigeratorButton() {
