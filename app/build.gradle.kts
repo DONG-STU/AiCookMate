@@ -26,14 +26,14 @@ android {
             buildConfigField(
                 "String",
                 "OPENAI_API_KEY",
-                "\"${project.findProperty("OPENAI_API_KEY")}\""
+                "\"${System.getenv("OPENAI_API_KEY") ?: ""}\""
             )
         }
         release {
             buildConfigField(
                 "String",
                 "OPENAI_API_KEY",
-                "\"${project.findProperty("OPENAI_API_KEY")}\""
+                "\"${System.getenv("OPENAI_API_KEY") ?: ""}\""
             )
             isMinifyEnabled = false
             proguardFiles(
