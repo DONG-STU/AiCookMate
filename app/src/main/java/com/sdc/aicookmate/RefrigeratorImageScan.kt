@@ -223,7 +223,7 @@ fun ScanRefrigeratorPhoto(navController: NavController) {
 }
 
 // 이미지 Uri 생성 함수
-private fun createImageUri(context: Context): Uri {
+ fun createImageUri(context: Context): Uri {
     val resolver = context.contentResolver
     val contentValues = ContentValues().apply {
         put(MediaStore.Images.Media.DISPLAY_NAME, "photo_${System.currentTimeMillis()}.jpg")

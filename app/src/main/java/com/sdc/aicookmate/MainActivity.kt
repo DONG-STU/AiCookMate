@@ -78,5 +78,8 @@ fun NavSys() {
         composable("ScanRefrigeratorPhoto") {
             ScanRefrigeratorPhoto(navController)
         }
+        composable("ScanReceiptImage") {
+            ScanReceiptImage(navController)
+        }
     }
 }
