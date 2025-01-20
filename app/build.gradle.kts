@@ -4,16 +4,8 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     id("com.google.devtools.ksp")
 }
-
-// ================================================================
-//  local.properties에서 OPENAI_API_KEY 읽어와서 openAiKey 변수에 저장
-// ================================================================
-val localProps = Properties()
-val localFile = rootProject.file("local.properties")
-if (localFile.exists()) {
-    localProps.load(FileInputStream(localFile))
-}
-val openAiKey = localProps.getProperty("OPENAI_API_KEY", "")
+val openaiApiKey: String = project.findProperty("OPENAI_API_KEY") as String?
+    ?: throw IllegalArgumentException("OpenAI API Key not found in gradle.properties")
 
 android {
     namespace = "com.sdc.aicookmate"
@@ -30,23 +22,22 @@ android {
     }
     buildTypes {
         debug {
-            // BuildConfig.OPENAI_API_KEY 에 local.properties 키 값 주입
-            buildConfigField("String", "OPENAI_API_KEY", "\"$openAiKey\"")
+            buildConfigField(
+                "String",
+                "OPENAI_API_KEY",
+                "\"${System.getenv("OPENAI_API_KEY") ?: ""}\""
+            )
         }
         release {
-            buildConfigField("String", "OPENAI_API_KEY", "\"$openAiKey\"")
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+            buildConfigField(
+                "String",
+                "OPENAI_API_KEY",
+                "\"${System.getenv("OPENAI_API_KEY") ?: ""}\""
             )
         }
     }
-
-    // BuildConfig 및 Compose 설정
     buildFeatures {
-        buildConfig = true
-        compose = true
+        buildConfig = true // BuildConfig 필드 활성화
     }
 
     compileOptions {
@@ -105,9 +96,11 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
 
+    //coil
     implementation("io.coil-kt.coil3:coil-compose:3.0.4")
     implementation("io.coil-kt.coil3:coil-network-okhttp:3.0.4")
 
+    //room
     val room_version = "2.6.1"
 
     implementation("androidx.room:room-runtime:$room_version")
