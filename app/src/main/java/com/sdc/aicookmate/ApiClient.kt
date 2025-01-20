@@ -1,29 +1,23 @@
 package com.sdc.aicookmate
 
-import android.util.Log
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import okhttp3.logging.HttpLoggingInterceptor
 
 object ApiClient {
     private const val BASE_URL = "https://api.openai.com/"
 
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
-        // 요청/응답 전체 로그를 보고 싶다면 BODY
-        level = HttpLoggingInterceptor.Level.BODY
+        level = HttpLoggingInterceptor.Level.BODY // BODY로 설정하여 요청 및 응답 본문을 출력
     }
 
     private val okHttpClient: OkHttpClient by lazy {
         OkHttpClient.Builder()
-            .addInterceptor(loggingInterceptor)
+            .addInterceptor(loggingInterceptor) // 로깅 인터셉터 추가
             .addInterceptor { chain ->
-                // 빌드 시점에 주입된 BuildConfig.OPENAI_API_KEY 사용
-                val apiKey = BuildConfig.OPENAI_API_KEY
-                Log.d("API Key Check", "API Key: $apiKey")
-
                 val request = chain.request().newBuilder()
-                    .addHeader("Authorization", "Bearer $apiKey")
+                    .addHeader("Authorization", "Bearer ${BuildConfig.OPENAI_API_KEY}")
                     .build()
                 chain.proceed(request)
             }

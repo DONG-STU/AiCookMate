@@ -1,9 +1,16 @@
 package com.sdc.aicookmate
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -745,6 +752,7 @@ fun Refrigerator(navController: NavController) {
     val selectedIngredients = mutableListOf<String>()
     var inputText by remember { mutableStateOf("") }
 
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -789,9 +797,8 @@ fun Refrigerator(navController: NavController) {
                     .background(Color.Black)
                     .height(1.dp)
             )
-            Row {
-                PostIt("이게되네")
-                PostIt("ㄹㅇㅋㅋ")
+            Row (){
+
             }
         }
         Spacer(modifier = Modifier.height(10.dp))
@@ -810,16 +817,7 @@ fun Refrigerator(navController: NavController) {
                 modifier = Modifier.fillMaxSize()
             )
             Column(modifier = Modifier.padding(5.dp)) {
-                Row(modifier = Modifier.padding(5.dp)) {
-                    PostIt("양파")
-                    PostIt("대파")
-                    PostIt("시금치")
-                    PostIt("콩나물시금치")
 
-                }
-                Row(modifier = Modifier.padding(5.dp)) {
-                    PostIt("아무튼졸라긴거적음")
-                }
             }
         }
 
@@ -833,7 +831,9 @@ fun Refrigerator(navController: NavController) {
                 .padding(horizontal = 10.dp)
         ) {
             Button(
-                onClick = {},
+                onClick = {
+                    navController.navigate("ScanRefrigeratorPhoto")
+                },
                 shape = RoundedCornerShape(10.dp), // 모서리를 둥글게 설정
                 modifier = Modifier
                     .weight(1f) // 버튼 균등 배치
@@ -854,7 +854,9 @@ fun Refrigerator(navController: NavController) {
             Spacer(modifier = Modifier.width(20.dp))
 
             Button(
-                onClick = {},
+                onClick = {
+
+                },
                 shape = RoundedCornerShape(10.dp), // 모서리를 둥글게 설정
                 modifier = Modifier
                     .weight(1f) // 버튼 균등 배치
@@ -888,7 +890,7 @@ fun Refrigerator(navController: NavController) {
             ) {
                 Image(
                     painter = painterResource(R.drawable.scan_reciept),
-                    contentDescription = "영수증 스캔",
+                    contentDescription = "GPT 추천",
                     contentScale = ContentScale.Fit,
                     modifier = Modifier.size(24.dp)
                 )

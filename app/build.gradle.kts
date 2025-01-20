@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("com.google.devtools.ksp")
 }
 val openaiApiKey: String = project.findProperty("OPENAI_API_KEY") as String?
     ?: throw IllegalArgumentException("OpenAI API Key not found in gradle.properties")
@@ -21,14 +22,17 @@ android {
     }
     buildTypes {
         debug {
-            buildConfigField("String", "OPENAI_API_KEY", "\"${project.findProperty("OPENAI_API_KEY")}\"")
+            buildConfigField(
+                "String",
+                "OPENAI_API_KEY",
+                "\"${System.getenv("OPENAI_API_KEY") ?: ""}\""
+            )
         }
         release {
-            buildConfigField("String", "OPENAI_API_KEY", "\"${project.findProperty("OPENAI_API_KEY")}\"")
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+            buildConfigField(
+                "String",
+                "OPENAI_API_KEY",
+                "\"${System.getenv("OPENAI_API_KEY") ?: ""}\""
             )
         }
     }
@@ -69,6 +73,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation("androidx.compose.material3:material3:1.1.1")
+
     val nav_version = "2.8.4"
 
 
@@ -91,5 +96,15 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
 
+    implementation("io.coil-kt.coil3:coil-compose:3.0.4")
+    implementation("io.coil-kt.coil3:coil-network-okhttp:3.0.4")
 
+    val room_version = "2.6.1"
+
+    implementation("androidx.room:room-runtime:$room_version")
+
+    // If this project uses any Kotlin source, use Kotlin Symbol Processing (KSP)
+    // See Add the KSP plugin to your project
+    ksp("androidx.room:room-compiler:$room_version")
+    implementation("androidx.room:room-ktx:$room_version")
 }
