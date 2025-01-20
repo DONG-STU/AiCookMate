@@ -752,7 +752,7 @@ val ingredients = listOf(
 
 @Composable
 fun Refrigerator(navController: NavController) {
-    val selectedIngredients = mutableListOf<String>()
+    val selectedIngredients = remember { mutableStateListOf<String>() }
     var inputText by remember { mutableStateOf("") }
 
 
@@ -819,7 +819,8 @@ fun Refrigerator(navController: NavController) {
                 contentScale = ContentScale.FillBounds,
                 modifier = Modifier.fillMaxSize()
             )
-            Column(modifier = Modifier.verticalScroll(rememberScrollState())
+            Column(modifier = Modifier
+                .verticalScroll(rememberScrollState())
                 .align(Alignment.TopCenter)) {
                 val chunkedIngredients = ingreidentsSelected.chunked(4)
                 for (ingredient in chunkedIngredients) {
@@ -889,7 +890,7 @@ fun Refrigerator(navController: NavController) {
 
             Button(
                 onClick = {
-                    ingreidentsSelected = selectedIngredients as SnapshotStateList<String>
+                    ingreidentsSelected = selectedIngredients
                     navController.navigate("selectRecipeScreen")
                 },
                 shape = RoundedCornerShape(10.dp), // 모서리를 둥글게 설정
@@ -945,8 +946,9 @@ fun PostIt(text: String) {
             Image(
                 painter = painterResource(R.drawable.postit_close_btn),
                 contentDescription = "닫기",
-                modifier = Modifier.size(20.dp)
-                    .clickable { ingreidentsSelected.removeIf{it == text} },
+                modifier = Modifier
+                    .size(20.dp)
+                    .clickable { ingreidentsSelected.removeIf { it == text } },
             )
         }
     }
