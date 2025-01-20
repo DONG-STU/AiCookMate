@@ -15,6 +15,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,6 +26,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
@@ -36,6 +38,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -54,19 +57,25 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import coil3.compose.rememberAsyncImagePainter
 import com.sdc.aicookmate.ui.theme.AiCookMateTheme
+import org.tensorflow.lite.Interpreter
+
+private lateinit var interpreter: Interpreter
 
 //@Preview
 @Composable
 fun ScanRefrigeratorPhoto(navController: NavController) {
     var inputText by remember { mutableStateOf("") }
     var imageUri by remember { mutableStateOf<Uri?>(null) }
+    var selectedIngredients = mutableListOf<String>()
     val context = LocalContext.current
+    interpreter = loadModel(context, "java/com/sdc/aicookmate/SearchMyRefrigerator.pt")
     val pickMedia =
         rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             if (uri != null) {
                 imageUri = uri
             }
         }
+    val scrollState = rememberScrollState()
 
     // Camera Launcher 설정
     val permissionLauncher = rememberLauncherForActivityResult(
@@ -89,6 +98,14 @@ fun ScanRefrigeratorPhoto(navController: NavController) {
             }
         }
     )
+
+    val bitmap = imageUri?.let { uriToBitmap(context, it) }
+    if (bitmap != null) {
+        val detectedClasses = runYoloModel(interpreter, bitmap)
+        selectedIngredients = detectedClasses.toMutableList()
+    } else {
+        println("Failed to convert URI to Bitmap.")
+    }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -134,9 +151,10 @@ fun ScanRefrigeratorPhoto(navController: NavController) {
                     .background(Color.Black)
                     .height(1.dp)
             )
-            Row() {
-                PostIt("양파")
-                PostIt("콩나물")
+            Row(modifier = Modifier.horizontalScroll(rememberScrollState())) {
+                for (i in selectedIngredients) {
+                    PostIt(i)
+                }
             }
         }
         Spacer(modifier = Modifier.height(10.dp))
@@ -150,7 +168,6 @@ fun ScanRefrigeratorPhoto(navController: NavController) {
                 .weight(1f)
                 .border(3.dp, Color.LightGray, RectangleShape)
         )
-
         Box(
             modifier = Modifier
                 .weight(0.4f)
@@ -158,18 +175,20 @@ fun ScanRefrigeratorPhoto(navController: NavController) {
                 .background(Color.White)
         ) {
             Text("다음 재료를 추가할게요!", modifier = Modifier.align(Alignment.TopStart))
-            Row (modifier = Modifier.padding(top = 10.dp)){
+            Row(modifier = Modifier.padding(top = 10.dp)) {
                 PostIt("양파")
                 PostIt("대파")
                 PostIt("계란")
                 PostIt("콩나물")
             }
-            Button(onClick = {
-                navController.navigateUp()
-                Toast.makeText(context, "재료를 추가했어요!", Toast.LENGTH_SHORT).show()
-            },
+            Button(
+                onClick = {
+                    navController.navigateUp()
+                    Toast.makeText(context, "재료를 추가했어요!", Toast.LENGTH_SHORT).show()
+                },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xffFF5D5D)),
-                modifier = Modifier.align(Alignment.BottomEnd)) {
+                modifier = Modifier.align(Alignment.BottomEnd)
+            ) {
                 Text("확인")
             }
         }
@@ -223,7 +242,7 @@ fun ScanRefrigeratorPhoto(navController: NavController) {
 }
 
 // 이미지 Uri 생성 함수
- fun createImageUri(context: Context): Uri {
+fun createImageUri(context: Context): Uri {
     val resolver = context.contentResolver
     val contentValues = ContentValues().apply {
         put(MediaStore.Images.Media.DISPLAY_NAME, "photo_${System.currentTimeMillis()}.jpg")

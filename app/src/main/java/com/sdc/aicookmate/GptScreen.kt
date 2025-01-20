@@ -1,6 +1,7 @@
 package com.sdc.aicookmate
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -30,6 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -119,7 +121,7 @@ fun GptScreen(navController: NavController) {
                     remainingCount--
                     if (remainingCount >= 0) {
                         fetchRecipe(
-                            prompt = "내가 가진 재료는 '$ingreidentsSelected'이고 '$titleSelected'을 요리하려고 해. 레시피를 만들어줘.",
+                            prompt = "내가 가진 재료는 '${ingreidentsSelected.joinToString(", ")}}'이고 '$titleSelected'을 요리하려고 해. 레시피를 만들어줘.",
                             onSuccess = { response ->
                                 recipeName = response.choices[0].message.content.substringBefore("\n")
                                 recipeIngredients = response.choices[0].message.content
@@ -147,6 +149,7 @@ fun RecipeRecommendationButton(
     onCountDecrease: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally

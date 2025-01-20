@@ -9,6 +9,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,10 +19,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -49,7 +53,6 @@ import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.korean.KoreanTextRecognizerOptions
 import java.io.IOException
 
-//@Preview
 @Composable
 fun ScanReceiptImage(navController: NavController) {
     var inputText by remember { mutableStateOf("") }
@@ -102,7 +105,8 @@ fun ScanReceiptImage(navController: NavController) {
             }
         }
     }
-
+    val foundIngredients = ingredients.filter { it in receiptText }.distinct()
+    val scrollState = rememberScrollState()
 
     Column(
         modifier = Modifier
@@ -159,8 +163,11 @@ fun ScanReceiptImage(navController: NavController) {
                 .fillMaxSize()
                 .background(Color.White)
         ) {
-            Column(modifier = Modifier.fillMaxSize()
-                .padding(10.dp)) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(10.dp)
+            ) {
                 Text(
                     "영수증",
                     fontSize = 30.sp,
@@ -175,16 +182,38 @@ fun ScanReceiptImage(navController: NavController) {
 
                 Spacer(modifier = Modifier.height(10.dp))
 
-                Box(modifier = Modifier.fillMaxWidth()
-                    .background(Color.Black)
-                    .padding(horizontal = 3.dp)
-                    .height(1.dp))
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Color.Black)
+                        .padding(horizontal = 3.dp)
+                        .height(1.dp)
+                )
                 Spacer(modifier = Modifier.height(10.dp))
-                Box(modifier = Modifier.fillMaxWidth()
-                    .background(Color.Black)
-                    .padding(horizontal = 3.dp)
-                    .height(1.dp))
-                ListOfIngredientsUI(receiptText)
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Color.Black)
+                        .padding(horizontal = 3.dp)
+                        .height(1.dp)
+                )
+                Column(modifier = Modifier.padding(vertical = 10.dp)
+                    .verticalScroll(scrollState)
+                    .weight(3f)) {
+                    for (ingredient in foundIngredients) {
+                        ListOfIngredientsUI(ingredient)
+                    }
+                }
+                Button(onClick = {
+                    ingreidentsSelected.addAll(foundIngredients.distinct())
+                    navController.navigateUp()
+                    Toast.makeText(context, "재료를 추가했어요!", Toast.LENGTH_SHORT).show()
+                },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xffFF5D5D)),
+                    modifier = Modifier.align(Alignment.End)
+                        .weight(1f)) {
+                    Text("확인")
+                }
             }
         }
         Row(
@@ -237,21 +266,26 @@ fun ScanReceiptImage(navController: NavController) {
 }
 
 @Composable
-fun ListOfIngredientsUI(text:String){
-    Column (modifier = Modifier.padding(vertical = 10.dp)){
-        Box(modifier = Modifier.fillMaxWidth()
-            .background(Color.LightGray)
-            .height(1.dp))
-        Row (horizontalArrangement = Arrangement.SpaceBetween,
+fun ListOfIngredientsUI(text: String) {
+        Box(modifier = Modifier.height(6.dp))
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.LightGray)
+                .height(1.dp)
+        )
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
-                .padding(horizontal = 5.dp)){
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 5.dp)
+        ) {
             Text(text)
-            Image(painter = painterResource(R.drawable.postit_close_btn),
-                contentDescription = "닫기 버튼")
+            Image(
+                painter = painterResource(R.drawable.postit_close_btn),
+                contentDescription = "닫기 버튼"
+            )
         }
-        Box(modifier = Modifier.fillMaxWidth()
-            .background(Color.LightGray)
-            .height(1.dp))
-    }
+
 }

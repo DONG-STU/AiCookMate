@@ -46,11 +46,14 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
@@ -69,7 +72,7 @@ fun ShowScreen() {
     //Refrigerator()
 }
 
-var ingreidentsSelected = mutableListOf<String>()
+var ingreidentsSelected = mutableStateListOf<String>()
 val ingredients = listOf(
     "3분 짜장",
     "가래떡",
@@ -816,8 +819,16 @@ fun Refrigerator(navController: NavController) {
                 contentScale = ContentScale.FillBounds,
                 modifier = Modifier.fillMaxSize()
             )
-            Column(modifier = Modifier.padding(5.dp)) {
-
+            Column(modifier = Modifier.verticalScroll(rememberScrollState())
+                .align(Alignment.TopCenter)) {
+                val chunkedIngredients = ingreidentsSelected.chunked(4)
+                for (ingredient in chunkedIngredients) {
+                    Row(modifier = Modifier.padding(2.dp)) {
+                        for (ingredient in ingredient) {
+                            PostIt(ingredient)
+                        }
+                    }
+                }
             }
         }
 
@@ -878,7 +889,7 @@ fun Refrigerator(navController: NavController) {
 
             Button(
                 onClick = {
-                    ingreidentsSelected = selectedIngredients
+                    ingreidentsSelected = selectedIngredients as SnapshotStateList<String>
                     navController.navigate("selectRecipeScreen")
                 },
                 shape = RoundedCornerShape(10.dp), // 모서리를 둥글게 설정
@@ -907,19 +918,21 @@ fun Refrigerator(navController: NavController) {
 fun PostIt(text: String) {
     var imgSize by remember { mutableIntStateOf(0) }
     when {
-        text.length < 4 -> imgSize = 60
-        text.length < 7 -> imgSize = 90
-        text.length < 10 -> imgSize = 120
+        text.length < 4 -> imgSize = 90
+        text.length < 7 -> imgSize = 120
+        text.length < 10 -> imgSize = 150
     }
     Box(
         modifier = Modifier
             .size(imgSize.dp)
-            .padding(5.dp),
+            .padding(2.dp),
         contentAlignment = Alignment.Center
     ) {
         Image(
             painter = painterResource(R.drawable.post_it_pink),
-            contentDescription = "포스트잇", modifier = Modifier.size(imgSize.dp)
+            contentDescription = "포스트잇",
+            contentScale = ContentScale.FillWidth,
+            modifier = Modifier.size(imgSize.dp)
         )
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -928,10 +941,12 @@ fun PostIt(text: String) {
                 .fillMaxSize()
                 .padding(top = 3.dp)
         ) {
-            Text(text, fontSize = 10.sp)
+            Text(text, fontSize = 20.sp)
             Image(
                 painter = painterResource(R.drawable.postit_close_btn),
-                contentDescription = "닫기", modifier = Modifier.size(10.dp)
+                contentDescription = "닫기",
+                modifier = Modifier.size(20.dp)
+                    .clickable { ingreidentsSelected.removeIf{it == text} },
             )
         }
     }

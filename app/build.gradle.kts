@@ -107,7 +107,6 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
     implementation("androidx.compose.foundation:foundation-layout:1.3.1")
 
-
     //coil
     implementation("io.coil-kt.coil3:coil-compose:3.0.4")
     implementation("io.coil-kt.coil3:coil-network-okhttp:3.0.4")
@@ -127,4 +126,13 @@ dependencies {
     implementation ("com.google.firebase:firebase-firestore-ktx")
 
     implementation ("com.google.mlkit:text-recognition-korean:16.0.1")
+
+    implementation ("org.tensorflow:tensorflow-lite:2.11.0")
+    implementation ("org.tensorflow:tensorflow-lite-support:0.4.0")
+
+    implementation(platform("com.google.firebase:firebase-bom:32.2.0"))
+    implementation ("com.google.firebase:firebase-firestore-ktx") // Firestore
+    implementation ("androidx.activity:activity-compose:1.7.2") // Compose Activity
+    implementation ("androidx.compose.ui:ui:1.5.1") // Compose UI
+    implementation ("androidx.compose.material3:material3:1.2.0")
 }
