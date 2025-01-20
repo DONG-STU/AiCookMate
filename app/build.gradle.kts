@@ -1,12 +1,23 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id ("com.google.gms.google-services")
     id("com.google.devtools.ksp")
+    kotlin("kapt")
 }
-val openaiApiKey: String = project.findProperty("OPENAI_API_KEY") as String?
-    ?: throw IllegalArgumentException("OpenAI API Key not found in gradle.properties")
-
+// ================================================================
+//  local.properties에서 OPENAI_API_KEY 읽어와서 openAiKey 변수에 저장
+// ================================================================
+val localProps = Properties()
+val localFile = rootProject.file("local.properties")
+if (localFile.exists()) {
+    localProps.load(FileInputStream(localFile))
+}
+val openAiKey = localProps.getProperty("OPENAI_API_KEY", "")
 android {
     namespace = "com.sdc.aicookmate"
     compileSdk = 35
@@ -22,22 +33,22 @@ android {
     }
     buildTypes {
         debug {
-            buildConfigField(
-                "String",
-                "OPENAI_API_KEY",
-                "\"${System.getenv("OPENAI_API_KEY") ?: ""}\""
-            )
+            // BuildConfig.OPENAI_API_KEY 에 local.properties 키 값 주입
+            buildConfigField("String", "OPENAI_API_KEY", "\"$openAiKey\"")
         }
         release {
-            buildConfigField(
-                "String",
-                "OPENAI_API_KEY",
-                "\"${System.getenv("OPENAI_API_KEY") ?: ""}\""
+            buildConfigField("String", "OPENAI_API_KEY", "\"$openAiKey\"")
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
             )
         }
     }
+    // BuildConfig 및 Compose 설정
     buildFeatures {
-        buildConfig = true // BuildConfig 필드 활성화
+        buildConfig = true
+        compose = true
     }
 
     compileOptions {
@@ -90,11 +101,12 @@ dependencies {
     // Testing Navigation
     androidTestImplementation("androidx.navigation:navigation-testing:$nav_version")
 
-    //openAI GPT 연결
-    // Retrofit and Gson for OpenAI GPT integration
+    // Retrofit, Gson, OkHttp for OpenAI GPT integration
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
+    implementation("androidx.compose.foundation:foundation-layout:1.3.1")
+
 
     //coil
     implementation("io.coil-kt.coil3:coil-compose:3.0.4")
@@ -109,4 +121,8 @@ dependencies {
     // See Add the KSP plugin to your project
     ksp("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
+
+    implementation ("com.google.code.gson:gson:2.10.1")
+    implementation (platform ("com.google.firebase:firebase-bom:32.7.1"))
+    implementation ("com.google.firebase:firebase-firestore-ktx")
 }
