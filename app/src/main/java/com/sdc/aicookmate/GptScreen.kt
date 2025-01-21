@@ -268,6 +268,8 @@ fun fetchRecipe(
         max_tokens = 1000
     )
 
+
+
     val call = api.sendChatCompletion(
         authorization = "Bearer ${BuildConfig.OPENAI_API_KEY}",
         request = requestBody
@@ -293,3 +295,5 @@ fun fetchRecipe(
         }
     })
 }
+
+

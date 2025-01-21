@@ -101,6 +101,11 @@ fun NavSys() {
             InfluencerScreen2(navController)
         }
 
+        composable("RecipeRecommendScreen") {
+            RecipeRecommendScreen(navController)
+        }
+
+
         composable("recipeList") {
             val viewModel: RecipeViewModel = viewModel()
             val recipes by viewModel.recipes.collectAsState()
