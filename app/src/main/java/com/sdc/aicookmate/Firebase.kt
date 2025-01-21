@@ -1,5 +1,6 @@
 package com.sdc.aicookmate
 
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -15,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import coil3.compose.rememberAsyncImagePainter
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -56,7 +58,7 @@ class RecipeViewModel : ViewModel() {
 }
 
 @Composable
-fun RecipeList(recipes: List<RecipeData>) {
+fun RecipeList(recipes: List<RecipeData>,navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
