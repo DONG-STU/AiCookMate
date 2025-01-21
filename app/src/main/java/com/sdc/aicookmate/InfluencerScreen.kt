@@ -40,8 +40,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -51,6 +55,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.sdc.aicookmate.model.Influencer
+import androidx.compose.ui.text.input.ImeAction
+
 
 @Composable
 fun InfluencerScreen(navController: NavController) { //
@@ -917,12 +923,16 @@ fun GoogleLikeSearchDropdown(
         items.filter { it.contains(inputText, ignoreCase = true) }
     }
 
+    // 포커스 관리
+//    val focusManager = LocalFocusManager.current
+
+
     Column(modifier = modifier) {
         OutlinedTextField(
             value = inputText,
-            onValueChange = {
-                inputText = it
-                expanded = it.isNotEmpty() // 입력 내용이 있을 때만 드롭다운 표시
+            onValueChange = { newValue ->
+                inputText = newValue
+                expanded = newValue.isNotEmpty() // 입력 내용이 있을 때만 드롭다운 표시
             },
             leadingIcon = { Icon(Icons.Default.Search, contentDescription = "검색") },
             placeholder = { Text(placeholderText) },
@@ -936,7 +946,17 @@ fun GoogleLikeSearchDropdown(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
                 .height(56.dp)
-                .clip(RoundedCornerShape(8.dp))
+                .clip(RoundedCornerShape(8.dp)),
+            // 키보드 액션: 완료 시 드롭다운 닫기
+//            keyboardOptions = androidx.compose.ui.text.input.KeyboardOptions.Default.copy(
+//                imeAction = androidx.compose.ui.text.input.ImeAction.Done
+//            ),
+//            keyboardActions = androidx.compose.ui.text.input.KeyboardActions(
+//                onDone = {
+//                    expanded = false
+//                    focusManager.clearFocus() // 키보드 닫기
+//                }
+//            )
         )
 
         DropdownMenu(
@@ -944,14 +964,12 @@ fun GoogleLikeSearchDropdown(
             onDismissRequest = { expanded = false },
             modifier = Modifier
                 .fillMaxWidth()
-                .heightIn(max = 250.dp) // 스크롤 가능 최대 높이
+                .heightIn(max = 250.dp) // 드롭다운 최대 높이
                 .background(Color.White)
         ) {
             if (filteredItems.isEmpty()) {
                 DropdownMenuItem(
-                    text = {
-                        Text("검색 결과가 없습니다", color = Color.Gray)
-                    },
+                    text = { Text("검색 결과가 없습니다", color = Color.Gray) },
                     onClick = { expanded = false }
                 )
             } else {
@@ -967,7 +985,7 @@ fun GoogleLikeSearchDropdown(
                         onClick = {
                             onItemSelected(item)
                             inputText = item
-                            expanded = false
+                            expanded = false // 드롭다운 닫기
                         }
                     )
                 }
