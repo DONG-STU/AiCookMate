@@ -54,13 +54,12 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+
     }
     kotlinOptions {
         jvmTarget = "11"
     }
-    buildFeatures {
-        compose = true
-    }
+
 }
 
 dependencies {
@@ -105,6 +104,7 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
+    implementation("com.squareup.okhttp3:okhttp:4.10.0")
     implementation("androidx.compose.foundation:foundation-layout:1.3.1")
 
     //coil
@@ -116,11 +116,15 @@ dependencies {
     val room_version = "2.6.1"
 
     implementation("androidx.room:room-runtime:$room_version")
+    implementation ("androidx.compose.runtime:runtime:1.5.0")
 
     // If this project uses any Kotlin source, use Kotlin Symbol Processing (KSP)
     // See Add the KSP plugin to your project
     ksp("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
+    implementation ("androidx.compose.material:material:1.5.0")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
+
 
     implementation ("com.google.code.gson:gson:2.10.1")
     implementation (platform ("com.google.firebase:firebase-bom:32.7.1"))
