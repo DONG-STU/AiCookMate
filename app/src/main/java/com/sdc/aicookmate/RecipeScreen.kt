@@ -37,6 +37,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.sdc.aicookmate.ui.theme.AiCookMateTheme
 
@@ -49,6 +50,9 @@ import com.sdc.aicookmate.ui.theme.AiCookMateTheme
 
 @Composable
 fun RecipeScreen(navController: NavController) {
+
+    val viewModel: RecipeViewModel = viewModel()
+    val recipes by viewModel.recipes.collectAsState()
 //    Scaffold(
 //        bottomBar = { BottomBar(navController) }
 //    ) { paddingValues ->
@@ -101,10 +105,10 @@ fun RecipeScreen(navController: NavController) {
                 onClick = { /**/ }
             )
         }
+        RecipeList(recipes = recipes, navController = navController)
 
         Spacer(modifier = Modifier.height(6.dp))
 
-        FoodItems(navController)
 
     }
 }
