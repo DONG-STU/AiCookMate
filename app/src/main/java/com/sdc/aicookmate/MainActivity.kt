@@ -90,15 +90,16 @@ fun NavSys() {
         composable("InfluencerScreen2") {
             InfluencerScreen2(navController)
         }
+
         composable("recipeList") {
             val viewModel: RecipeViewModel = viewModel()
             val recipes by viewModel.recipes.collectAsState()
             RecipeList(recipes = recipes, navController = navController)
         }
 
-        composable("FirebaseExplainRecipe/{title}") { backStackEntry ->
+        composable(route = "recipeDetail/{title}") { backStackEntry ->
             val title = backStackEntry.arguments?.getString("title") ?: ""
-            RecipeDetailScreen(title = title)
+            RecipeDetailScreen(title)
         }
 
 

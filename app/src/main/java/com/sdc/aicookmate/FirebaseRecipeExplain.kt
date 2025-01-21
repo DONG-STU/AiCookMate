@@ -72,6 +72,7 @@ fun RecipeDetailScreen(title: String) {
 
 
 
+
 data class RecipeDetailData(
     val title: String = "",
     val thumbnail: String = "",
@@ -105,7 +106,7 @@ fun RecipeDetailContent(recipe: RecipeDetailData) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(8.dp)
             .verticalScroll(scrollState) // 스크롤 가능하도록 설정
     ) {
         // Title
@@ -116,9 +117,10 @@ fun RecipeDetailContent(recipe: RecipeDetailData) {
         Image(
             painter = rememberAsyncImagePainter(recipe.thumbnail),
             contentDescription = null,
+            contentScale = ContentScale.Crop,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(200.dp)
+                .height(180.dp)
         )
         Spacer(modifier = Modifier.height(8.dp))
 
@@ -128,68 +130,68 @@ fun RecipeDetailContent(recipe: RecipeDetailData) {
             horizontalArrangement = Arrangement.SpaceBetween, // 텍스트 간 간격 조절
             verticalAlignment = Alignment.CenterVertically // 텍스트와 이미지 정렬
         ) {
-            // Servings
-//            Row(verticalAlignment = Alignment.CenterVertically) {
-//                Image(
-//                    painter = painterResource(id = R.drawable.ic_person), // 아이콘 리소스 추가
-//                    contentDescription = "Servings Icon",
-//                    modifier = Modifier.size(16.dp) // 아이콘 크기 설정
-//                )
-//                Spacer(modifier = Modifier.width(1.dp)) // 텍스트와 이미지 간 간격
-//                Text(text = "${recipe.servings}")
-//            }
-//
-//            // Time Required
-//            Row(verticalAlignment = Alignment.CenterVertically) {
-//                Image(
-//                    painter = painterResource(id = R.drawable.ic_time), // 아이콘 리소스 추가
-//                    contentDescription = "Time Icon",
-//                    modifier = Modifier.size(16.dp) // 아이콘 크기 설정
-//                )
-//                Spacer(modifier = Modifier.width(1.dp)) // 텍스트와 이미지 간 간격
-//                Text(text = "${recipe.time_required}")
-//            }
-//
-//            // Difficulty
-//            Row(verticalAlignment = Alignment.CenterVertically) {
-//                Image(
-//                    painter = painterResource(id = R.drawable.ic_star), // 아이콘 리소스 추가
-//                    contentDescription = "Difficulty Icon",
-//                    modifier = Modifier.size(16.dp) // 아이콘 크기 설정
-//                )
-//                Spacer(modifier = Modifier.width(1.dp)) // 텍스트와 이미지 간 간격
-//                Text(text = "${recipe.difficulty}")
-//            }
-//        }
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Description
-            Text(text = "Tips:" + recipe.description)
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Ingredients
-            Text(text = "재료:")
-            recipe.ingredients.forEach {
-                Text(text = "- ${it.name}: ${it.quantity}")
-            }
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Steps
-            Text(text = "조리방법:")
-            recipe.steps.forEachIndexed { index, step ->
-                Text(text = "${index + 1}. ${step.description}")
-                Spacer(modifier = Modifier.height(8.dp))
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 Image(
-                    painter = rememberAsyncImagePainter(step.image),
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(170.dp)
-                        .padding(bottom = 8.dp)
+                    painter = painterResource(id = R.drawable.ic_person), // 아이콘 리소스 추가
+                    contentDescription = "Servings Icon",
+                    modifier = Modifier.size(16.dp) // 아이콘 크기 설정
                 )
+                Spacer(modifier = Modifier.width(1.dp)) // 텍스트와 이미지 간 간격
+                Text(text = "${recipe.servings}")
             }
+
+            // Time Required
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_time), // 아이콘 리소스 추가
+                    contentDescription = "Time Icon",
+                    modifier = Modifier.size(16.dp) // 아이콘 크기 설정
+                )
+                Spacer(modifier = Modifier.width(1.dp)) // 텍스트와 이미지 간 간격
+                Text(text = "${recipe.time_required}")
+            }
+
+            // Difficulty
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_star), // 아이콘 리소스 추가
+                    contentDescription = "Difficulty Icon",
+                    modifier = Modifier.size(16.dp) // 아이콘 크기 설정
+                )
+                Spacer(modifier = Modifier.width(1.dp)) // 텍스트와 이미지 간 간격
+                Text(text = "${recipe.difficulty}")
+            }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Description
+        Text(text = "Tips:" + recipe.description)
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Ingredients
+        Text(text = "재료:")
+        recipe.ingredients.forEach {
+            Text(text = "- ${it.name}: ${it.quantity}")
+        }
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Steps
+        Text(text = "조리방법:")
+        recipe.steps.forEachIndexed { index, step ->
+            Text(text = "${index + 1}. ${step.description}")
+            Spacer(modifier = Modifier.height(8.dp))
+            Image(
+                painter = rememberAsyncImagePainter(step.image),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(170.dp)
+                    .padding(bottom = 8.dp)
+            )
         }
     }
 }
+

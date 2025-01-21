@@ -1,6 +1,7 @@
 package com.sdc.aicookmate
 
 
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -22,6 +23,11 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import com.google.firebase.firestore.FieldPath
 
 data class RecipeData(
     val title: String = "",
@@ -41,8 +47,12 @@ class RecipeViewModel : ViewModel() {
 
     private fun fetchRecipes() {
         viewModelScope.launch {
+            val randomOffset = (0..100).random() // 20개 중 랜덤 오프셋 설정
+
             firestore.collection("aicookmaterecipe")
-                .limit(3)
+                .orderBy(FieldPath.documentId()) // 정렬 기준 설정
+                .startAfter(randomOffset.toString()) // 랜덤 오프셋에서 시작
+                .limit(5) // 5개 문서 가져오기
                 .get()
                 .addOnSuccessListener { result ->
                     val recipeList = result.documents.mapNotNull { document ->
@@ -58,21 +68,26 @@ class RecipeViewModel : ViewModel() {
 }
 
 @Composable
-fun RecipeList(recipes: List<RecipeData>,navController: NavController) {
+fun RecipeList(recipes: List<RecipeData>, navController: NavController) {
+    val scrollState = rememberScrollState()
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 20.dp)
+            .verticalScroll(scrollState)
     ) {
         recipes.forEach { item ->
-            RecipeItem(item)
+            RecipeItem(item = item) { encodedTitle ->
+                // NavController를 사용하여 다음 화면으로 이동
+                navController.navigate("recipeDetail/$encodedTitle")
+            }
             Spacer(modifier = Modifier.height(8.dp))
         }
     }
 }
 
 @Composable
-fun RecipeItem(item: RecipeData) {
+fun RecipeItem(item: RecipeData, onClick: (String) -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -86,7 +101,9 @@ fun RecipeItem(item: RecipeData) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(200.dp)
-                    .clickable { /**/ }
+                    .clickable {
+                        onClick(Uri.encode(item.title))
+                    }
             )
             Text(
                 text = item.title,
