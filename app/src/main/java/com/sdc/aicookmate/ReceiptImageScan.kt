@@ -9,6 +9,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -105,7 +106,7 @@ fun ScanReceiptImage(navController: NavController) {
             }
         }
     }
-    val foundIngredients = ingredients.filter { it in receiptText }.distinct()
+    val foundIngredients = ingredients.filter { it in receiptText }.distinct().toMutableList()
     val scrollState = rememberScrollState()
 
     Column(
@@ -284,7 +285,7 @@ fun ListOfIngredientsUI(text: String) {
             Text(text)
             Image(
                 painter = painterResource(R.drawable.postit_close_btn),
-                contentDescription = "닫기 버튼"
+                contentDescription = "닫기 버튼",
             )
         }
 

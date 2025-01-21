@@ -935,13 +935,13 @@ fun Refrigerator(navController: NavController) {
             ) {
                 Image(
                     painter = painterResource(R.drawable.scan_reciept),
-                    contentDescription = "GPT 추천",
+                    contentDescription = "자동 추천",
                     contentScale = ContentScale.Fit,
                     modifier = Modifier.size(15.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "GTP 추천",
+                    text = "자동 추천",
                     fontSize = 14.sp,
                     modifier = Modifier.weight(1f) // 텍스트에 더 많은 공간 할당
                 )

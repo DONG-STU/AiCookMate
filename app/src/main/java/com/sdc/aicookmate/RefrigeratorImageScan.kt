@@ -12,11 +12,20 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,7 +33,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import coil3.compose.rememberAsyncImagePainter
 import kotlinx.coroutines.Dispatchers
@@ -151,7 +163,10 @@ fun createImageUri(context: Context): Uri {
  */
 @Composable
 fun RefrigeratorImageScanScreen(navController: NavController) {
+    var inputText by remember { mutableStateOf("") }
     val context = LocalContext.current
+    val scrollState = rememberScrollState()
+    val selectedIngredients = remember { mutableStateListOf<String>() }
 
     // 이미지 URI
     var imageUri by remember { mutableStateOf<Uri?>(null) }
@@ -194,49 +209,111 @@ fun RefrigeratorImageScanScreen(navController: NavController) {
             Toast.makeText(context, "사진 촬영 실패", Toast.LENGTH_SHORT).show()
         }
     }
-
-    // UI
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(color = Color(0xFFFCF6E0))
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // 상단 Text
-        Text(text = resultText, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(10.dp))
 
-        // 선택된 이미지 표시
-        imageUri?.let { uri ->
-            Image(
-                painter = rememberAsyncImagePainter(uri),
-                contentDescription = "selected image",
+        // 검색 필드
+        OutlinedTextField(
+            value = inputText,
+            onValueChange = { inputText = it },
+            leadingIcon = { Icon(Icons.Default.Search, "검색") },
+            maxLines = 1,
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = Color.White,
+                unfocusedContainerColor = Color.White,
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp)
+                .height(60.dp) // 검색 필드 높이 고정
+                .border(3.dp, Color.LightGray, RoundedCornerShape(10.dp)),
+            shape = RoundedCornerShape(10.dp)
+        )
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        // 즐겨찾기 박스
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f) // 즐겨찾기 박스 높이 고정
+                .padding(horizontal = 20.dp)
+                .border(1.dp, Color.Black, RoundedCornerShape(10.dp))
+                .background(Color(0xFFFFFCCB))
+        ) {
+            // 선택된 이미지 표시
+            imageUri?.let { uri ->
+                Image(
+                    painter = rememberAsyncImagePainter(uri),
+                    contentDescription = "selected image",
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .border(2.dp, Color.Gray),
+                    contentScale = ContentScale.Fit
+                )
+            }
+        }
+        Spacer(modifier = Modifier.height(10.dp))
+        Column(
+            modifier = Modifier
+                .background(color = Color.White)
+                .fillMaxSize()
+                .padding(10.dp)
+                .weight(1f)
+        ) {
+            Text(
+                "안에 들어있는 재료",
+                fontSize = 30.sp,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
                 modifier = Modifier
-                    .size(200.dp)
-                    .border(2.dp, Color.Gray),
-                contentScale = ContentScale.Fit
+                    .padding(3.dp)
+                    .fillMaxWidth()
             )
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            Column(modifier = Modifier.padding(vertical = 10.dp)
+                .verticalScroll(scrollState)
+                .weight(3f)) {
+                for (ingredient in selectedIngredients) {
+                    ListOfIngredientsUI(ingredient)
+                }
+            }
+            Button(onClick = {
+                val newIngredients = selectedIngredients.filter { it !in ingreidentsSelected }
+                ingreidentsSelected.addAll(newIngredients.distinct())
+                navController.navigateUp()
+                Toast.makeText(context, "재료를 추가했어요!", Toast.LENGTH_SHORT).show()
+            },
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xffFF5D5D)),
+                modifier = Modifier.align(Alignment.End)
+                    .weight(1f)) {
+                Text("확인")
+            }
         }
 
-        Spacer(modifier = Modifier.height(10.dp))
-
-        // (B) 버튼들 (갤러리, 카메라)
-        Row {
-            // 1) 갤러리
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(80.dp) // 버튼 Row 높이 고정
+                .padding(horizontal = 10.dp)
+                .weight(0.7f)
+        ) {
             Button(
                 onClick = {
                     pickLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
                 },
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xffFF5D5D)),
                 modifier = Modifier.weight(1f)
             ) {
                 Text("사진 넣기")
             }
-
-            Spacer(Modifier.width(8.dp))
-
-            // 2) 카메라
             Button(
                 onClick = {
                     val permission = android.Manifest.permission.CAMERA
@@ -253,49 +330,51 @@ fun RefrigeratorImageScanScreen(navController: NavController) {
             ) {
                 Text("카메라 촬영")
             }
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // (C) "서버 업로드" 버튼
-        Button(
-            onClick = {
-                if (imageUri == null) {
-                    Toast.makeText(context, "이미지를 먼저 선택하세요", Toast.LENGTH_SHORT).show()
-                    return@Button
-                }
-                // 코루틴 스코프에서 suspend 함수 호출
-                scope.launch {
-                    isLoading = true
-                    resultText = ""
-                    detectionList = emptyList()
-
-                    val res = uploadRefrigeratorImage(imageUri!!, context)
-                    isLoading = false
-                    if (res.isSuccess) {
-                        val list = res.getOrNull().orEmpty()
-                        detectionList = list
-                        val sb = StringBuilder()
-                        sb.append("감지된 객체: ${list.size}개\n")
-                        for (item in list) {
-                            sb.append("${item.name} : ${"%.2f".format(item.confidence)}\n")
-                        }
-                        resultText = sb.toString()
-                    } else {
-                        resultText = "업로드 실패: ${res.exceptionOrNull()?.message}"
+            Button(
+                onClick = {
+                    if (imageUri == null) {
+                        Toast.makeText(context, "이미지를 먼저 선택하세요", Toast.LENGTH_SHORT).show()
+                        return@Button
                     }
-                }
-            },
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xff90AA8D))
-        ) {
-            Text("서버 업로드")
+                    // 코루틴 스코프에서 suspend 함수 호출
+                    scope.launch {
+                        isLoading = true
+                        resultText = ""
+                        detectionList = emptyList()
+
+                        val res = uploadRefrigeratorImage(imageUri!!, context)
+                        isLoading = false
+                        if (res.isSuccess) {
+                            val list = res.getOrNull().orEmpty()
+                            detectionList = list
+                            val sb = StringBuilder()
+                            sb.append("감지된 객체: ${list.size}개\n")
+                            for (item in list) {
+                                sb.append("${item.name} : ${"%.2f".format(item.confidence)}\n")
+                            }
+                            resultText = sb.toString()
+                        } else {
+                            resultText = "업로드 실패: ${res.exceptionOrNull()?.message}"
+                        }
+                        when {
+                            "onion" in resultText -> selectedIngredients.add("양파")
+                            "egg" in resultText -> selectedIngredients.add("계란")
+                            "garlic" in resultText -> selectedIngredients.add("마늘")
+                            "green onion" in resultText -> selectedIngredients.add("대파")
+                            "pepper" in resultText -> selectedIngredients.add("고추")
+                            "potato" in resultText -> selectedIngredients.add("감자")
+                        }
+                    }
+                },
+                modifier = Modifier.weight(1f)
+            ) {
+                Text("탐지 시작")
+            }
         }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
         // 로딩 표시
         if (isLoading) {
             CircularProgressIndicator()
         }
+
     }
 }
