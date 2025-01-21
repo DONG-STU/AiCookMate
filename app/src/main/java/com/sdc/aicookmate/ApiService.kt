@@ -1,24 +1,20 @@
-package com.sdc.aicookmate
-
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.Header
 import retrofit2.http.POST
 
-// OpenAI 요청 바디 정의
+// 메시지 / 요청 바디
 data class GptRequest(
-    val model: String,
+    val model: String,               // e.g. "gpt-4o", "gpt-4o-mini", ...
     val messages: List<Message>,
     val max_tokens: Int = 300
 )
 
-// GPT 메시지 형식
 data class Message(
-    val role: String, // "user", "system", or "assistant"
+    val role: String,    // "user", "developer", "assistant"...
     val content: String
 )
 
-// OpenAI 응답 데이터 구조
 data class GptResponse(
     val choices: List<Choice>
 )
@@ -27,7 +23,7 @@ data class Choice(
     val message: Message
 )
 
-// API 인터페이스
+// ChatCompletion Endpoint
 interface ApiService {
     @POST("v1/chat/completions")
     fun getGptResponse(
