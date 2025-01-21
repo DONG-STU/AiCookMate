@@ -58,7 +58,7 @@ class RecipeRecommendViewModel : ViewModel() {
 
     fun fetchFilteredRecipes() {
         viewModelScope.launch {
-            firestore.collection("bokuem")
+            firestore.collection("aicookmaterecipe")
                 .orderBy(FieldPath.documentId())
                 .get()
                 .addOnSuccessListener { result ->
