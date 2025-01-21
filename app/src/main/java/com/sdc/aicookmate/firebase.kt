@@ -1,5 +1,7 @@
 package com.sdc.aicookmate
 
+import android.app.Application
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -7,20 +9,26 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
+import com.google.firebase.FirebaseApp
+import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+
 
 data class RecipeData(
     val title: String = "",
@@ -40,8 +48,12 @@ class RecipeViewModel : ViewModel() {
 
     private fun fetchRecipes() {
         viewModelScope.launch {
+            val randomOffset = (0..20).random() // 20개 중 랜덤 오프셋 설정
+
             firestore.collection("aicookmaterecipe")
-                .limit(3)
+                .orderBy(FieldPath.documentId()) // 정렬 기준 설정
+                .startAfter(randomOffset.toString()) // 랜덤 오프셋에서 시작
+                .limit(5) // 5개 문서 가져오기
                 .get()
                 .addOnSuccessListener { result ->
                     val recipeList = result.documents.mapNotNull { document ->
@@ -56,22 +68,9 @@ class RecipeViewModel : ViewModel() {
     }
 }
 
-@Composable
-fun RecipeList(recipes: List<RecipeData>) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 20.dp)
-    ) {
-        recipes.forEach { item ->
-            RecipeItem(item)
-            Spacer(modifier = Modifier.height(8.dp))
-        }
-    }
-}
 
-@Composable
-fun RecipeItem(item: RecipeData) {
+    @Composable
+fun RecipeItem(item: RecipeData, onClick: (String) -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -82,10 +81,11 @@ fun RecipeItem(item: RecipeData) {
             Image(
                 painter = rememberAsyncImagePainter(item.thumbnail),
                 contentDescription = null,
+                contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(200.dp)
-                    .clickable { /**/ }
+                    .clickable { onClick(item.title) } // title 값을 전달
             )
             Text(
                 text = item.title,
@@ -94,3 +94,25 @@ fun RecipeItem(item: RecipeData) {
         }
     }
 }
+
+
+
+@Composable
+fun RecipeList(recipes: List<RecipeData>, navController: NavController) {
+    val scrollState = rememberScrollState()
+    Column(
+
+        modifier = Modifier
+            .fillMaxWidth()
+            .verticalScroll(scrollState)
+    ) {
+        recipes.forEach { item ->
+            RecipeItem(item) { recipeId ->
+                navController.navigate("FirebaseExplainRecipe/$recipeId")
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+        }
+    }
+}
+
+
