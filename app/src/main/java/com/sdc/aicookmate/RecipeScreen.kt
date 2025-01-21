@@ -116,96 +116,47 @@ fun RecipeScreen(navController: NavController) {
 
 @Composable
 fun FoodCategories(navController: NavController) {
-    val categories = listOf(
-        "찜조림" to R.drawable.ic_zzim,
-        "국/탕/찌개" to R.drawable.ic_gook,
-        "볶음/구이" to R.drawable.ic_bokuem,
-        "밥/죽" to R.drawable.ic_rice,
-        "면/만두" to R.drawable.ic_noodle,
-        "간편요리" to R.drawable.ic_quick,
-        "야식" to R.drawable.ic_chicken,
-        "다이어트" to R.drawable.ic_diet,
-        "인플루언서" to R.drawable.ic_influencer
-    )
-
     Column(
-        modifier = Modifier
-            .fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(0.dp)
-
     ) {
-
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(8.dp),
+                .padding(vertical = 4.dp, horizontal = 0.dp),
             horizontalArrangement = Arrangement.SpaceBetween
-
         ) {
-            FoodCategoryItem(
-                navController,
-                title = categories[0].first,
-                iconRes = categories[0].second
-            )
-            FoodCategoryItem(
-                navController,
-                title = categories[1].first,
-                iconRes = categories[1].second
-            )
-            FoodCategoryItem(
-                navController,
-                title = categories[2].first,
-                iconRes = categories[2].second
-            )
+            FoodCategoryItem(navController, title = "찜조림", iconRes = R.drawable.ic_zzim)
+            FoodCategoryItem(navController, title = "국/탕/찌개", iconRes = R.drawable.ic_gook)
+            FoodCategoryItem(navController, title = "볶음/구이", iconRes = R.drawable.ic_bokuem)
         }
 
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(8.dp),
+                .padding(vertical = 4.dp, horizontal = 0.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            FoodCategoryItem(
-                navController,
-                title = categories[3].first,
-                iconRes = categories[3].second
-            )
-            FoodCategoryItem(
-                navController,
-                title = categories[4].first,
-                iconRes = categories[4].second
-            )
-            FoodCategoryItem(
-                navController,
-                title = categories[5].first,
-                iconRes = categories[5].second
-            )
+            FoodCategoryItem(navController, title = "밥/죽", iconRes = R.drawable.ic_rice)
+            FoodCategoryItem(navController, title = "면/만두", iconRes = R.drawable.ic_noodle)
+            FoodCategoryItem(navController, title = "간편요리", iconRes = R.drawable.ic_quick)
         }
 
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(8.dp),
+                .padding(vertical = 4.dp, horizontal = 0.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            FoodCategoryItem(
-                navController,
-                title = categories[6].first,
-                iconRes = categories[6].second
-            )
-            FoodCategoryItem(
-                navController,
-                title = categories[7].first,
-                iconRes = categories[7].second
-            )
-            FoodCategoryItem(
-                navController,
-                title = categories[8].first,
-                iconRes = categories[8].second
-            )
+            FoodCategoryItem(navController, title = "야식", iconRes = R.drawable.ic_chicken)
+            FoodCategoryItem(navController, title = "다이어트", iconRes = R.drawable.ic_diet)
+            FoodCategoryItem(navController, title = "인플루언서", iconRes = R.drawable.ic_influencer)
         }
     }
 }
+
+
+
 
 @Composable
 fun FoodCategoryItem(navController: NavController, title: String, iconRes: Int) {
@@ -219,10 +170,21 @@ fun FoodCategoryItem(navController: NavController, title: String, iconRes: Int) 
                 .clip(RoundedCornerShape(percent = 20))
                 .background(Color.White)
                 .clickable {
-                    if (title == "인플루언서") {
-                        navController.navigate("influencerScreen")
-                    } else {
-                        navController.navigate("recipeScreen2")
+                    val routes = mapOf(
+                        "찜조림" to "zzimScreen",
+                        "국/탕/찌개" to "gookScreen",
+                        "볶음/구이" to "bokuemScreen",
+                        "밥/죽" to "riceScreen",
+                        "면/만두" to "noodleScreen",
+                        "간편요리" to "quickScreen",
+                        "야식" to "chickenScreen",
+                        "다이어트" to "dietScreen",
+                        "인플루언서" to "influencerScreen"
+                    )
+
+                    val route = routes[title]
+                    if (route != null) {
+                        navController.navigate(route)
                     }
                 }
                 .border(
@@ -238,9 +200,7 @@ fun FoodCategoryItem(navController: NavController, title: String, iconRes: Int) 
                 modifier = Modifier.fillMaxSize()
             ) {
                 Box(
-                    modifier = Modifier
-                        .size(100.dp)
-
+                    modifier = Modifier.size(100.dp)
                 ) {
                     Image(
                         painter = painterResource(id = iconRes),
@@ -265,6 +225,7 @@ fun FoodCategoryItem(navController: NavController, title: String, iconRes: Int) 
         }
     }
 }
+
 
 
 @Composable

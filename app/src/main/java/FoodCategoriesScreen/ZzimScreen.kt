@@ -1,33 +1,46 @@
-package com.sdc.aicookmate
-
+package FoodCategoriesScreen
 
 import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import coil3.compose.rememberAsyncImagePainter
+import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
-import coil3.compose.rememberAsyncImagePainter
-import com.google.firebase.firestore.FieldPath
 
-data class RecipeData(
+
+@Composable
+fun zzimScreen(navController: NavController) {
+
+    ZzimScreen(navController)
+}
+
+@Composable
+fun ZzimScreen(navController: NavController) {
+    val viewModel: ZzimViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+    val recipes = viewModel.recipes.collectAsState(initial = emptyList()).value
+    ZzimRecipeList(recipes = recipes, navController = navController)
+}
+
+data class ZzimRecipeData(
     val title: String = "",
     val thumbnail: String = "",
     val servings: String = "",
@@ -35,29 +48,29 @@ data class RecipeData(
     val difficulty: String = "",
 )
 
-class RecipeViewModel : ViewModel() {
+class ZzimViewModel : ViewModel() {
     private val firestore = FirebaseFirestore.getInstance()
 
     // StateFlow로 데이터를 관리
-    private val _recipes = MutableStateFlow<List<RecipeData>>(emptyList())
-    val recipes: StateFlow<List<RecipeData>> = _recipes
+    private val _recipes = MutableStateFlow<List<ZzimRecipeData>>(emptyList())
+    val recipes: StateFlow<List<ZzimRecipeData>> = _recipes
 
     init {
-        fetchRecipes()
+        fetchZzimRecipes()
     }
 
-    private fun fetchRecipes() {
+    private fun fetchZzimRecipes() {
         viewModelScope.launch {
             val randomOffset = (0..200).random() // 200개 중 랜덤 오프셋 설정
 
-            firestore.collection("aicookmaterecipe")
+            firestore.collection("zzim")
                 .orderBy(FieldPath.documentId()) // 정렬 기준 설정
                 .startAfter(randomOffset.toString()) // 랜덤 오프셋에서 시작
                 .limit(5) // 5개 문서 가져오기
                 .get()
                 .addOnSuccessListener { result ->
                     val recipeList = result.documents.mapNotNull { document ->
-                        document.toObject(RecipeData::class.java)
+                        document.toObject(ZzimRecipeData::class.java)
                     }
                     _recipes.value = recipeList
                 }
@@ -69,7 +82,7 @@ class RecipeViewModel : ViewModel() {
 }
 
 @Composable
-fun RecipeList(recipes: List<RecipeData>, navController: NavController) {
+fun ZzimRecipeList(recipes: List<ZzimRecipeData>, navController: NavController) {
     val scrollState = rememberScrollState()
     Column(
         modifier = Modifier
@@ -78,7 +91,7 @@ fun RecipeList(recipes: List<RecipeData>, navController: NavController) {
             .verticalScroll(scrollState)
     ) {
         recipes.forEach { item ->
-            RecipeItem(item = item) { encodedTitle ->
+            ZzimRecipeItem(item = item) { encodedTitle ->
                 // NavController를 사용하여 다음 화면으로 이동
                 navController.navigate("recipeDetail/$encodedTitle")
             }
@@ -88,7 +101,7 @@ fun RecipeList(recipes: List<RecipeData>, navController: NavController) {
 }
 
 @Composable
-fun RecipeItem(item: RecipeData, onClick: (String) -> Unit) {
+fun ZzimRecipeItem(item: ZzimRecipeData, onClick: (String) -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -115,16 +128,16 @@ fun RecipeItem(item: RecipeData, onClick: (String) -> Unit) {
                 horizontalArrangement = Arrangement.spacedBy(60.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                InfoRow(iconRes = R.drawable.ic_person, text = item.servings)
-                InfoRow(iconRes = R.drawable.ic_time, text = item.time_required)
-                InfoRow(iconRes = R.drawable.ic_star, text = item.difficulty)
+//                ZzimInfoRow(iconRes = R.drawable.ic_person, text = item.servings)
+//                ZzimInfoRow(iconRes = R.drawable.ic_time, text = item.time_required)
+//                ZzimInfoRow(iconRes = R.drawable.ic_star, text = item.difficulty)
             }
         }
     }
 }
 
 @Composable
-fun InfoRow(iconRes: Int, text: String) {
+fun ZzimInfoRow(iconRes: Int, text: String) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.padding(vertical = 4.dp)
@@ -138,4 +151,3 @@ fun InfoRow(iconRes: Int, text: String) {
         Text(text = text)
     }
 }
-
