@@ -58,6 +58,7 @@ import com.sdc.aicookmate.model.Influencer
 import androidx.compose.ui.text.input.ImeAction
 
 
+
 @Composable
 fun InfluencerScreen(navController: NavController) { //
     Scaffold(
@@ -75,7 +76,7 @@ fun InfluencerScreen(navController: NavController) { //
                 modifier = Modifier
                     .padding(vertical = 16.dp, horizontal = 8.dp)
             ) {
-                GoogleLikeSearchDropdown(
+                SmoothGoogleLikeSearchDropdown(
                     items = listOf(
                         "3분 짜장",
                         "가래떡",
@@ -911,85 +912,77 @@ fun ScrapInfluencerCard(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GoogleLikeSearchDropdown(
+fun SmoothGoogleLikeSearchDropdown(
     items: List<String>,
     placeholderText: String,
-    modifier: Modifier = Modifier,
     onItemSelected: (String) -> Unit
 ) {
     var inputText by remember { mutableStateOf("") }
     var expanded by remember { mutableStateOf(false) }
+
+    // 필터링된 리스트
     val filteredItems = remember(inputText) {
         items.filter { it.contains(inputText, ignoreCase = true) }
     }
 
-    // 포커스 관리
-//    val focusManager = LocalFocusManager.current
-
-
-    Column(modifier = modifier) {
+    Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+        // 검색창
         OutlinedTextField(
             value = inputText,
             onValueChange = { newValue ->
                 inputText = newValue
-                expanded = newValue.isNotEmpty() // 입력 내용이 있을 때만 드롭다운 표시
+                expanded = newValue.isNotEmpty() // 입력값이 있을 때만 드롭다운 표시
             },
-            leadingIcon = { Icon(Icons.Default.Search, contentDescription = "검색") },
             placeholder = { Text(placeholderText) },
-            maxLines = 1,
+            leadingIcon = { Icon(Icons.Default.Search, contentDescription = "검색") },
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(8.dp)),
+            singleLine = true,
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 containerColor = Color.White,
                 focusedBorderColor = Color.Gray,
                 unfocusedBorderColor = Color.LightGray
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-                .height(56.dp)
-                .clip(RoundedCornerShape(8.dp)),
-            // 키보드 액션: 완료 시 드롭다운 닫기
-//            keyboardOptions = androidx.compose.ui.text.input.KeyboardOptions.Default.copy(
-//                imeAction = androidx.compose.ui.text.input.ImeAction.Done
-//            ),
-//            keyboardActions = androidx.compose.ui.text.input.KeyboardActions(
-//                onDone = {
-//                    expanded = false
-//                    focusManager.clearFocus() // 키보드 닫기
-//                }
-//            )
+            )
         )
 
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false },
-            modifier = Modifier
-                .fillMaxWidth()
-                .heightIn(max = 250.dp) // 드롭다운 최대 높이
-                .background(Color.White)
-        ) {
-            if (filteredItems.isEmpty()) {
-                DropdownMenuItem(
-                    text = { Text("검색 결과가 없습니다", color = Color.Gray) },
-                    onClick = { expanded = false }
-                )
-            } else {
-                filteredItems.forEach { item ->
-                    DropdownMenuItem(
-                        text = {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Icon(Icons.Default.Search, contentDescription = null, tint = Color.Gray)
-                                Spacer(modifier = Modifier.width(8.dp))
-                                Text(item, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                            }
-                        },
-                        onClick = {
-                            onItemSelected(item)
-                            inputText = item
-                            expanded = false // 드롭다운 닫기
-                        }
+        // 드롭다운 메뉴
+        if (expanded) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.White)
+                    .border(1.dp, Color.LightGray, shape = RoundedCornerShape(8.dp))
+            ) {
+                if (filteredItems.isEmpty()) {
+                    Text(
+                        "검색 결과가 없습니다",
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .align(Alignment.CenterStart),
+                        color = Color.Gray
                     )
+                } else {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(max = 200.dp) // 드롭다운 최대 높이
+                            .verticalScroll(rememberScrollState())
+                    ) {
+                        filteredItems.forEach { item ->
+                            DropdownMenuItem(
+                                text = { Text(text = item) },
+                                onClick = {
+                                    inputText = item // 선택된 항목을 검색창에 반영
+                                    expanded = false // 드롭다운 닫기
+                                    onItemSelected(item) // 선택된 항목 전달
+                                }
+                            )
+                        }
+                    }
                 }
             }
         }
     }
 }
+
