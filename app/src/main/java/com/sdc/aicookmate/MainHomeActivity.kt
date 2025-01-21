@@ -91,7 +91,7 @@ fun MainScreen(navController: NavController) {
                 ChuChunCard()
                 Spacer(modifier = Modifier.height(32.dp))
 
-                CategorySelector()
+                CategorySelector(navController)
                 Spacer(modifier = Modifier.height(32.dp))
 
                 BestRecipe()
@@ -235,7 +235,7 @@ fun RecipeCard(imageRes: Int, description: String) {
 }
 
 @Composable
-fun CategorySelector() {
+fun CategorySelector(navController: NavController) {
     var selectedCategory by remember { mutableStateOf("한식") }
     Column {
         Text(
@@ -255,59 +255,87 @@ fun CategorySelector() {
         ) {
 
             CategoryItem(
-                iconRes = R.drawable.ic_korean,
-                label = "한식",
-                isSelected = selectedCategory == "한식",
-                onClick = { selectedCategory = "한식" }
+                iconRes = R.drawable.ic_zzim,
+                label = "찜/조림",
+                isSelected = selectedCategory == "찜/조림",
+                onClick = {
+                    selectedCategory = "찜/조림"
+                    navController.navigate("zzimScreen") // 찜/조림 화면으로 이동
+                }
             )
             CategoryItem(
-                iconRes = R.drawable.ic_japanese,
-                label = "일식",
-                isSelected = selectedCategory == "일식",
-                onClick = { selectedCategory = "일식" }
+                iconRes = R.drawable.ic_gook,
+                label = "국/탕/찌개",
+                isSelected = selectedCategory == "국/탕/찌개",
+                onClick = {
+                    selectedCategory = "국/탕/찌개"
+                    navController.navigate("gookScreen") // 국/탕/찌개 화면으로 이동
+                }
             )
             CategoryItem(
-                iconRes = R.drawable.ic_chinese,
-                label = "중식",
-                isSelected = selectedCategory == "중식",
-                onClick = { selectedCategory = "중식" }
+                iconRes = R.drawable.ic_bokuem,
+                label = "볶음/구이",
+                isSelected = selectedCategory == "볶음/구이",
+                onClick = {
+                    selectedCategory = "볶음/구이"
+                    navController.navigate("bokuemScreen") // 볶음/구이 화면으로 이동
+                }
             )
             CategoryItem(
-                iconRes = R.drawable.ic_western,
-                label = "양식",
-                isSelected = selectedCategory == "양식",
-                onClick = { selectedCategory = "양식" }
+                iconRes = R.drawable.ic_rice,
+                label = "밥/죽",
+                isSelected = selectedCategory == "밥/죽",
+                onClick = {
+                    selectedCategory = "밥/죽"
+                    navController.navigate("riceScreen") // 밥/죽 화면으로 이동
+                }
             )
             CategoryItem(
-                iconRes = R.drawable.ic_boonsik,
-                label = "분식",
-                isSelected = selectedCategory == "분식",
-                onClick = { selectedCategory = "분식" }
+                iconRes = R.drawable.ic_noodle,
+                label = "면/만두",
+                isSelected = selectedCategory == "면/만두",
+                onClick = {
+                    selectedCategory = "면/만두"
+                    navController.navigate("noodleScreen") // 면/만두 화면으로 이동
+                }
             )
             CategoryItem(
-                iconRes = R.drawable.ic_desert,
-                label = "디저트",
-                isSelected = selectedCategory == "디저트",
-                onClick = { selectedCategory = "디저트" }
+                iconRes = R.drawable.ic_quick,
+                label = "간편요리",
+                isSelected = selectedCategory == "간편요리",
+                onClick = {
+                    selectedCategory = "간편요리"
+                    navController.navigate("quickScreen") // 간편요리 화면으로 이동
+                }
             )
             CategoryItem(
-                iconRes = R.drawable.ic_sallad,
-                label = "샐러드",
-                isSelected = selectedCategory == "샐러드",
-                onClick = { selectedCategory = "샐러드" }
+                iconRes = R.drawable.ic_chicken,
+                label = "야식",
+                isSelected = selectedCategory == "야식",
+                onClick = {
+                    selectedCategory = "야식"
+                    navController.navigate("chickenScreen") // 야식 화면으로 이동
+                }
             )
             CategoryItem(
-                iconRes = R.drawable.ic_baking,
-                label = "베이킹",
-                isSelected = selectedCategory == "베이킹",
-                onClick = { selectedCategory = "베이킹" }
+                iconRes = R.drawable.ic_diet,
+                label = "다이어트",
+                isSelected = selectedCategory == "다이어트",
+                onClick = {
+                    selectedCategory = "다이어트"
+                    navController.navigate("dietScreen") // 다이어트 화면으로 이동
+                }
             )
             CategoryItem(
-                iconRes = R.drawable.ic_snack,
-                label = "스낵",
-                isSelected = selectedCategory == "스낵",
-                onClick = { selectedCategory = "스낵" }
+                iconRes = R.drawable.ic_influencer,
+                label = "인플루언서",
+                isSelected = selectedCategory == "인플루언서",
+                onClick = {
+                    selectedCategory = "인플루언서"
+                    navController.navigate("influencerScreen") // 인플루언서 화면으로 이동
+                }
             )
+
         }
     }
 }
@@ -391,6 +419,7 @@ fun BestRecipe() {
 @Composable
 fun BestListCard() {
     Row(
+
         modifier = Modifier
             .fillMaxWidth()
             .horizontalScroll(rememberScrollState()),

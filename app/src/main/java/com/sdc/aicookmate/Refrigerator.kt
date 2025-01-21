@@ -836,7 +836,7 @@ fun Refrigerator(navController: NavController) {
             }
             Button(
                 onClick = {
-                    navController.navigate("ScanRefrigeratorPhoto")
+                    navController.navigate("RecipeRecommendScreen")
                 },
                 shape = RoundedCornerShape(10.dp), // 모서리를 둥글게 설정
                 modifier = Modifier
