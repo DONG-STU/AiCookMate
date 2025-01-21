@@ -1,6 +1,8 @@
 package com.sdc.aicookmate
 
 
+import FoodCategoriesScreen.ZzimRecipeList
+import FoodCategoriesScreen.ZzimViewModel
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -35,6 +37,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,12 +52,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.sdc.aicookmate.ui.theme.AiCookMateTheme
 
 @Composable
 fun MainScreen(navController: NavController) {
+//    val recipeViewModel: RecipeViewModel = viewModel()
+//    val zzimViewModel: ZzimViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+//    val recipes by recipeViewModel.recipes.collectAsState()
+//    val zzimRecipes by zzimViewModel.recipes.collectAsState()
     Scaffold(
         bottomBar = { BottomBar(navController) }
     ) { paddingValues ->
@@ -98,7 +106,6 @@ fun MainScreen(navController: NavController) {
                 Spacer(modifier = Modifier.height(12.dp))
                 BestListCard()
 
-
                 Spacer(modifier = Modifier.height(16.dp))
             }
         }
@@ -136,7 +143,7 @@ fun RefrigeratorButton() {
             Spacer(modifier = Modifier.width(100.dp))
 
             Text(
-                text = "냉장고 관리하기",
+                text = "냉슐랭 가이드",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black
@@ -185,6 +192,8 @@ fun ChuchunList() {
                         .padding(bottom = 4.dp)
 
                 )
+
+
             }
             Spacer(modifier = Modifier.width(10.dp))
         }

@@ -48,7 +48,7 @@ class RecipeViewModel : ViewModel() {
 
     private fun fetchRecipes() {
         viewModelScope.launch {
-            val randomOffset = (0..200).random() // 200개 중 랜덤 오프셋 설정
+            val randomOffset = (100..500).random() // 500개 중 랜덤 오프셋 설정
 
             firestore.collection("aicookmaterecipe")
                 .orderBy(FieldPath.documentId()) // 정렬 기준 설정

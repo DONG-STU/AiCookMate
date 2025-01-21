@@ -61,11 +61,8 @@ class ZzimViewModel : ViewModel() {
 
     private fun fetchZzimRecipes() {
         viewModelScope.launch {
-            val randomOffset = (0..200).random() // 200개 중 랜덤 오프셋 설정
-
             firestore.collection("zzim")
                 .orderBy(FieldPath.documentId()) // 정렬 기준 설정
-                .startAfter(randomOffset.toString()) // 랜덤 오프셋에서 시작
                 .limit(5) // 5개 문서 가져오기
                 .get()
                 .addOnSuccessListener { result ->
