@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -34,6 +35,9 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -57,6 +61,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.boundsInWindow
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -64,6 +70,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Popup
 import androidx.navigation.NavController
 
 @Preview(showBackground = true)
@@ -72,7 +79,7 @@ fun ShowScreen() {
     //Refrigerator()
 }
 
-var ingreidentsSelected = mutableStateListOf<String>()
+var ingreidentsSelected = mutableStateListOf<String>()  //ingredients 중에서 ingreidentsSelected는 검색되면 안됨
 val ingredients = listOf(
     "3분 짜장",
     "가래떡",
@@ -765,22 +772,15 @@ fun Refrigerator(navController: NavController) {
         Spacer(modifier = Modifier.height(10.dp))
 
         // 검색 필드
-        OutlinedTextField(
-            value = inputText,
-            onValueChange = { inputText = it },
-            leadingIcon = { Icon(Icons.Default.Search, "검색") },
-            maxLines = 1,
-            colors = TextFieldDefaults.colors(
-                focusedContainerColor = Color.White,
-                unfocusedContainerColor = Color.White,
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp)
-                .height(60.dp) // 검색 필드 높이 고정
-                .border(3.dp, Color.LightGray, RoundedCornerShape(10.dp)),
-            shape = RoundedCornerShape(10.dp)
-        )
+
+        SmoothGoogleLikeSearchDropdown2(
+            items = ingredients,
+            ingredientsSelected = selectedIngredients,
+            placeholderText = "재료를 검색하세요"
+        ) { selectedItem ->
+            println("선택된 항목: $selectedItem")
+        }
+
 
         Spacer(modifier = Modifier.height(10.dp))
 
@@ -950,6 +950,74 @@ fun PostIt(text: String) {
                     .size(20.dp)
                     .clickable { ingreidentsSelected.removeIf { it == text } },
             )
+        }
+    }
+}
+
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SmoothGoogleLikeSearchDropdown2(
+    items: List<String>,
+    ingredientsSelected: List<String>, // 제외할 아이템 리스트
+    placeholderText: String,
+    onItemSelected: (String) -> Unit
+) {
+    var inputText by remember { mutableStateOf("") }
+    var expanded by remember { mutableStateOf(false) }
+
+    // 필터링된 리스트 (ingredientsSelected에 없는 항목만 포함)
+    val filteredItems = remember(inputText, ingredientsSelected) {
+        items.filter {
+            it.contains(inputText, ignoreCase = true) && it !in ingredientsSelected
+        }
+    }
+
+    Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+        // 검색창
+        OutlinedTextField(
+            value = inputText,
+            onValueChange = { newValue ->
+                inputText = newValue
+                expanded = newValue.isNotEmpty() // 입력값이 있을 때만 드롭다운 표시
+            },
+            placeholder = { Text(placeholderText) },
+            leadingIcon = { Icon(Icons.Default.Search, contentDescription = "검색") },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true,
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                containerColor = Color.White,
+                focusedBorderColor = Color.Gray,
+                unfocusedBorderColor = Color.LightGray
+            )
+        )
+
+        // 드롭다운 메뉴
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(max = 240.dp) // 최대 높이 설정 (약 5개 항목)
+        ) {
+            if (filteredItems.isEmpty()) {
+                DropdownMenuItem(
+                    text = { Text("검색 결과가 없습니다", color = Color.Gray) },
+                    onClick = { expanded = false }
+                )
+            } else {
+                filteredItems.forEach { item ->
+                    DropdownMenuItem(
+                        text = { Text(text = item) },
+                        onClick = {
+                            inputText = item // 선택된 항목을 검색창에 반영
+                            expanded = false // 드롭다운 닫기
+                            onItemSelected(item) // 선택된 항목 전달
+                        }
+                    )
+                }
+            }
         }
     }
 }
