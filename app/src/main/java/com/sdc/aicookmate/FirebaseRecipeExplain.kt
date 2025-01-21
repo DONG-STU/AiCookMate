@@ -101,13 +101,13 @@ data class Step(
 
 @Composable
 fun RecipeDetailContent(recipe: RecipeDetailData) {
-    val scrollState = rememberScrollState() // 스크롤 상태 추가
+    val scrollState = rememberScrollState()
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(8.dp)
-            .verticalScroll(scrollState) // 스크롤 가능하도록 설정
+            .verticalScroll(scrollState)
     ) {
         // Title
         Text(text = recipe.title, fontSize = 24.sp, fontWeight = FontWeight.Bold)
@@ -148,36 +148,36 @@ fun RecipeDetailContent(recipe: RecipeDetailData) {
                     contentDescription = "Time Icon",
                     modifier = Modifier.size(16.dp) // 아이콘 크기 설정
                 )
-                Spacer(modifier = Modifier.width(1.dp)) // 텍스트와 이미지 간 간격
+                Spacer(modifier = Modifier.width(1.dp))
                 Text(text = "${recipe.time_required}")
             }
 
-            // Difficulty
+
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Image(
-                    painter = painterResource(id = R.drawable.ic_star), // 아이콘 리소스 추가
+                    painter = painterResource(id = R.drawable.ic_star),
                     contentDescription = "Difficulty Icon",
-                    modifier = Modifier.size(16.dp) // 아이콘 크기 설정
+                    modifier = Modifier.size(16.dp)
                 )
-                Spacer(modifier = Modifier.width(1.dp)) // 텍스트와 이미지 간 간격
+                Spacer(modifier = Modifier.width(1.dp))
                 Text(text = "${recipe.difficulty}")
             }
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Description
+
         Text(text = "Tips:" + recipe.description)
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Ingredients
+
         Text(text = "재료:")
         recipe.ingredients.forEach {
             Text(text = "- ${it.name}: ${it.quantity}")
         }
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Steps
+
         Text(text = "조리방법:")
         recipe.steps.forEachIndexed { index, step ->
             Text(text = "${index + 1}. ${step.description}")
@@ -188,7 +188,7 @@ fun RecipeDetailContent(recipe: RecipeDetailData) {
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(170.dp)
+                    .height(250.dp)
                     .padding(bottom = 8.dp)
             )
         }
