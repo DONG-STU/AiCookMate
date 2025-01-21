@@ -79,7 +79,8 @@ fun ShowScreen() {
     //Refrigerator()
 }
 
-var ingreidentsSelected = mutableStateListOf<String>()  //ingredients 중에서 ingreidentsSelected는 검색되면 안됨
+var ingreidentsSelected =
+    mutableStateListOf<String>()  //ingredients 중에서 ingreidentsSelected는 검색되면 안됨
 val ingredients = listOf(
     "3분 짜장",
     "가래떡",
@@ -819,9 +820,11 @@ fun Refrigerator(navController: NavController) {
                 contentScale = ContentScale.FillBounds,
                 modifier = Modifier.fillMaxSize()
             )
-            Column(modifier = Modifier
-                .verticalScroll(rememberScrollState())
-                .align(Alignment.TopCenter)) {
+            Column(
+                modifier = Modifier
+                    .verticalScroll(rememberScrollState())
+                    .align(Alignment.TopCenter)
+            ) {
                 val chunkedIngredients = ingreidentsSelected.chunked(4)
                 for (ingredient in chunkedIngredients) {
                     Row(modifier = Modifier.padding(2.dp)) {
@@ -831,6 +834,28 @@ fun Refrigerator(navController: NavController) {
                     }
                 }
             }
+            Button(
+                onClick = {
+                    navController.navigate("ScanRefrigeratorPhoto")
+                },
+                shape = RoundedCornerShape(10.dp), // 모서리를 둥글게 설정
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .border(3.dp, Color.LightGray, RoundedCornerShape(10.dp)) // 둥근 외곽선
+                    .size(60.dp), // 버튼 높이 고정
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.recipe_book),
+                    contentDescription = "냉장고 스캔",
+                    modifier = Modifier.size(50.dp)
+
+                )
+
+            }
+
+
+
+
         }
 
         // 버튼 Row
@@ -857,13 +882,17 @@ fun Refrigerator(navController: NavController) {
                     painter = painterResource(R.drawable.scan_camera),
                     contentDescription = "냉장고 스캔",
                     contentScale = ContentScale.Fit,
-                    modifier = Modifier.size(24.dp)
+                    modifier = Modifier.size(15.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
-                Text("냉장고 스캔", fontSize = 14.sp)
+                Text(
+                    text = "냉장고 스캔",
+                    fontSize = 14.sp,
+                    modifier = Modifier.weight(1f) // 텍스트에 더 많은 공간 할당
+                )
             }
 
-            Spacer(modifier = Modifier.width(20.dp))
+            Spacer(modifier = Modifier.width(10.dp))
 
             Button(
                 onClick = {
@@ -880,13 +909,17 @@ fun Refrigerator(navController: NavController) {
                     painter = painterResource(R.drawable.scan_reciept),
                     contentDescription = "영수증 스캔",
                     contentScale = ContentScale.Fit,
-                    modifier = Modifier.size(24.dp)
+                    modifier = Modifier.size(15.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
-                Text("영수증 스캔", fontSize = 14.sp)
+                Text(
+                    text = "영수증 스캔",
+                    fontSize = 14.sp,
+                    modifier = Modifier.weight(1f) // 텍스트에 더 많은 공간 할당
+                )
             }
 
-            Spacer(modifier = Modifier.width(20.dp))
+            Spacer(modifier = Modifier.width(10.dp))
 
             Button(
                 onClick = {
@@ -904,10 +937,14 @@ fun Refrigerator(navController: NavController) {
                     painter = painterResource(R.drawable.scan_reciept),
                     contentDescription = "GPT 추천",
                     contentScale = ContentScale.Fit,
-                    modifier = Modifier.size(24.dp)
+                    modifier = Modifier.size(15.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
-                Text("GPT 추천", fontSize = 14.sp)
+                Text(
+                    text = "GTP 추천",
+                    fontSize = 14.sp,
+                    modifier = Modifier.weight(1f) // 텍스트에 더 많은 공간 할당
+                )
             }
         }
         Spacer(modifier = Modifier.height(5.dp))
@@ -918,14 +955,14 @@ fun Refrigerator(navController: NavController) {
 @Composable
 fun PostIt(text: String) {
     var imgSize by remember { mutableIntStateOf(0) }
-    when {
-        text.length < 4 -> imgSize = 90
-        text.length < 7 -> imgSize = 120
-        text.length < 10 -> imgSize = 150
-    }
+    val fixedHeight = 40.dp
+    imgSize = (40+text.length*10)
+
+
     Box(
         modifier = Modifier
-            .size(imgSize.dp)
+            .width(imgSize.dp)
+            .height(fixedHeight)
             .padding(2.dp),
         contentAlignment = Alignment.Center
     ) {
@@ -933,7 +970,9 @@ fun PostIt(text: String) {
             painter = painterResource(R.drawable.post_it_pink),
             contentDescription = "포스트잇",
             contentScale = ContentScale.FillWidth,
-            modifier = Modifier.size(imgSize.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(fixedHeight)
         )
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -942,18 +981,17 @@ fun PostIt(text: String) {
                 .fillMaxSize()
                 .padding(top = 3.dp)
         ) {
-            Text(text, fontSize = 20.sp)
+            Text(text, fontSize = 15.sp)
             Image(
                 painter = painterResource(R.drawable.postit_close_btn),
                 contentDescription = "닫기",
                 modifier = Modifier
-                    .size(20.dp)
+                    .size(12.dp)
                     .clickable { ingreidentsSelected.removeIf { it == text } },
             )
         }
     }
 }
-
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -974,7 +1012,9 @@ fun SmoothGoogleLikeSearchDropdown2(
         }
     }
 
-    Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+    Column(modifier = Modifier
+        .fillMaxWidth()
+        .padding(16.dp)) {
         // 검색창
         OutlinedTextField(
             value = inputText,
