@@ -1,5 +1,14 @@
 package com.sdc.aicookmate
 
+import FoodCategoriesScreen.BokuemScreen
+import FoodCategoriesScreen.DietScreen
+import FoodCategoriesScreen.GookScreen
+import FoodCategoriesScreen.InfluencerScreen
+import FoodCategoriesScreen.NoodleScreen
+import FoodCategoriesScreen.QuickScreen
+import FoodCategoriesScreen.RiceScreen
+import FoodCategoriesScreen.ZzimScreen
+import FoodCategoriesScreen.ChickenScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -25,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -54,19 +64,19 @@ fun NavSys() {
         composable("main") {
             MainScreen(navController)
         }
-        composable("myPage"){
+        composable("myPage") {
             MyPageScreen(navController)
         }
-        composable("shopping"){
+        composable("shopping") {
             FoodShoppingScreen(navController)
         }
-        composable("recipeExplain"){
-            RecipeExplainScreen(navController)
-        }
-        composable("recipeScreen2"){
-            RecipeScreen2(navController)
-        }
-        composable("Recipe"){
+//        composable("recipeExplain") {
+//            RecipeExplainScreen(navController)
+//        }
+//        composable("recipeScreen2") {
+//            RecipeScreen2(navController)
+//        }
+        composable("Recipe") {
             RecipeScreen(navController)
         }
         composable("selectRecipeScreen") {
@@ -84,9 +94,9 @@ fun NavSys() {
         composable("ScanReceiptImage") {
             ScanReceiptImage(navController)
         }
-        composable("InfluencerScreen") {
-            InfluencerScreen(navController)
-        }
+//        composable("InfluencerScreen") {
+//            InfluencerScreen(navController)
+//        }
         composable("InfluencerScreen2") {
             InfluencerScreen2(navController)
         }
@@ -102,6 +112,17 @@ fun NavSys() {
             RecipeDetailScreen(title)
         }
 
-
+        composable("categoriesScreen") { FoodCategories(navController) }
+        composable("zzimScreen") { ZzimScreen(navController) }
+        composable("gookScreen") { GookScreen(navController) }
+        composable("bokuemScreen") { BokuemScreen(navController) }
+        composable("riceScreen") { RiceScreen(navController) }
+        composable("noodleScreen") { NoodleScreen(navController) }
+        composable("quickScreen") { QuickScreen(navController) }
+        composable("chickenScreen") { ChickenScreen(navController) }
+        composable("dietScreen") { DietScreen(navController) }
+        composable("influencerScreen") { InfluencerScreen(navController) }
+        }
     }
-}
+
+
