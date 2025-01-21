@@ -56,6 +56,14 @@ fun GPTFoodCategories(navController: NavController) {
         verticalArrangement = Arrangement.spacedBy(0.dp)
 
     ) {
+        // 뒤로가기 버튼
+        Image(
+            painter = painterResource(id = R.drawable.ic_arrowback),
+            contentDescription = "뒤로가기",
+            modifier = Modifier
+                .size(40.dp)
+                .clickable { navController.navigateUp() }
+        )
 
         Row(
             modifier = Modifier
