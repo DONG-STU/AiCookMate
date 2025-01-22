@@ -204,7 +204,7 @@ fun RecentRecipeSection(recipes: List<Recipe>) {
 
             RecentRecipeCard(
                 title = recipe.title,
-                views = recipe.views,
+                time_required = recipe.views,
                 viewCount = recipe.viewCount,
                 descript = recipe.descript,
                 isSaved = isSaved,
@@ -236,7 +236,7 @@ fun RecentRecipeCard(
 //    imageUrl: String,
     title: String,
     descript: String,
-    views: String,
+    time_required: String,
     viewCount: String,
     isSaved: Boolean,
     onSaveClick: (Boolean) -> Unit
@@ -351,7 +351,7 @@ fun RecentRecipeCard(
                                 )
 
                                 Text(
-                                    text = views,
+                                    text = time_required,
                                     color = Color.Black
                                 )
                             }
