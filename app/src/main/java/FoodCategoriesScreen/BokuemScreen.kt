@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -64,6 +65,7 @@ class BokuemViewModel : ViewModel() {
     }
 
     private fun fetchBokuemRecipes() {
+
         viewModelScope.launch {
             val randomOffset = (0..200).random() // 200개 중 랜덤 오프셋 설정
 
@@ -95,6 +97,15 @@ fun BokuemRecipeList(recipes: List<BokuemRecipeData>, navController: NavControll
             .verticalScroll(scrollState)
             .background(Color.White),
     ) {
+        Image(
+            painter = painterResource(id = R.drawable.ic_arrowback),
+            contentDescription = "Back button",
+            modifier = Modifier
+                .padding(16.dp)
+                .clickable {
+                    navController.popBackStack()
+                })
+
         recipes.forEach { item ->
             BokuemRecipeItem(item = item) { encodedTitle ->
                 // NavController를 사용하여 다음 화면으로 이동

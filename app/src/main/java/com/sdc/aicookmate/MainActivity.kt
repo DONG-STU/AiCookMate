@@ -114,7 +114,7 @@ fun NavSys() {
 
         composable(route = "recipeDetail/{title}") { backStackEntry ->
             val title = backStackEntry.arguments?.getString("title") ?: ""
-            RecipeDetailScreen(title)
+            RecipeDetailScreen(title, navController)
         }
 
         composable("categoriesScreen") { FoodCategories(navController) }
