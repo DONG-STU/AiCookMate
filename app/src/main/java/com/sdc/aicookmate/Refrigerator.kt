@@ -66,6 +66,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -73,11 +74,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import androidx.navigation.NavController
 
-@Preview(showBackground = true)
-@Composable
-fun ShowScreen() {
-    //Refrigerator()
-}
 
 var ingreidentsSelected =
     mutableStateListOf<String>()  //ingredients 중에서 ingreidentsSelected는 검색되면 안됨
@@ -761,28 +757,30 @@ val ingredients = listOf(
 @Composable
 fun Refrigerator(navController: NavController) {
     val selectedIngredients = remember { mutableStateListOf<String>() }
-    var inputText by remember { mutableStateOf("") }
-
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Color(0xFFFCF6E0))
+            .background(color = Color.White)
     ) {
         // 상단 여백
-        Spacer(modifier = Modifier.height(10.dp))
-
-        // 검색 필드
-
-        SmoothGoogleLikeSearchDropdown2(
-            items = ingredients,
-            ingredientsSelected = selectedIngredients,
-            placeholderText = "재료를 검색하세요"
-        ) { selectedItem ->
-            println("선택된 항목: $selectedItem")
+        Column (modifier = Modifier
+            .background(color = colorResource(R.color.titleColor))
+            .padding(vertical = 5.dp)){
+            Text("갖고 있는 재료를 한 번에 봐요!",
+                color = Color.White,
+                fontSize = 25.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(start = 5.dp))
+            SmoothGoogleLikeSearchDropdown2(
+                items = ingredients,
+                ingredientsSelected = selectedIngredients,
+                placeholderText = "재료를 검색하세요"
+            ) { selectedItem ->
+                println("선택된 항목: $selectedItem")
+            }
         }
-
-
+        // 검색 필드
         Spacer(modifier = Modifier.height(10.dp))
 
         // 즐겨찾기 박스
@@ -852,10 +850,6 @@ fun Refrigerator(navController: NavController) {
                 )
 
             }
-
-
-
-
         }
 
         // 버튼 Row
@@ -956,7 +950,7 @@ fun Refrigerator(navController: NavController) {
 fun PostIt(text: String) {
     var imgSize by remember { mutableIntStateOf(0) }
     val fixedHeight = 40.dp
-    imgSize = (40+text.length*10)
+    imgSize = (40 + text.length * 10)
 
 
     Box(
@@ -1012,9 +1006,11 @@ fun SmoothGoogleLikeSearchDropdown2(
         }
     }
 
-    Column(modifier = Modifier
-        .fillMaxWidth()
-        .padding(16.dp)) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    ) {
         // 검색창
         OutlinedTextField(
             value = inputText,
