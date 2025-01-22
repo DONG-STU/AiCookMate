@@ -59,10 +59,7 @@ import com.sdc.aicookmate.ui.theme.AiCookMateTheme
 
 @Composable
 fun MainScreen(navController: NavController) {
-//    val recipeViewModel: RecipeViewModel = viewModel()
-//    val zzimViewModel: ZzimViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
-//    val recipes by recipeViewModel.recipes.collectAsState()
-//    val zzimRecipes by zzimViewModel.recipes.collectAsState()
+
     Scaffold(
         bottomBar = { BottomBar(navController) }
     ) { paddingValues ->
