@@ -312,6 +312,7 @@ fun BestListCard() {
         BestCard(imageRes = R.drawable.recipe1, description = "")
         BestCard(imageRes = R.drawable.recipe2, description = "")
         BestCard(imageRes = R.drawable.recipe3, description = "")
+        BestCard(imageRes = R.drawable.recipe4, description = "")
     }
 }
 
