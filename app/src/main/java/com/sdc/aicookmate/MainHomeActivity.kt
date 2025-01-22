@@ -443,6 +443,7 @@ fun FirebaseDropdown(
                     .fillMaxWidth()
                     .background(Color.White)
                     .border(1.dp, Color.LightGray, shape = RoundedCornerShape(8.dp))
+                    .padding(vertical = 4.dp)
             ) {
                 Column(
                     modifier = Modifier
@@ -452,7 +453,7 @@ fun FirebaseDropdown(
                 ) {
                     searchResults.forEach { recipe ->
                         DropdownMenuItem(
-                            text = { Text(text = recipe.title) },
+                            text = { Text(text = recipe.title, color = Color.Black) },
                             onClick = {
                                 inputText = recipe.title
                                 expanded = false
