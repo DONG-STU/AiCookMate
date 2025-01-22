@@ -28,6 +28,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -82,7 +84,7 @@ fun MainScreen(navController: NavController) {
             ) { //검색창 컬럼
                 FirebaseDropdown(
                     viewModel = viewModel,
-                    placeholderText = "레시피 검색"
+                    placeholderText = "레시피를 검색하세요"
                 ) { selectedRecipe ->
                     println("선택된 레시피: ${selectedRecipe.title}")
                     navController.navigate("recipeDetail/${selectedRecipe.title}")
@@ -298,7 +300,6 @@ fun CategoryItem(
 }
 
 
-
 @Composable
 fun BestListCard() {
     Row(
@@ -410,13 +411,18 @@ fun FirebaseDropdown(
     var inputText by remember { mutableStateOf("") }
     var expanded by remember { mutableStateOf(false) }
     val searchResults by viewModel.searchResults.collectAsState(initial = emptyList())
+    val isLoading by viewModel.isLoading.collectAsState(initial = false) // 로딩 상태 추가
 
     // 입력 텍스트와 검색 결과에 따라 드롭다운 상태 업데이트
     LaunchedEffect(inputText, searchResults) {
         expanded = inputText.isNotEmpty() && searchResults.isNotEmpty()
     }
 
-    Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    ) {
         OutlinedTextField(
             value = inputText,
             onValueChange = { newValue ->
@@ -430,37 +436,42 @@ fun FirebaseDropdown(
                 .clip(RoundedCornerShape(30.dp)),
             singleLine = true,
             colors = TextFieldDefaults.outlinedTextFieldColors(
-                containerColor = Color.White,
-                focusedBorderColor = Color.Gray,
-                unfocusedBorderColor = Color.LightGray
+                containerColor = Color.White, // 배경색 고정
+                focusedBorderColor = Color.LightGray, // 선택 상태 테두리 색상
+                unfocusedBorderColor = Color.LightGray, // 비선택 상태 테두리 색상
+                focusedLabelColor = Color.Transparent, // 선택 상태 라벨 색상
+                unfocusedLabelColor = Color.Transparent // 비선택 상태 라벨 색상
             )
         )
 
+        // 로딩 상태 표시
+        if (isLoading) {
+            CircularProgressIndicator(
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(8.dp),
+                color = Color.Gray
+            )
+        }
+
         // 드롭다운 표시
         if (expanded) {
-            Box(
+            DropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false },
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(Color.White)
-                    .border(1.dp, Color.LightGray, shape = RoundedCornerShape(8.dp))
-                    .padding(vertical = 4.dp)
             ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(max = 200.dp) // 최대 높이 제한
-                        .verticalScroll(rememberScrollState())
-                ) {
-                    searchResults.forEach { recipe ->
-                        DropdownMenuItem(
-                            text = { Text(text = recipe.title, color = Color.Black) },
-                            onClick = {
-                                inputText = recipe.title
-                                expanded = false
-                                onItemSelected(recipe)
-                            }
-                        )
-                    }
+                searchResults.forEach { recipe ->
+                    DropdownMenuItem(
+                        text = { Text(text = recipe.title) },
+                        onClick = {
+                            inputText = recipe.title
+                            expanded = false
+                            onItemSelected(recipe)
+                        }
+                    )
                 }
             }
         }
