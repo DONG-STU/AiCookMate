@@ -32,13 +32,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import coil3.compose.rememberAsyncImagePainter
 import com.sdc.aicookmate.ui.theme.Pink80
 import kotlinx.coroutines.Dispatchers
@@ -59,6 +62,16 @@ import java.io.File
 import java.io.IOException
 import java.util.UUID
 import java.util.concurrent.TimeUnit
+
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewRefrigeratorImageScanScreen() {
+    // Fake NavController for preview purposes
+    val fakeNavController = rememberNavController()
+
+    RefrigeratorImageScanScreen(navController = fakeNavController)
+}
 
 /**
  * 1) Flask 서버에서 반환하는 객체 정보
@@ -218,23 +231,23 @@ fun RefrigeratorImageScanScreen(navController: NavController) {
     ) {
         Spacer(modifier = Modifier.height(10.dp))
 
-        // 검색 필드
-        OutlinedTextField(
-            value = inputText,
-            onValueChange = { inputText = it },
-            leadingIcon = { Icon(Icons.Default.Search, "검색") },
-            maxLines = 1,
-            colors = TextFieldDefaults.colors(
-                focusedContainerColor = Color.White,
-                unfocusedContainerColor = Color.White,
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp)
-                .height(60.dp) // 검색 필드 높이 고정
-                .border(3.dp, Color.LightGray, RoundedCornerShape(10.dp)),
-            shape = RoundedCornerShape(10.dp)
-        )
+    // 검색 필드
+    OutlinedTextField(
+        value = inputText,
+        onValueChange = { inputText = it },
+        trailingIcon = { Icon(Icons.Default.Search, contentDescription = "검색") },
+        maxLines = 1,
+        colors = TextFieldDefaults.colors(
+            focusedContainerColor = Color.White,
+            unfocusedContainerColor = Color.White,
+        ),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp)
+            .height(60.dp) // 검색 필드 높이 고정
+            .border(3.dp, Color.LightGray, RoundedCornerShape(10.dp)),
+        shape = RoundedCornerShape(10.dp)
+    )
 
         Spacer(modifier = Modifier.height(10.dp))
 
@@ -271,11 +284,12 @@ fun RefrigeratorImageScanScreen(navController: NavController) {
         ) {
             Box(
                 modifier = Modifier
+                    .fillMaxWidth()
                     .background(color = Color(0xFFF5F5F5))
                     .weight(3f)
             ) {
                 Text(
-                    "안에 들어있는 재료",
+                    "추가된 재료",
                     fontSize = 30.sp,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center,
@@ -295,8 +309,10 @@ fun RefrigeratorImageScanScreen(navController: NavController) {
                         ListOfIngredientsUI(ingredient)
                     }
                 }
-                Box(modifier = Modifier
-                    .fillMaxSize()) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                ) {
                     Button(
                         onClick = {
                             val newIngredients =
@@ -305,7 +321,9 @@ fun RefrigeratorImageScanScreen(navController: NavController) {
                             navController.navigateUp()
                             Toast.makeText(context, "재료를 추가했어요!", Toast.LENGTH_SHORT).show()
                         },
-                        colors = ButtonDefaults.buttonColors(Pink80),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = colorResource(id = R.color.titleColor) // XML 색상 적용
+                        ),
                         shape = RoundedCornerShape(12.dp),
                         contentPadding = PaddingValues(0.dp),
                         modifier = Modifier
@@ -313,11 +331,17 @@ fun RefrigeratorImageScanScreen(navController: NavController) {
                             .align(Alignment.BottomEnd) // 버튼을 오른쪽 아래로 배치
                             .padding(10.dp)
                     ) {
-                        Text("확인", fontSize = 16.sp,color = Color.Black)
+                        Text(
+                            "확인",
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.Black
+                        )
                     }
                 }
             }
         }
+        Spacer(modifier = Modifier . padding(vertical = 20.dp))
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -332,22 +356,31 @@ fun RefrigeratorImageScanScreen(navController: NavController) {
                     },
                     shape = RoundedCornerShape(12.dp),
                     contentPadding = PaddingValues(0.dp),
-                    colors = ButtonDefaults.buttonColors(Pink80),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = colorResource(id = R.color.titleColor) // XML 색상 적용
+                    ),
 
                     modifier = Modifier
 
-                        .size(80.dp)
+                        .size(70.dp)
                 ) {
-//                Text("사진 넣기")
+
                     Image(
                         painter = painterResource(id = R.drawable.ic_plus),
                         contentDescription = "사진 버튼 이미지",
-                        modifier = Modifier.size(30.dp)
+                        modifier = Modifier.size(40.dp)
                     )
                 }
-                Text("사진넣기")
+                Column(modifier = Modifier.padding(horizontal = 10.dp,vertical = 3.dp)) {
+                    Text("사진 넣기",
+                        fontSize = 18.sp,
+                        modifier = Modifier,
+                        fontWeight = FontWeight.Bold)
+                    Spacer(modifier = Modifier.height(9.dp))
+                    Text("갤러리에 있는 사진을 등록해보세요")
+                }
             }
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(25.dp))
             Row {
                 Button(
                     onClick = {
@@ -364,21 +397,32 @@ fun RefrigeratorImageScanScreen(navController: NavController) {
                     },
                     shape = RoundedCornerShape(12.dp),
                     contentPadding = PaddingValues(0.dp),
-                    colors = ButtonDefaults.buttonColors(Pink80),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = colorResource(id = R.color.titleColor) // XML 색상 적용
+                    ),
                     modifier = Modifier
 
-                        .size(80.dp)
+                        .size(70.dp)
                 ) {
-//                    Text("카메라 촬영")
+
                     Image(
                         painter = painterResource(id = R.drawable.ic_plus),
                         contentDescription = "카메라 버튼 이미지",
-                        modifier = Modifier.size(30.dp)
+                        modifier = Modifier.size(40.dp)
                     )
                 }
-                Text("카메라 촬영")
+                Column(modifier = Modifier.padding(horizontal = 10.dp, vertical = 3.dp)) {
+                    Text(
+                        "카메라 촬영",
+                        fontSize = 18.sp,
+                        modifier = Modifier,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Spacer(modifier = Modifier.height(9.dp))
+                    Text("냉장고를 촬영하고 사진을 넣어보세요")
+                }
             }
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(25.dp))
             Row {
                 Button(
                     onClick = {
@@ -418,20 +462,31 @@ fun RefrigeratorImageScanScreen(navController: NavController) {
                     },
                     shape = RoundedCornerShape(12.dp),
                     contentPadding = PaddingValues(0.dp),
-                    colors = ButtonDefaults.buttonColors(Pink80),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = colorResource(id = R.color.titleColor) // XML 색상 적용
+                    ),
                     modifier = Modifier
 
-                        .size(80.dp)
+                        .size(70.dp)
                 ) {
 //                    Text("탐지 시작")
                     Image(
                         painter = painterResource(id = R.drawable.ic_plus),
                         contentDescription = "사진 버튼 이미지",
-                        modifier = Modifier.size(30.dp)
+                        modifier = Modifier.size(40.dp)
                     )
 
                 }
-                Text("탐지 시작")
+                Column(modifier = Modifier.padding(horizontal = 10.dp, vertical = 3.dp)) {
+                    Text(
+                        "재료 탐지",
+                        fontSize = 18.sp,
+                        modifier = Modifier,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Spacer(modifier = Modifier.height(1.dp))
+                    Text("카메라를 재료에 대보면 무슨 재료인지 알려드려요")
+                }
             }
         }
         // 로딩 표시
