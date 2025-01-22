@@ -142,10 +142,10 @@ fun RecipeItem(item: RecipeData, onClick: (String) -> Unit) {
                 Image(
                     painter = rememberAsyncImagePainter(item.thumbnail),
                     contentDescription = null,
-                    contentScale = ContentScale.Crop,
+                    contentScale = ContentScale.FillWidth,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(200.dp)
+                        .height(250.dp)
                         .clickable {
                             onClick(Uri.encode(item.title))
                         }
