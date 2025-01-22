@@ -33,16 +33,12 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 // 전역 변수로 선택된 재료 관리
-var ingredientsSelected = mutableStateListOf<String>()
-
 @Composable
 fun RecipeRecommendScreen(navController: NavController) {
     val viewModel: RecipeRecommendViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
 
 
     LaunchedEffect(Unit) {
-        ingredientsSelected.clear()
-        ingredientsSelected.add("대파")
         viewModel.fetchFilteredRecipes()
     }
 
@@ -80,7 +76,7 @@ class RecipeRecommendViewModel : ViewModel() {
                                 document.get("ingredients") as? List<Map<String, String>>
                             if (ingredients != null) {
                                 val recipeIngredients = ingredients.mapNotNull { it["name"] }
-                                if (recipeIngredients.any { it in ingredientsSelected }) {
+                                if (recipeIngredients.any { it in ingreidentsSelected }) {
                                     document.toObject(RecipeRecommendData::class.java)
                                 } else {
                                     null
