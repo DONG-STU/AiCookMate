@@ -8,7 +8,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,7 +20,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -29,9 +30,11 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -44,6 +47,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.motionEventSpy
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -51,6 +55,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.sdc.aicookmate.ui.theme.AiCookMateTheme
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.style.TextAlign
 
 @Composable
 fun MainScreen(navController: NavController) {
@@ -63,15 +71,14 @@ fun MainScreen(navController: NavController) {
             modifier = Modifier
                 .padding(paddingValues)
                 .verticalScroll(rememberScrollState())
-                .background(Color(0xFFFCF6E0))
+                .background(Color.White)
         ) {
-            Column(
+            Column( //검색창 컬럼
                 modifier = Modifier
-                    .padding(horizontal = 20.dp)
-                    .fillMaxWidth(),
-            ) {
-                Spacer(modifier = Modifier.height(16.dp))
-
+                    .height(90.dp)
+                    .fillMaxWidth()
+                    .background(color = colorResource(R.color.titleColor))
+            ) { //검색창 컬럼
                 FirebaseDropdown(
                     viewModel = viewModel,
                     placeholderText = "레시피 검색"
@@ -79,28 +86,76 @@ fun MainScreen(navController: NavController) {
                     println("선택된 레시피: ${selectedRecipe.title}")
                     navController.navigate("recipeDetail/${selectedRecipe.title}")
                 }
+            } //검색창컬럼
 
+            Box( //레시피리스트 박스
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { navController.navigate("refigeratorScreen") } // 클릭 시 이동
+            ) { //레시피리스트 박스
+                Image(
+                    painter = painterResource(id = R.drawable.recipelist),
+                    contentDescription = "홈 레시피 리스트",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                        .height(350.dp)
+                        .align(Alignment.Center),
+                    contentScale = ContentScale.FillBounds
+                )
+            } //레시피리스트 박스
 
-                Spacer(modifier = Modifier.height(20.dp))
-                RefrigeratorButton()
-                Spacer(modifier = Modifier.height(24.dp))
+            Column( //카테고리 컬럼
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {//카테고리 컬럼
+                Text(//텍스트
+                    text = "레시피 종류",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color.Black,
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp, vertical = 9.dp)
+//                        .background(color = colorResource(R.color.titleColor))
+//                        .width(130.dp)
+//                        .height(30.dp),
+//                        textAlign = TextAlign.Center
 
-                ChuchunList()
-                Spacer(modifier = Modifier.height(12.dp))
-                ChuChunCard()
-                Spacer(modifier = Modifier.height(32.dp))
-
+                )//텍스트
                 CategorySelector(navController)
-                Spacer(modifier = Modifier.height(32.dp))
+            }//카테고리 컬럼
 
-                BestRecipe()
-                Spacer(modifier = Modifier.height(12.dp))
-                BestListCard()
+            Spacer(modifier = Modifier.height(20.dp))
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 9.dp, horizontal = 16.dp)
+            ) {
+                Text(
+                    text = "실시간 인기 레시피",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color.Black,
+                    modifier = Modifier
+                        .align(Alignment.TopStart)
+                )
 
+                Text(
+                    "더보기>",
+                    fontSize = 14.sp,
+                    color = Color.Gray,
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                )
 
-                Spacer(modifier = Modifier.height(16.dp))
             }
-        }
+
+
+
+            BestListCard()
+
+
+        }//최상위 컬럼
     }
 }
 
@@ -237,15 +292,6 @@ fun RecipeCard(imageRes: Int, description: String) {
 fun CategorySelector(navController: NavController) {
     var selectedCategory by remember { mutableStateOf("한식") }
     Column {
-        Text(
-            "카테고리",
-            fontSize = 28.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color.Black,
-            modifier = Modifier
-                .padding(bottom = 8.dp)
-        )
-
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -356,7 +402,7 @@ fun CategoryItem(
             )
             .border(
                 width = if (isSelected) 2.dp else 0.dp,
-                color = if (isSelected) Color.Blue else Color.Transparent,
+                color = if (isSelected) Color.Blue else Color.Black,
                 shape = RoundedCornerShape(12.dp)
             )
             .size(80.dp)
@@ -384,7 +430,7 @@ fun BestRecipe() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(1.dp)
+
 
     )
     {
@@ -397,10 +443,11 @@ fun BestRecipe() {
         ) {
 
             Text(
-                "실시간 베스트 레시피",
-                fontSize = 28.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.Black
+                "실시간 인기 레시피",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = Color.Black,
+                modifier = Modifier.padding(vertical = 9.dp)
             )
 
             Text(
@@ -463,53 +510,51 @@ fun BottomBar(navController: NavController) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .wrapContentHeight()
-            .padding(5.dp)
-            .background(Color.White)
+            .height(56.dp)
+            .background(Color(0xFFF2F2F2))
     ) {
         Row(
             modifier = Modifier
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Spacer(modifier = Modifier.weight(1f))
             Image(
-                painter = painterResource(R.drawable.home_btn),
+                painter = painterResource(id = R.drawable.ic_home),
                 contentDescription = "메인 홈 아이콘",
                 modifier = Modifier
                     .size(40.dp)
-                    .weight(1f)
                     .clickable { navController.navigate("main") }
             )
-            Spacer(modifier = Modifier.weight(1f))
             Image(
-                painter = painterResource(R.drawable.shopping_btn),
-                contentDescription = "쇼핑 아이콘",
+                painter = painterResource(id = R.drawable.ic_cart),
+                contentDescription = "카트 아이콘",
                 modifier = Modifier
                     .size(40.dp)
-                    .weight(1f)
                     .clickable { navController.navigate("shopping") }
             )
-            Spacer(modifier = Modifier.weight(1f))
             Image(
-                painter = painterResource(R.drawable.recipe_book),
-                contentDescription = "레시피 아이콘",
+                painter = painterResource(id = R.drawable.ic_kitchen),
+                contentDescription = "냉장고 아이콘",
                 modifier = Modifier
                     .size(40.dp)
-                    .weight(1f)
+                    .clickable { navController.navigate("refigeratorScreen") }
+            )
+            Image(
+                painter = painterResource(id = R.drawable.ic_bookheart),
+                contentDescription = "찜 레시피 아이콘",
+                modifier = Modifier
+                    .size(40.dp)
                     .clickable { navController.navigate("Recipe") }
             )
-            Spacer(modifier = Modifier.weight(1f))
             Image(
-                painter = painterResource(R.drawable.mypage_btn),
+                painter = painterResource(id = R.drawable.ic_person),
                 contentDescription = "마이페이지 아이콘",
                 modifier = Modifier
                     .size(40.dp)
-                    .weight(1f)
                     .clickable { navController.navigate("myPage") }
             )
-            Spacer(modifier = Modifier.weight(1f))
         }
     }
 }
@@ -533,7 +578,11 @@ fun FirebaseDropdown(
         }
     }
 
-    Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    ) {
         OutlinedTextField(
             value = inputText,
             onValueChange = { newValue ->
