@@ -207,7 +207,7 @@ fun ScanReceiptImage(navController: NavController) {
                 }
                 Button(onClick = {
                     ingreidentsSelected.addAll(foundIngredients.distinct())
-                    navController.navigateUp()
+                    navController.navigate("refigeratorScreen")
                     Toast.makeText(context, "재료를 추가했어요!", Toast.LENGTH_SHORT).show()
                 },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xffFF5D5D)),
