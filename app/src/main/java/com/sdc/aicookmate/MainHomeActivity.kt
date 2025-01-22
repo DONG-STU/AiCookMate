@@ -1,8 +1,6 @@
 package com.sdc.aicookmate
 
 
-import FoodCategoriesScreen.ZzimRecipeList
-import FoodCategoriesScreen.ZzimViewModel
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -18,6 +16,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -28,6 +27,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -37,6 +37,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -59,6 +60,7 @@ import com.sdc.aicookmate.ui.theme.AiCookMateTheme
 
 @Composable
 fun MainScreen(navController: NavController) {
+    val viewModel: RecipeViewModel = viewModel()
 
     Scaffold(
         bottomBar = { BottomBar(navController) }
@@ -76,16 +78,14 @@ fun MainScreen(navController: NavController) {
             ) {
                 Spacer(modifier = Modifier.height(16.dp))
 
-                OutlinedTextField(
-                    value = "",
-                    onValueChange = {},
-                    leadingIcon = { Icon(Icons.Default.Search, "검색") },
-                    placeholder = { Text("레시피 검색") },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(Color.White, RoundedCornerShape(30.dp)),
-                    shape = RoundedCornerShape(30.dp)
-                )
+                FirebaseDropdown(
+                    viewModel = viewModel,
+                    placeholderText = "레시피 검색"
+                ) { selectedRecipe ->
+                    println("선택된 레시피: ${selectedRecipe.title}")
+                    navController.navigate("recipeDetail/${selectedRecipe.title}")
+                }
+
 
                 Spacer(modifier = Modifier.height(20.dp))
                 RefrigeratorButton()
@@ -102,6 +102,7 @@ fun MainScreen(navController: NavController) {
                 BestRecipe()
                 Spacer(modifier = Modifier.height(12.dp))
                 BestListCard()
+
 
                 Spacer(modifier = Modifier.height(16.dp))
             }
@@ -140,7 +141,7 @@ fun RefrigeratorButton() {
             Spacer(modifier = Modifier.width(100.dp))
 
             Text(
-                text = "냉슐랭 가이드",
+                text = "냉장고 관리하기",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black
@@ -189,8 +190,6 @@ fun ChuchunList() {
                         .padding(bottom = 4.dp)
 
                 )
-
-
             }
             Spacer(modifier = Modifier.width(10.dp))
         }
@@ -519,3 +518,70 @@ fun BottomBar(navController: NavController) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun FirebaseDropdown(
+    viewModel: RecipeViewModel,
+    placeholderText: String,
+    onItemSelected: (RecipeData) -> Unit
+) {
+    var inputText by remember { mutableStateOf("") }
+    var expanded by remember { mutableStateOf(false) }
+    val searchResults by viewModel.searchResults.collectAsState(initial = emptyList())
+
+    LaunchedEffect(inputText) {
+        if (inputText.isNotEmpty()) {
+            viewModel.fetchRecipes2(inputText)
+        } else {
+            expanded = false // 입력이 비어 있으면 드롭다운 숨기기
+        }
+    }
+
+    Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+        OutlinedTextField(
+            value = inputText,
+            onValueChange = { newValue ->
+                inputText = newValue // 텍스트 필드 값 갱신
+                expanded = true // 드롭다운 표시
+            },
+            placeholder = { Text(placeholderText) },
+            leadingIcon = { Icon(Icons.Default.Search, contentDescription = "검색") },
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(30.dp)),
+            singleLine = true,
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                containerColor = Color.White,
+                focusedBorderColor = Color.Gray,
+                unfocusedBorderColor = Color.LightGray
+            )
+        )
+
+        if (expanded && searchResults.isNotEmpty()) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.White)
+                    .border(1.dp, Color.LightGray, shape = RoundedCornerShape(8.dp))
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(max = 200.dp) // 최대 높이 제한
+                        .verticalScroll(rememberScrollState())
+                ) {
+                    searchResults.forEach { recipe ->
+                        DropdownMenuItem(
+                            text = { Text(text = recipe.title) },
+                            onClick = {
+                                inputText = recipe.title
+                                expanded = false
+                                onItemSelected(recipe)
+                            }
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
