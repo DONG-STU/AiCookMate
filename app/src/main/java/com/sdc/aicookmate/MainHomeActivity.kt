@@ -126,6 +126,7 @@ fun MainScreen(navController: NavController) {
             }//카테고리 컬럼
 
             Spacer(modifier = Modifier.height(20.dp))
+
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
