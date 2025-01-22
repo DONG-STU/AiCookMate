@@ -410,24 +410,17 @@ fun FirebaseDropdown(
     var expanded by remember { mutableStateOf(false) }
     val searchResults by viewModel.searchResults.collectAsState(initial = emptyList())
 
-    LaunchedEffect(inputText) {
-        if (inputText.isNotEmpty()) {
-            viewModel.fetchRecipes2(inputText)
-        } else {
-            expanded = false // 입력이 비어 있으면 드롭다운 숨기기
-        }
+    // 입력 텍스트와 검색 결과에 따라 드롭다운 상태 업데이트
+    LaunchedEffect(inputText, searchResults) {
+        expanded = inputText.isNotEmpty() && searchResults.isNotEmpty()
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-    ) {
+    Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
         OutlinedTextField(
             value = inputText,
             onValueChange = { newValue ->
                 inputText = newValue // 텍스트 필드 값 갱신
-                expanded = true // 드롭다운 표시
+                viewModel.fetchRecipes2(newValue) // 검색 쿼리 호출
             },
             placeholder = { Text(placeholderText) },
             leadingIcon = { Icon(Icons.Default.Search, contentDescription = "검색") },
@@ -442,7 +435,8 @@ fun FirebaseDropdown(
             )
         )
 
-        if (expanded && searchResults.isNotEmpty()) {
+        // 드롭다운 표시
+        if (expanded) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()

@@ -187,4 +187,3 @@ fun InfoRow(iconRes: Int, text: String) {
         Text(text = text, fontWeight = FontWeight.Bold, color = Color.Black)
     }
 }
-
