@@ -59,14 +59,6 @@ import androidx.navigation.compose.rememberNavController
 import com.sdc.aicookmate.ui.theme.AiCookMateTheme
 
 
-@Preview(showBackground = true)
-@Composable
-fun MainScreePreview() {
-    AiCookMateTheme {
-    }
-}
-
-
 @Composable
 fun FoodShoppingScreen(navController: NavController) {
     Scaffold(
@@ -75,7 +67,7 @@ fun FoodShoppingScreen(navController: NavController) {
         Column(
             modifier = Modifier
                 .padding(paddingValues)
-                .background(Color(0xFFFCF6E0))
+                .background(Color.White)
         ) {
             Column(
                 modifier = Modifier
@@ -83,25 +75,24 @@ fun FoodShoppingScreen(navController: NavController) {
             ) {
                 Spacer(modifier = Modifier.height(16.dp))
 
-                Row {
+                Row (verticalAlignment = Alignment.CenterVertically){
                     OutlinedTextField(
                         value = "",
                         onValueChange = {},
                         leadingIcon = { Icon(Icons.Default.Search, "검색") },
-                        placeholder = { Text("찾으시려는 레시피를 입력해주세요") },
+                        placeholder = { Text("레시피 검색") },
                         modifier = Modifier
-                            .weight(0.80f)
+                            .weight(0.8f)
                             .background(Color.White, RoundedCornerShape(30.dp)),
                         shape = RoundedCornerShape(30.dp)
                     )
 
                     Image(
-                        painter = painterResource(id = R.drawable.ic_cart),
-                        contentDescription = "장바구니",
+                        painter = painterResource(R.drawable.shoppingcart_btn),
+                        contentDescription = "카트에 담기",
                         modifier = Modifier
                             .size(40.dp)
-                            .clickable {/**/ }
-
+                            .clickable {/**/}
                     )
                 }
                 Spacer(
@@ -183,7 +174,7 @@ fun CategorySection() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color(0xFFFCF6E0))
+            .background(Color.White)
             .padding(16.dp)
     ) {
         Row(
@@ -230,7 +221,7 @@ fun HotDealsSection() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color(0xFFFCF6E0))
+            .background(Color.White)
             .padding(16.dp)
     ) {
         Row(
@@ -360,7 +351,7 @@ fun PlanSection() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color(0xFFFCF6E0))
+            .background(Color.White)
             .padding(16.dp)
     ) {
         Row(
