@@ -30,6 +30,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.test.isSelected
 import androidx.compose.ui.text.TextStyle
@@ -40,75 +41,83 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 
-//@Preview
-//@Composable
-//fun mainpreview() {
-//    RecipeScreen()
-//}
-
-
 @Composable
 fun RecipeScreen(navController: NavController) {
 
     val viewModel: RecipeViewModel = viewModel()
     val recipes by viewModel.recipes.collectAsState()
-//    Scaffold(
-//        bottomBar = { BottomBar(navController) }
-//    ) { paddingValues ->
-//        Column(
-//            modifier = Modifier
-//                .padding(paddingValues)
-//                .background(Color(0xFFFCF6E0))
-//        ){
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-
-
-        OutlinedTextField(
-            value = "",
-            onValueChange = {},
-            leadingIcon = { Icon(Icons.Default.Search, "검색") },
-            placeholder = { Text("재료나 요리명을 검색하세요", fontSize = 14.sp, color = Color.Gray) },
+    Scaffold(
+        bottomBar = { BottomBar(navController) }
+    ) { paddingValues ->
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp)
-                .background(Color.White, RoundedCornerShape(30.dp)),
-            shape = RoundedCornerShape(30.dp)
-        )
-
-        Spacer(modifier = Modifier.height(3.dp))
-
-        FoodCategories(navController)
-
-        Spacer(modifier = Modifier.height(3.dp))
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.End
+                .padding(paddingValues)
+                .background(Color.White)
         ) {
-            RecentButton(
-                text = "최신순",
-                isSelected = true,
-                onClick = { /**/ }
-            )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(90.dp)
+                    .background(color = colorResource(R.color.titleColor))
+            ) {
+                OutlinedTextField(
+                    value = "",
+                    onValueChange = {},
+                    leadingIcon = { Icon(Icons.Default.Search, "검색") },
+                    placeholder = {
+                        Text(
+                            "재료나 요리명을 검색하세요",
+                            fontSize = 14.sp,
+                            color = Color.Gray
+                        )
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp)
+                        .background(Color.White, RoundedCornerShape(30.dp))
+                        .align(Alignment.Center),
+                    shape = RoundedCornerShape(30.dp)
+                )
+            }
 
-            Spacer(modifier = Modifier.width(8.dp))
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp)
+            ) {
+                Spacer(modifier = Modifier.height(3.dp))
 
-            RecentButton(
-                text = "인기순",
-                isSelected = false,
-                onClick = { /**/ }
-            )
+                FoodCategories(navController)
+
+                Spacer(modifier = Modifier.height(3.dp))
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 9.dp),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    RecentButton(
+                        text = "최신순",
+                        isSelected = true,
+                        onClick = { /**/ }
+                    )
+
+                    Spacer(modifier = Modifier.width(8.dp))
+
+                    RecentButton(
+                        text = "인기순",
+                        isSelected = false,
+                        onClick = { /**/ }
+                    )
+                }
+                RecipeList(recipes = recipes, navController = navController)
+
+                Spacer(modifier = Modifier.height(6.dp))
+
+
+            }
         }
-        RecipeList(recipes = recipes, navController = navController)
-
-        Spacer(modifier = Modifier.height(6.dp))
-
-
     }
 }
 
@@ -116,8 +125,9 @@ fun RecipeScreen(navController: NavController) {
 @Composable
 fun FoodCategories(navController: NavController) {
     Column(
-        modifier = Modifier.fillMaxWidth()
-        .padding(vertical = 4.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp),
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
         Row(
@@ -156,8 +166,6 @@ fun FoodCategories(navController: NavController) {
 }
 
 
-
-
 @Composable
 fun FoodCategoryItem(navController: NavController, title: String, iconRes: Int) {
     Column(
@@ -189,7 +197,7 @@ fun FoodCategoryItem(navController: NavController, title: String, iconRes: Int) 
                 }
                 .border(
                     width = 0.5.dp,
-                    color = Color.LightGray,
+                    color = Color.Black,
                     shape = RoundedCornerShape(percent = 20)
                 ),
             contentAlignment = Alignment.Center
@@ -213,7 +221,9 @@ fun FoodCategoryItem(navController: NavController, title: String, iconRes: Int) 
 
                     Text(
                         text = title,
-                        modifier = Modifier.align(Alignment.BottomCenter),
+                        modifier = Modifier
+                            .align(Alignment.BottomCenter)
+                            .padding(bottom = 5.dp),
                         style = TextStyle(
                             fontSize = 16.sp,
                             color = Color.Black,
@@ -225,7 +235,6 @@ fun FoodCategoryItem(navController: NavController, title: String, iconRes: Int) 
         }
     }
 }
-
 
 
 @Composable
@@ -264,6 +273,7 @@ fun FoodItemCard(navController: NavController, foodItem: FoodItem) {
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
             .clickable { navController.navigate("recipeExplain") }
+            .border(0.5.dp, Color.Black, RoundedCornerShape(12.dp))
     ) {
 
         Image(
