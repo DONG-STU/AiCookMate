@@ -93,9 +93,8 @@ fun MyPageScreen(navController: NavController) {
                     .padding(vertical = 9.dp, horizontal = 16.dp)
             ) {
 
-                Button(
+                IconButton(
                     onClick = {},
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0x00ffffff)),
                     modifier = Modifier
                         .size(45.dp)
                         .weight(1f)
@@ -106,9 +105,8 @@ fun MyPageScreen(navController: NavController) {
                         modifier = Modifier.fillMaxSize()
                     )
                 }
-                Button(
+                IconButton(
                     onClick = {},
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0x00ffffff)),
                     modifier = Modifier
                         .size(45.dp)
                         .weight(1f)
@@ -119,9 +117,8 @@ fun MyPageScreen(navController: NavController) {
                         modifier = Modifier.fillMaxSize()
                     )
                 }
-                Button(
+                IconButton(
                     onClick = {},
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0x00ffffff)),
                     modifier = Modifier
                         .size(45.dp)
                         .weight(1f)
@@ -207,7 +204,7 @@ fun RecentRecipeSection(recipes: List<Recipe>) {
 
             RecentRecipeCard(
                 title = recipe.title,
-                views = recipe.views,
+                time_required = recipe.views,
                 viewCount = recipe.viewCount,
                 descript = recipe.descript,
                 isSaved = isSaved,
@@ -239,7 +236,7 @@ fun RecentRecipeCard(
 //    imageUrl: String,
     title: String,
     descript: String,
-    views: String,
+    time_required: String,
     viewCount: String,
     isSaved: Boolean,
     onSaveClick: (Boolean) -> Unit
@@ -287,9 +284,12 @@ fun RecentRecipeCard(
                         .fillMaxWidth()
                         .weight(0.4f)
                 ) {
-                    Box(modifier = Modifier
-                        .fillMaxWidth()) {
-                        Text(modifier = Modifier.align(Alignment.BottomStart),
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    ) {
+                        Text(
+                            modifier = Modifier.align(Alignment.BottomStart),
                             text = title,
                             color = Color.Black,
                             fontSize = 20.sp,
@@ -351,7 +351,7 @@ fun RecentRecipeCard(
                                 )
 
                                 Text(
-                                    text = views,
+                                    text = time_required,
                                     color = Color.Black
                                 )
                             }
