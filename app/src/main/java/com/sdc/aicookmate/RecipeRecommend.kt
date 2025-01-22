@@ -76,9 +76,13 @@ class RecipeRecommendViewModel : ViewModel() {
                                 document.get("ingredients") as? List<Map<String, String>>
                             if (ingredients != null) {
                                 val recipeIngredients = ingredients.mapNotNull { it["name"] }
-                                if (recipeIngredients.any { it in ingreidentsSelected }) {
+                                val matchCount = recipeIngredients.count { it in ingreidentsSelected }
+                                if (matchCount >= 2) {
+//                                if (recipeIngredients.any { it in ingreidentsSelected })
+//                                {
                                     document.toObject(RecipeRecommendData::class.java)
-                                } else {
+//                                }
+                            }else {
                                     null
                                 }
                             } else {

@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -21,16 +22,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 
 @Composable
-fun SelectRecipeScreen(navController: NavController){
+fun SelectRecipeScreen(navController: NavController) {
     GPTFoodCategories(navController)
 }
 
@@ -39,15 +40,25 @@ var titleSelected = ""
 @Composable
 fun GPTFoodCategories(navController: NavController) {
     val categories = listOf(
+        "한식" to R.drawable.ic_korean,
+        "일식" to R.drawable.ic_japanese,
+        "중식" to R.drawable.ic_chinese,
+        "프랑스" to R.drawable.ic_french,
+        "이탈리아" to R.drawable.ic_italian,
+        "멕시칸" to R.drawable.ic_mexican,
         "찜조림" to R.drawable.ic_zzim,
         "국/탕/찌개" to R.drawable.ic_gook,
         "볶음/구이" to R.drawable.ic_bokuem,
         "밥/죽" to R.drawable.ic_rice,
+        "튀김" to R.drawable.ic_fried,
         "면/만두" to R.drawable.ic_noodle,
         "간편요리" to R.drawable.ic_quick,
         "야식" to R.drawable.ic_chicken,
+        "안주" to R.drawable.ic_anju,
+        "집들이" to R.drawable.ic_houseparty,
         "다이어트" to R.drawable.ic_diet,
-        "인플루언서" to R.drawable.ic_influencer
+        "디저트" to R.drawable.ic_dessert
+
     )
 
     Column(
@@ -57,13 +68,24 @@ fun GPTFoodCategories(navController: NavController) {
 
     ) {
         // 뒤로가기 버튼
-        Image(
-            painter = painterResource(id = R.drawable.ic_arrowback),
-            contentDescription = "뒤로가기",
+        Column(
             modifier = Modifier
-                .size(40.dp)
-                .clickable { navController.navigateUp() }
-        )
+                .fillMaxWidth()
+                .background(color = colorResource(R.color.titleColor))
+                .height(90.dp)
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.ic_arrowback),
+                contentDescription = "뒤로가기",
+                modifier = Modifier
+                    .size(40.dp)
+                    .clickable { navController.navigateUp() }
+            )
+            Text(text = "현재 먹고 싶은 음식을 선택해주세요",
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp,
+                modifier = Modifier.align(Alignment.CenterHorizontally))
+        }
 
         Row(
             modifier = Modifier
@@ -134,6 +156,52 @@ fun GPTFoodCategories(navController: NavController) {
                 iconRes = categories[8].second,
             )
         }
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            GPTFoodCategoryItem(
+                navController,
+                title = categories[9].first,
+                iconRes = categories[9].second,
+            )
+            GPTFoodCategoryItem(
+                navController,
+                title = categories[10].first,
+                iconRes = categories[10].second,
+            )
+            GPTFoodCategoryItem(
+                navController,
+                title = categories[11].first,
+                iconRes = categories[11].second,
+            )
+        }
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            GPTFoodCategoryItem(
+                navController,
+                title = categories[12].first,
+                iconRes = categories[12].second,
+            )
+            GPTFoodCategoryItem(
+                navController,
+                title = categories[13].first,
+                iconRes = categories[13].second,
+            )
+            GPTFoodCategoryItem(
+                navController,
+                title = categories[14].first,
+                iconRes = categories[14].second,
+            )
+        }
     }
 }
 
@@ -180,7 +248,9 @@ fun GPTFoodCategoryItem(navController: NavController, title: String, iconRes: In
 
                     Text(
                         text = title,
-                        modifier = Modifier.align(Alignment.BottomCenter),
+                        modifier = Modifier
+                            .align(Alignment.BottomCenter)
+                            .padding(bottom = 5.dp),
                         style = TextStyle(
                             fontSize = 16.sp,
                             color = Color.Black,
