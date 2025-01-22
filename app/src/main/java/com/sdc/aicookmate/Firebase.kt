@@ -114,6 +114,7 @@ fun RecipeList(recipes: List<RecipeData>, navController: NavController) {
             .padding(horizontal = 4.dp)
             .verticalScroll(scrollState)
     ) {
+
         recipes.forEach { item ->
             RecipeItem(item = item) { encodedTitle ->
                 // NavController를 사용하여 다음 화면으로 이동

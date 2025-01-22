@@ -42,6 +42,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.compose.foundation.layout.width
 
 data class Recipe(
     val title: String,
@@ -378,12 +379,13 @@ fun RecentRecipeCard(
                                 tint = Color.Black,
                                 modifier = Modifier.size(20.dp)  // 아이콘 크기 약간 줄임
                             )
-
+                            Spacer(modifier = Modifier.width(5.dp))
                             Text(
-                                text = views,
+                                text = "30분 이내",
                                 color = Color.Black,
                                 fontSize = 12.sp  // 글자 크기 조정
                             )
+
 
                         }
                         Row(
@@ -397,12 +399,13 @@ fun RecentRecipeCard(
                                 tint = Color.Black,
                                 modifier = Modifier.size(20.dp)
                             )
-//                            Spacer(modifier = Modifier.width(4.dp))
+
                             Text(
                                 text = viewCount,
                                 color = Color.Black,
                                 fontSize = 12.sp
                             )
+
                         }
                     }
                 }

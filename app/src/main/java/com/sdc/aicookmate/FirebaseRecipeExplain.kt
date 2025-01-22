@@ -2,6 +2,7 @@ package com.sdc.aicookmate
 
 import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,42 +29,52 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import coil3.compose.rememberAsyncImagePainter
 import com.google.firebase.firestore.FirebaseFirestore
 
 @Composable
-fun RecipeDetailScreen(title: String) {
+fun RecipeDetailScreen(title: String,navController: NavController) {
     val recipeDetail = remember { mutableStateOf<RecipeDetailData?>(null) }
-
-    // Firestore 데이터 로드
-    LaunchedEffect(title) {
-        Log.d("RecipeDetailScreen", "Fetching recipe for title: $title")
-        FirebaseFirestore.getInstance()
-            .collection("aicookmaterecipe")
-            .whereEqualTo("title", title) // title 필드 기준으로 조회
-            .get()
-            .addOnSuccessListener { querySnapshot ->
-                if (!querySnapshot.isEmpty) {
-                    recipeDetail.value = querySnapshot.documents.firstOrNull()
-                        ?.toObject(RecipeDetailData::class.java)
-                    Log.d("Firestore", "Recipe found: ${recipeDetail.value}")
-                } else {
-                    Log.e("Firestore", "No document found for title: $title")
+    Column() {
+        Image(
+        painter = painterResource(id = R.drawable.ic_arrowback),
+        contentDescription = "Back button",
+        modifier = Modifier
+            .padding(16.dp)
+            .clickable {
+                navController.popBackStack()
+            })
+        // Firestore 데이터 로드
+        LaunchedEffect(title) {
+            Log.d("RecipeDetailScreen", "Fetching recipe for title: $title")
+            FirebaseFirestore.getInstance()
+                .collection("aicookmaterecipe")
+                .whereEqualTo("title", title) // title 필드 기준으로 조회
+                .get()
+                .addOnSuccessListener { querySnapshot ->
+                    if (!querySnapshot.isEmpty) {
+                        recipeDetail.value = querySnapshot.documents.firstOrNull()
+                            ?.toObject(RecipeDetailData::class.java)
+                        Log.d("Firestore", "Recipe found: ${recipeDetail.value}")
+                    } else {
+                        Log.e("Firestore", "No document found for title: $title")
+                    }
                 }
-            }
-            .addOnFailureListener { exception ->
-                Log.e("Firestore", "Error fetching data: ${exception.message}")
-            }
-    }
+                .addOnFailureListener { exception ->
+                    Log.e("Firestore", "Error fetching data: ${exception.message}")
+                }
+        }
 
-    // UI
-    recipeDetail.value?.let { recipe ->
-        RecipeDetailContent(recipe)
-    } ?: Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(text = "Loading...")
+        // UI
+        recipeDetail.value?.let { recipe ->
+            RecipeDetailContent(recipe)
+        } ?: Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(text = "Loading...")
+        }
     }
 }
 
@@ -95,7 +106,7 @@ data class Step(
 )
 
 @Composable
-fun RecipeDetailContent(recipe: RecipeDetailData) {
+fun RecipeDetailContent(recipe: RecipeDetailData,) {
     val scrollState = rememberScrollState()
 
     Column(
@@ -104,6 +115,8 @@ fun RecipeDetailContent(recipe: RecipeDetailData) {
             .padding(8.dp)
             .verticalScroll(scrollState)
     ) {
+
+
         // Title
         Text(text = recipe.title, fontSize = 24.sp, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(25.dp))
