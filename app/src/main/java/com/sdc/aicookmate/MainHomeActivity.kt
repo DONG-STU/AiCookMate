@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -511,51 +512,53 @@ fun BottomBar(navController: NavController) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(56.dp)
-            .background(Color(0xFFF2F2F2))
+            .wrapContentHeight()
+            .padding(5.dp)
+            .background(Color.White)
     ) {
         Row(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
+            Spacer(modifier = Modifier.weight(1f))
             Image(
-                painter = painterResource(id = R.drawable.ic_home),
+                painter = painterResource(R.drawable.home_btn),
                 contentDescription = "메인 홈 아이콘",
                 modifier = Modifier
                     .size(40.dp)
+                    .weight(1f)
                     .clickable { navController.navigate("main") }
             )
+            Spacer(modifier = Modifier.weight(1f))
             Image(
-                painter = painterResource(id = R.drawable.ic_cart),
-                contentDescription = "카트 아이콘",
+                painter = painterResource(R.drawable.shopping_btn),
+                contentDescription = "쇼핑 아이콘",
                 modifier = Modifier
                     .size(40.dp)
+                    .weight(1f)
                     .clickable { navController.navigate("shopping") }
             )
+            Spacer(modifier = Modifier.weight(1f))
             Image(
-                painter = painterResource(id = R.drawable.ic_kitchen),
-                contentDescription = "냉장고 아이콘",
+                painter = painterResource(R.drawable.recipe_book),
+                contentDescription = "레시피 아이콘",
                 modifier = Modifier
                     .size(40.dp)
-                    .clickable { navController.navigate("refigeratorScreen") }
-            )
-            Image(
-                painter = painterResource(id = R.drawable.ic_bookheart),
-                contentDescription = "찜 레시피 아이콘",
-                modifier = Modifier
-                    .size(40.dp)
+                    .weight(1f)
                     .clickable { navController.navigate("Recipe") }
             )
+            Spacer(modifier = Modifier.weight(1f))
             Image(
-                painter = painterResource(id = R.drawable.ic_person),
+                painter = painterResource(R.drawable.mypage_btn),
                 contentDescription = "마이페이지 아이콘",
                 modifier = Modifier
                     .size(40.dp)
+                    .weight(1f)
                     .clickable { navController.navigate("myPage") }
             )
+            Spacer(modifier = Modifier.weight(1f))
         }
     }
 }

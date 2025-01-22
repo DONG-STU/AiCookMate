@@ -149,7 +149,7 @@ fun ActionButtons(buttons: List<String>, onButtonClick: (String) -> Unit) {
         buttons.forEach { buttonText ->
             Button(
                 onClick = { onButtonClick(buttonText) },
-                colors = ButtonDefaults.buttonColors(containerColor = colorResource(R.color.contentcolorgreen)),
+                colors = ButtonDefaults.buttonColors(containerColor = colorResource(R.color.titleColor)),
                 shape = RoundedCornerShape(10),
                 modifier = Modifier
                     .weight(1f) // 버튼 크기를 동일하게 설정
@@ -252,7 +252,7 @@ fun RecentRecipeCard(
             .border(
                 BorderStroke(
                     width = 2.dp,
-                    color = colorResource(R.color.contentcolorgreen)
+                    color = colorResource(R.color.titleColor)
                 ),
                 shape = RoundedCornerShape(15.dp)
             ),
