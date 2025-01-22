@@ -95,6 +95,14 @@ fun ChickenRecipeList(recipes: List<ChickenRecipeData>, navController: NavContro
             .verticalScroll(scrollState)
             .background(Color.White),
     ) {
+        Image(
+            painter = painterResource(id = R.drawable.ic_arrowback),
+            contentDescription = "Back button",
+            modifier = Modifier
+                .padding(16.dp)
+                .clickable {
+                    navController.popBackStack()
+                })
         recipes.forEach { item ->
             ChickenRecipeItem(item = item) { encodedTitle ->
                 // NavController를 사용하여 다음 화면으로 이동
