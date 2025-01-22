@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.TabRowDefaults.Divider
 
 data class Recipe(
     val title: String,
@@ -60,7 +61,7 @@ fun MyPageScreen(navController: NavController) {
         Column(
             modifier = Modifier
                 .padding(paddingValues)
-                .background(Color(0xFFFCF6E0))
+                .background(Color.White)
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
@@ -109,6 +110,15 @@ fun MyPageScreen(navController: NavController) {
                 )
             )
 
+            Spacer(modifier = Modifier.height(32.dp))
+
+            Divider(
+                color = Color.Black, // 선의 색상
+                thickness = 1.dp,   // 선의 두께
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+            )
             NoticeList(
                 noticeItems = listOf(
                     "📢 공지사항",
@@ -118,12 +128,31 @@ fun MyPageScreen(navController: NavController) {
                     "1:1 문의하기"
                 )
             )
+            Divider(
+                color = Color.Black, // 선의 색상
+                thickness = 1.dp,   // 선의 두께
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+            )
+
+            Spacer(modifier = Modifier.height(32.dp))
+
             Text(
                 text = "We Contact",
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(horizontal = 16.dp),
+                modifier = Modifier
+                    .padding(horizontal = 16.dp),
                 color = Color.Black
+            )
+
+            Divider(
+                color = Color.Black, // 선의 색상
+                thickness = 1.dp,   // 선의 두께
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
             )
 
             Row(
@@ -131,9 +160,8 @@ fun MyPageScreen(navController: NavController) {
                     .fillMaxWidth()
                     .padding(vertical = 9.dp, horizontal = 16.dp)
             ) {
-                Button(
+                IconButton(
                     onClick = {},
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0x00ffffff)),
                     modifier = Modifier
                         .size(45.dp)
                         .weight(1f)
@@ -144,9 +172,8 @@ fun MyPageScreen(navController: NavController) {
                         modifier = Modifier.fillMaxSize()
                     )
                 }
-                Button(
+                IconButton(
                     onClick = {},
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0x00ffffff)),
                     modifier = Modifier
                         .size(45.dp)
                         .weight(1f)
@@ -157,9 +184,8 @@ fun MyPageScreen(navController: NavController) {
                         modifier = Modifier.fillMaxSize()
                     )
                 }
-                Button(
+                IconButton(
                     onClick = {},
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0x00ffffff)),
                     modifier = Modifier
                         .size(45.dp)
                         .weight(1f)
@@ -217,20 +243,31 @@ fun RecentRecipeSection(recipes: List<Recipe>) {
         modifier = Modifier
             .fillMaxWidth()
     ) {
+        Spacer(modifier = Modifier.height(16.dp))
+
         Text(
             "최근에 본 레시피",
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(start = 10.dp),
+            modifier = Modifier.padding(start = 16.dp),
             color = Color.Black
         )
     }
 
+
+    Divider(
+        color = Color.Black, // 선의 색상
+        thickness = 1.dp,   // 선의 두께
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)// 전체 너비를 채움
+    )
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)
-            .height(370.dp)
+            .padding(horizontal = 16.dp)
+            .height(350.dp)
             .verticalScroll(rememberScrollState())
             .background(Color(0xFFFFFFFF))
     ) {
@@ -249,6 +286,14 @@ fun RecentRecipeSection(recipes: List<Recipe>) {
             Spacer(modifier = Modifier.height(8.dp))
         }
     }
+
+    Divider(
+        color = Color.Black, // 선의 색상
+        thickness = 1.dp,   // 선의 두께
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)// 전체 너비를 채움
+    )
 }
 
 @Composable
@@ -256,13 +301,15 @@ fun NoticeList(noticeItems: List<String>) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 9.dp)
             .padding(horizontal = 16.dp)
             .background(Color.White)
             .clip(RoundedCornerShape(8.dp))
     ) {
+
         noticeItems.forEach { item ->
             ClickableMenuItem(text = item)
+
+
         }
     }
 }
@@ -280,7 +327,7 @@ fun RecentRecipeCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 5.dp, horizontal = 15.dp)
+            .padding(vertical = 5.dp, horizontal = 9.dp)
             .height(110.dp)
             .border(
                 BorderStroke(
@@ -414,20 +461,20 @@ fun RecentRecipeCard(
     }
 }
 
-                @Composable
-                fun ClickableMenuItem(text: String) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable { /* 클릭 이벤트 처리 */ }
-                            .padding(vertical = 12.dp, horizontal = 16.dp)
-                    ) {
-                        Text(
-                            text = text,
-                            fontSize = 14.sp,
-                            modifier = Modifier.align(Alignment.CenterStart),
-                            color = Color.Black
-                        )
-                    }
-                }
+@Composable
+fun ClickableMenuItem(text: String) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { /* 클릭 이벤트 처리 */ }
+            .padding(vertical = 12.dp, horizontal = 16.dp)
+    ) {
+        Text(
+            text = text,
+            fontSize = 14.sp,
+            modifier = Modifier.align(Alignment.CenterStart),
+            color = Color.Black
+        )
+    }
+}
 
