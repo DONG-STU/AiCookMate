@@ -152,141 +152,10 @@ fun MainScreen(navController: NavController) {
 
             }
 
-
-
             BestListCard()
 
 
         }//최상위 컬럼
-    }
-}
-
-@Composable
-fun RefrigeratorButton() {
-
-    Button(
-        onClick = {},
-        colors = ButtonDefaults.buttonColors(
-            containerColor = Color(136, 193, 136),
-            contentColor = Color.Black
-        ), modifier = Modifier
-            .fillMaxWidth()
-            .height(110.dp),
-        shape = RoundedCornerShape(8.dp)
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Start,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 10.dp)
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_kitchen),
-                contentDescription = "냉장고 아이콘",
-                modifier = Modifier
-                    .width(80.dp)
-                    .height(90.dp),
-                contentScale = ContentScale.FillBounds
-            )
-            Spacer(modifier = Modifier.width(100.dp))
-
-            Text(
-                text = "냉장고 관리하기",
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.Black
-            )
-            Spacer(modifier = Modifier.width(10.dp))
-
-            Image(
-                painter = painterResource(id = R.drawable.ic_arrow),
-                contentDescription = "냉장고 아이콘",
-                modifier = Modifier
-                    .size(16.dp)
-            )
-        }
-    }
-}
-
-@Composable
-fun ChuchunList() {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(1.dp)
-    )
-    {
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.Bottom
-        ) {
-
-
-            Text(
-                "오늘의 추천 레시피",
-                fontSize = 28.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.Black
-            )
-            Box() {
-                Text(
-                    "더보기>",
-                    fontSize = 14.sp,
-                    color = Color.Gray,
-                    modifier = Modifier
-                        .padding(bottom = 4.dp)
-
-                )
-            }
-            Spacer(modifier = Modifier.width(10.dp))
-        }
-    }
-}
-
-
-@Composable
-fun ChuChunCard() {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .horizontalScroll(rememberScrollState()),
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        RecipeCard(imageRes = R.drawable.recipe1, description = "")
-        RecipeCard(imageRes = R.drawable.recipe2, description = "")
-        RecipeCard(imageRes = R.drawable.recipe3, description = "")
-    }
-}
-
-
-@Composable
-fun RecipeCard(imageRes: Int, description: String) {
-    Column(
-        modifier = Modifier
-            .width(150.dp)
-            .height(130.dp)
-
-    ) {
-        Image(
-            painter = painterResource(id = imageRes),
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(140.dp)
-                .clip(RoundedCornerShape(13.dp))
-        )
-        Text(
-            text = description,
-            fontSize = 12.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(8.dp),
-            color = Color.Black
-        )
     }
 }
 
@@ -297,7 +166,8 @@ fun CategorySelector(navController: NavController) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .horizontalScroll(rememberScrollState()),
+                .horizontalScroll(rememberScrollState())
+                .padding(horizontal = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
 
@@ -427,42 +297,7 @@ fun CategoryItem(
     }
 }
 
-@Composable
-fun BestRecipe() {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
 
-
-    )
-    {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.Bottom
-
-        ) {
-
-            Text(
-                "실시간 인기 레시피",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = Color.Black,
-                modifier = Modifier.padding(vertical = 9.dp)
-            )
-
-            Text(
-                "더보기>",
-                fontSize = 14.sp,
-                color = Color.Gray,
-                modifier = Modifier
-                    .padding(bottom = 4.dp)
-            )
-            Spacer(modifier = Modifier.width(10.dp))
-        }
-    }
-}
 
 @Composable
 fun BestListCard() {
@@ -470,7 +305,8 @@ fun BestListCard() {
 
         modifier = Modifier
             .fillMaxWidth()
-            .horizontalScroll(rememberScrollState()),
+            .horizontalScroll(rememberScrollState())
+            .padding(horizontal = 16.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         BestCard(imageRes = R.drawable.recipe1, description = "")
