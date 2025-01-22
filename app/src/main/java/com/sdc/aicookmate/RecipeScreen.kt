@@ -60,24 +60,13 @@ fun RecipeScreen(navController: NavController) {
                     .height(90.dp)
                     .background(color = colorResource(R.color.titleColor))
             ) {
-                OutlinedTextField(
-                    value = "",
-                    onValueChange = {},
-                    leadingIcon = { Icon(Icons.Default.Search, "검색") },
-                    placeholder = {
-                        Text(
-                            "재료나 요리명을 검색하세요",
-                            fontSize = 14.sp,
-                            color = Color.Gray
-                        )
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp)
-                        .background(Color.White, RoundedCornerShape(30.dp))
-                        .align(Alignment.Center),
-                    shape = RoundedCornerShape(30.dp)
-                )
+                FirebaseDropdown(
+                    viewModel = viewModel,
+                    placeholderText = "레시피를 검색하세요"
+                ) { selectedRecipe ->
+                    println("선택된 레시피: ${selectedRecipe.title}")
+                    navController.navigate("recipeDetail/${selectedRecipe.title}")
+                }
             }
 
             Column(

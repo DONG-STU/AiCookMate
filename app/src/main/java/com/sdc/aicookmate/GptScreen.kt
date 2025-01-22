@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -95,22 +96,31 @@ fun GptScreen(
     ) {
         Column {
             // 뒤로가기 버튼
-            Image(
-                painter = painterResource(id = R.drawable.ic_arrowback),
-                contentDescription = "뒤로가기",
+            Column(
                 modifier = Modifier
-                    .size(40.dp)
-                    .clickable { navController.navigateUp() }
-            )
+                    .fillMaxWidth()
+                    .height(90.dp)
+                    .background(color = colorResource(R.color.titleColor))
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_arrowback),
+                    contentDescription = "뒤로가기",
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clickable { navController.navigateUp() }
+                )
 
-            Text(
-                text = "이런 메뉴 어떠세요?",
-                style = TextStyle(
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold
-                ),
-                modifier = Modifier.padding(8.dp)
-            )
+                Text(
+                    text = "이런 메뉴 어떠세요?",
+                    style = TextStyle(
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold
+                    ),
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .align(Alignment.CenterHorizontally)
+                )
+            }
 
             // 레시피 박스
             Box(
@@ -179,7 +189,7 @@ fun GptScreen(
                         // GPT 요청 프롬프트 구성
 
                         val prompt = """
-                            제가 가진 재료는 [${ingreidentsSelected.joinToString ( ", " )}]입니다.
+                            제가 가진 재료는 [${ingreidentsSelected.joinToString(", ")}]입니다.
                             주어진 식재료를 가지고 ${titleSelected} 요리 레시피를 제안해 주세요.
                             레시피는 쉽고 빠르게 요리하고 싶어하는 일반인을 대상으로 하며, 식재료 양이나 조리 시간을 그램,분 단위로 반드시 포함하여 친근한 언어로 작성해주세요.
                             레시피는 반드시 주어진 식재료가 포함되는 요리여야 합니다.
@@ -224,7 +234,7 @@ fun GptScreen(
                 },
                 enabled = (remainingCount > 0 && !isLoading),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(136, 193, 136),
+                    containerColor = colorResource(R.color.titleColor),
                     contentColor = Color.Black
                 ),
                 modifier = Modifier
@@ -269,7 +279,6 @@ fun fetchRecipe(
     )
 
 
-
     val call = api.sendChatCompletion(
         authorization = "Bearer ${BuildConfig.OPENAI_API_KEY}",
         request = requestBody
@@ -289,6 +298,7 @@ fun fetchRecipe(
                 onError()
             }
         }
+
         override fun onFailure(call: Call<GptResponse>, t: Throwable) {
             Log.e("GPT API", "Failure: ${t.message}")
             onError()

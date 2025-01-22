@@ -4,6 +4,7 @@ package com.sdc.aicookmate
 import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -50,6 +51,9 @@ class RecipeViewModel : ViewModel() {
     private val _searchResults = MutableStateFlow<List<RecipeData>>(emptyList())
     val searchResults: StateFlow<List<RecipeData>> = _searchResults
 
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading
+
     private var searchJob: Job? = null
 
 
@@ -80,9 +84,11 @@ class RecipeViewModel : ViewModel() {
 
     // 드롭다운용 검색 쿼리
     fun fetchRecipes2(query: String) {
-        searchJob?.cancel()
+        searchJob?.cancel() // 이전 작업 취소
         searchJob = viewModelScope.launch {
+            _isLoading.value = true // 로딩 시작
             delay(300) // Debounce 처리
+
             firestore.collection("aicookmaterecipe")
                 .orderBy("title") // 제목 기준 정렬
                 .startAt(query)
@@ -99,9 +105,11 @@ class RecipeViewModel : ViewModel() {
                 .addOnFailureListener {
                     _searchResults.value = emptyList()
                 }
+                .addOnCompleteListener {
+                    _isLoading.value = false // 로딩 종료
+                }
         }
     }
-
 }
 
 
@@ -131,7 +139,8 @@ fun RecipeItem(item: RecipeData, onClick: (String) -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp)
-            .background(Color.White),
+            .background(Color.White)
+            .border(1.dp, Color.Black, RoundedCornerShape(12.dp)),
         shape = RoundedCornerShape(12.dp)
     ) {
         Box(
@@ -139,7 +148,7 @@ fun RecipeItem(item: RecipeData, onClick: (String) -> Unit) {
                 .fillMaxSize()
                 .background(Color.White),
         ) {
-            Column(modifier = Modifier.padding(16.dp)) {
+            Column() { //modifier = Modifier.padding(16.dp)
                 Image(
                     painter = rememberAsyncImagePainter(item.thumbnail),
                     contentDescription = null,
