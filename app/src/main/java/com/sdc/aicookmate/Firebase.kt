@@ -3,7 +3,6 @@ package com.sdc.aicookmate
 
 import android.net.Uri
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,13 +22,10 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import coil3.compose.rememberAsyncImagePainter
 import com.google.firebase.firestore.FieldPath
-import com.sdc.aicookmate.ui.theme.Pink80
 
 data class RecipeData(
     val title: String = "",
@@ -80,7 +76,6 @@ fun RecipeList(recipes: List<RecipeData>, navController: NavController) {
             .fillMaxWidth()
             .padding(horizontal = 4.dp)
             .verticalScroll(scrollState)
-
     ) {
         recipes.forEach { item ->
             RecipeItem(item = item) { encodedTitle ->
@@ -98,15 +93,8 @@ fun RecipeItem(item: RecipeData, onClick: (String) -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp),
-        shape = RoundedCornerShape(12.dp),
-
-
+        shape = RoundedCornerShape(12.dp)
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color(0xFFF5F5F5))
-        ){
         Column(modifier = Modifier.padding(16.dp)) {
             Image(
                 painter = rememberAsyncImagePainter(item.thumbnail),
@@ -114,18 +102,13 @@ fun RecipeItem(item: RecipeData, onClick: (String) -> Unit) {
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(250.dp)
+                    .height(200.dp)
                     .clickable {
                         onClick(Uri.encode(item.title))
                     }
             )
             Spacer(modifier = Modifier.height(12.dp))
-            Text(
-                text = item.title,
-                modifier = Modifier.padding(bottom = 12.dp),
-                fontWeight = FontWeight.Bold,
-                color = Color.Black
-            )
+            Text(text = item.title, modifier = Modifier.padding(bottom = 12.dp))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -136,7 +119,6 @@ fun RecipeItem(item: RecipeData, onClick: (String) -> Unit) {
                 InfoRow(iconRes = R.drawable.ic_time, text = item.time_required)
                 InfoRow(iconRes = R.drawable.ic_star, text = item.difficulty)
             }
-        }
         }
     }
 }
@@ -153,7 +135,7 @@ fun InfoRow(iconRes: Int, text: String) {
             modifier = Modifier.size(16.dp)
         )
         Spacer(modifier = Modifier.width(8.dp))
-        Text(text = text, fontWeight = FontWeight.Bold, color = Color.Black)
+        Text(text = text)
     }
 }
 
