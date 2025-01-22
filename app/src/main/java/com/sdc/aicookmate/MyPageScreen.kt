@@ -43,6 +43,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 
+data class Recipe(
+    val title: String,
+    val views: String,
+    val viewCount: String,
+    val descript: String,
+    val imageRes: Int
+)
+
 @Composable
 fun MyPageScreen(navController: NavController) {
     Scaffold(
@@ -62,12 +70,41 @@ fun MyPageScreen(navController: NavController) {
 
             RecentRecipeSection(
                 recipes = listOf(
-                    Recipe("맛있는 비빔밥", "조회수", "32회", "일단 먹어보세요 진짜 맛있어요 구라에요 먹지마요 나 혼자 먹을거에요"),
-                    Recipe("고소한 김치찌개", "조회수", "45회", "일단 먹어보세요 진짜 맛있어요 구라에요 먹지마요 나 혼자 먹을거에요"),
-                    Recipe("맛있는 비빔밥", "조회수", "45회", "일단 먹어보세요 진짜 맛있어요 구라에요 먹지마요 나 혼자 먹을거에요"),
-                    Recipe("고소한 김치찌개", "조회수", "45회", "일단 먹어보세요 진짜 맛있어요 구라에요 먹지마요 나 혼자 먹을거에요"),
-                    Recipe("맛있는 비빔밥", "조회수", "45회", "일단 먹어보세요 진짜 맛있어요 구라에요 먹지마요 나 혼자 먹을거에요")
-
+                    Recipe(
+                        title = "맛있는 제육볶음",
+                        views = "조회수",
+                        viewCount = "32회",
+                        descript = "",
+                        imageRes = R.drawable.recipe1
+                    ),
+                    Recipe(
+                        title = "부드러운 계란탕",
+                        views = "조회수",
+                        viewCount = "45회",
+                        descript = "",
+                        imageRes = R.drawable.recipe2
+                    ),
+                    Recipe(
+                        title = "매콤달콤 떡볶이",
+                        views = "조회수",
+                        viewCount = "28회",
+                        descript = "",
+                        imageRes = R.drawable.recipe3
+                    ),
+                    Recipe(
+                        title = "매콤한 어묵무침",
+                        views = "조회수",
+                        viewCount = "56회",
+                        descript = "",
+                        imageRes = R.drawable.recipe4
+                    ),
+                    Recipe(
+                        title = "쫄깃한 아구찜",
+                        views = "조회수",
+                        viewCount = "41회",
+                        descript = "",
+                        imageRes = R.drawable.recipe5
+                    )
                 )
             )
 
@@ -81,7 +118,8 @@ fun MyPageScreen(navController: NavController) {
                 )
             )
             Text(
-                text = "We Contact", fontSize = 18.sp,
+                text = "We Contact",
+                fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(horizontal = 16.dp),
                 color = Color.Black
@@ -92,9 +130,9 @@ fun MyPageScreen(navController: NavController) {
                     .fillMaxWidth()
                     .padding(vertical = 9.dp, horizontal = 16.dp)
             ) {
-
-                IconButton(
+                Button(
                     onClick = {},
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0x00ffffff)),
                     modifier = Modifier
                         .size(45.dp)
                         .weight(1f)
@@ -105,8 +143,9 @@ fun MyPageScreen(navController: NavController) {
                         modifier = Modifier.fillMaxSize()
                     )
                 }
-                IconButton(
+                Button(
                     onClick = {},
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0x00ffffff)),
                     modifier = Modifier
                         .size(45.dp)
                         .weight(1f)
@@ -117,8 +156,9 @@ fun MyPageScreen(navController: NavController) {
                         modifier = Modifier.fillMaxSize()
                     )
                 }
-                IconButton(
+                Button(
                     onClick = {},
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0x00ffffff)),
                     modifier = Modifier
                         .size(45.dp)
                         .weight(1f)
@@ -129,7 +169,6 @@ fun MyPageScreen(navController: NavController) {
                         modifier = Modifier.fillMaxSize()
                     )
                 }
-
             }
         }
     }
@@ -141,7 +180,7 @@ fun ActionButtons(buttons: List<String>, onButtonClick: (String) -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp) // 버튼 간 간격 조정
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         buttons.forEach { buttonText ->
             Button(
@@ -149,29 +188,25 @@ fun ActionButtons(buttons: List<String>, onButtonClick: (String) -> Unit) {
                 colors = ButtonDefaults.buttonColors(containerColor = colorResource(R.color.titleColor)),
                 shape = RoundedCornerShape(10),
                 modifier = Modifier
-                    .weight(1f) // 버튼 크기를 동일하게 설정
+                    .weight(1f)
                     .height(60.dp),
-                contentPadding = PaddingValues(0.dp) // 텍스트가 정확히 가운데 정렬되도록 패딩 제거
+                contentPadding = PaddingValues(0.dp)
             ) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center // 텍스트를 완전히 가운데 정렬
+                    contentAlignment = Alignment.Center
                 ) {
                     Text(
                         text = buttonText,
                         color = Color.White,
                         fontSize = 14.sp,
-                        maxLines = 1 // 텍스트가 여러 줄로 늘어나는 것을 방지
+                        maxLines = 1
                     )
                 }
             }
         }
     }
 }
-
-
-data class Recipe(val title: String, val views: String, val viewCount: String, val descript: String)
-
 
 @Composable
 fun RecentRecipeSection(recipes: List<Recipe>) {
@@ -198,15 +233,15 @@ fun RecentRecipeSection(recipes: List<Recipe>) {
             .verticalScroll(rememberScrollState())
             .background(Color(0xFFFFFFFF))
     ) {
-
         recipes.forEach { recipe ->
             val isSaved = savedRecipes[recipe.title] ?: false
 
             RecentRecipeCard(
                 title = recipe.title,
-                time_required = recipe.views,
+                views = recipe.views,
                 viewCount = recipe.viewCount,
                 descript = recipe.descript,
+                imageRes = recipe.imageRes,
                 isSaved = isSaved,
                 onSaveClick = { newState -> savedRecipes[recipe.title] = newState }
             )
@@ -233,11 +268,11 @@ fun NoticeList(noticeItems: List<String>) {
 
 @Composable
 fun RecentRecipeCard(
-//    imageUrl: String,
     title: String,
     descript: String,
-    time_required: String,
+    views: String,
     viewCount: String,
+    imageRes: Int,
     isSaved: Boolean,
     onSaveClick: (Boolean) -> Unit
 ) {
@@ -254,16 +289,14 @@ fun RecentRecipeCard(
                 shape = RoundedCornerShape(15.dp)
             ),
         shape = RoundedCornerShape(15.dp),
-//        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-        colors = CardDefaults
-            .cardColors(containerColor = Color.White)
+        colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxSize()
         ) {
             Image(
-                painter = painterResource(id = R.drawable.recipe1),
+                painter = painterResource(id = imageRes),
                 contentDescription = null,
                 modifier = Modifier
                     .fillMaxSize()
@@ -284,10 +317,7 @@ fun RecentRecipeCard(
                         .fillMaxWidth()
                         .weight(0.4f)
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                    ) {
+                    Box(modifier = Modifier.fillMaxWidth()) {
                         Text(
                             modifier = Modifier.align(Alignment.BottomStart),
                             text = title,
@@ -296,16 +326,17 @@ fun RecentRecipeCard(
                             fontWeight = FontWeight.SemiBold
                         )
 
-                        IconButton(modifier = Modifier.align(Alignment.TopEnd),
-                            onClick = { onSaveClick(!isSaved) } // 저장 상태 토글
+                        IconButton(
+                            modifier = Modifier.align(Alignment.TopEnd),
+                            onClick = { onSaveClick(!isSaved) }
                         ) {
                             Icon(
                                 painter = painterResource(
-                                    if (isSaved) R.drawable.ic_aftersavebutton // 저장됨 아이콘
-                                    else R.drawable.ic_beforesavebutton // 저장 전 아이콘
+                                    if (isSaved) R.drawable.ic_aftersavebutton
+                                    else R.drawable.ic_beforesavebutton
                                 ),
                                 contentDescription = null,
-                                tint = Color.Unspecified, // 기본 색상 유지
+                                tint = Color.Unspecified,
                                 modifier = Modifier.size(25.dp)
                             )
                         }
@@ -333,48 +364,45 @@ fun RecentRecipeCard(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(bottom = 5.dp)
+                            .padding(bottom = 5.dp),
+                        horizontalArrangement = Arrangement.Start  // 시작 부분부터 배치
                     ) {
                         Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .weight(0.5f)
+                            modifier = Modifier.weight(1f),
+                            horizontalArrangement = Arrangement.Start,
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_cookingtime),
+                                contentDescription = null,
+                                tint = Color.Black,
+                                modifier = Modifier.size(20.dp)  // 아이콘 크기 약간 줄임
+                            )
 
-                            Row(modifier = Modifier.fillMaxWidth()) {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.ic_cookingtime),
-                                    contentDescription = null,
-                                    tint = Color.Black,
-                                    modifier = Modifier
-                                        .size(24.dp)
-                                )
+                            Text(
+                                text = views,
+                                color = Color.Black,
+                                fontSize = 12.sp  // 글자 크기 조정
+                            )
 
-                                Text(
-                                    text = time_required,
-                                    color = Color.Black
-                                )
-                            }
                         }
                         Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .weight(0.5f)
+                            modifier = Modifier.weight(1f),
+                            horizontalArrangement = Arrangement.Start,
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Row(modifier = Modifier.fillMaxWidth()) {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.ic_difficultlevel),
-                                    contentDescription = null,
-                                    tint = Color.Black,
-                                    modifier = Modifier
-                                        .size(24.dp)
-                                )
-
-                                Text(
-                                    text = viewCount,
-                                    color = Color.Black
-                                )
-                            }
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_difficultlevel),
+                                contentDescription = null,
+                                tint = Color.Black,
+                                modifier = Modifier.size(20.dp)
+                            )
+//                            Spacer(modifier = Modifier.width(4.dp))
+                            Text(
+                                text = viewCount,
+                                color = Color.Black,
+                                fontSize = 12.sp
+                            )
                         }
                     }
                 }
@@ -383,21 +411,20 @@ fun RecentRecipeCard(
     }
 }
 
-
-@Composable
-fun ClickableMenuItem(text: String) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { /* 클릭 이벤트 처리 */ }
-            .padding(vertical = 12.dp, horizontal = 16.dp)
-    ) {
-        Text(
-            text = text,
-            fontSize = 14.sp,
-            modifier = Modifier.align(Alignment.CenterStart),
-            color = Color.Black
-        )
-    }
-}
+                @Composable
+                fun ClickableMenuItem(text: String) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { /* 클릭 이벤트 처리 */ }
+                            .padding(vertical = 12.dp, horizontal = 16.dp)
+                    ) {
+                        Text(
+                            text = text,
+                            fontSize = 14.sp,
+                            modifier = Modifier.align(Alignment.CenterStart),
+                            color = Color.Black
+                        )
+                    }
+                }
 
