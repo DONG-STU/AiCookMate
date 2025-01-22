@@ -82,12 +82,13 @@ class RecipeViewModel : ViewModel() {
             firestore.collection("aicookmaterecipe")
                 .orderBy("title") // 제목 기준 정렬
                 .startAt(query)
-                .endAt(query + "\uf8ff") // Firestore의 범위 검색
-                .limit(50) // 최대 50개의 결과 반환
+                .endAt(query + "\uf8ff") // 입력값으로 시작하는 항목의 끝
                 .get()
                 .addOnSuccessListener { result ->
                     val recipeList = result.documents.mapNotNull { document ->
                         document.toObject(RecipeData::class.java)
+                    }.filter { recipe ->
+                        recipe.title.contains(query, ignoreCase = true) // 키워드 포함 여부 확인
                     }.distinctBy { it.title } // 중복 제거
                     _searchResults.value = recipeList
                 }
