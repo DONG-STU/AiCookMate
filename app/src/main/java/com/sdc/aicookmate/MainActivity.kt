@@ -105,6 +105,13 @@ fun NavSys() {
             RecipeRecommendScreen(navController)
         }
 
+        composable("ShowHowAddIngredients") {
+            ShowHowAddIngredients(navController)
+        }
+
+        composable("ShowHowRecommend") {
+            ShowHowRecommend((navController))
+        }
 
         composable("recipeList") {
             val viewModel: RecipeViewModel = viewModel()

@@ -30,6 +30,8 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
@@ -39,6 +41,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -64,11 +67,13 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -774,7 +779,7 @@ fun Refrigerator(navController: NavController) {
         Column(
             modifier = Modifier
                 .background(color = colorResource(R.color.titleColor))
-                .padding(top = 3.dp)
+                .padding(vertical = 5.dp)
         ) {
             Text(
                 "가지고 있는 재료를 한 번에 봐요!",
@@ -783,14 +788,13 @@ fun Refrigerator(navController: NavController) {
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(start = 10.dp)
             )
-            SmoothGoogleLikeSearchDropdown2(
+            EnhancedSearchDropdown(
                 items = ingredients,
-                ingredientsSelected = selectedIngredients,
+                selectedItems = selectedIngredients, // 여기서 매개변수 이름을 맞춤
                 placeholderText = "재료를 검색하세요"
             ) { selectedItem ->
                 println("선택된 항목: $selectedItem")
-            }
-        }
+            }        }
         // 검색 필드
         Spacer(modifier = Modifier.height(10.dp))
 
@@ -873,6 +877,7 @@ fun Refrigerator(navController: NavController) {
                     modifier = Modifier
                         .background(color = Color(0xffE85D3A), RoundedCornerShape(10.dp))
                         .padding(horizontal = 10.dp, vertical = 10.dp)
+                        .clickable { navController.navigate("ShowHowAddIngredients") }
                 )
             }
             Column(
@@ -898,9 +903,7 @@ fun Refrigerator(navController: NavController) {
         }
 
         Button(
-            onClick = {
-
-            },
+            onClick = {navController.navigate("ShowHowRecommend")},
             shape = RoundedCornerShape(10.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xffFF9E66)),
             modifier = Modifier
@@ -930,100 +933,9 @@ fun Refrigerator(navController: NavController) {
                 )
             }
         }
-
-        // 버튼 Row
-//        Row(
-//            horizontalArrangement = Arrangement.Center,
-//            verticalAlignment = Alignment.CenterVertically,
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .height(80.dp) // 버튼 Row 높이 고정
-//                .padding(horizontal = 10.dp)
-//        ) {
-//            Button(
-//                onClick = {
-//                    //navController.navigate("ScanRefrigeratorPhoto")
-//                },
-//                shape = RoundedCornerShape(10.dp), // 모서리를 둥글게 설정
-//                modifier = Modifier
-//                    .weight(1f) // 버튼 균등 배치
-//                    .border(3.dp, Color.LightGray, RoundedCornerShape(10.dp)) // 둥근 외곽선
-//                    .height(60.dp), // 버튼 높이 고정
-//                colors = ButtonDefaults.buttonColors(containerColor = colorResource(R.color.contentcolorgreen))
-//            ) {
-//                Image(
-//                    painter = painterResource(R.drawable.scan_camera),
-//                    contentDescription = "냉장고 스캔",
-//                    contentScale = ContentScale.Fit,
-//                    modifier = Modifier.size(15.dp)
-//                )
-//                Spacer(modifier = Modifier.width(8.dp))
-//                Text(
-//                    text = "냉장고 스캔",
-//                    fontSize = 14.sp,
-//                    modifier = Modifier.weight(1f) // 텍스트에 더 많은 공간 할당
-//                )
-//            }
-//
-//            Spacer(modifier = Modifier.width(10.dp))
-//
-//            Button(
-//                onClick = {
-//                    //navController.navigate("ScanReceiptImage")
-//                },
-//                shape = RoundedCornerShape(10.dp), // 모서리를 둥글게 설정
-//                modifier = Modifier
-//                    .weight(1f) // 버튼 균등 배치
-//                    .border(3.dp, Color.LightGray, RoundedCornerShape(10.dp)) // 둥근 외곽선
-//                    .height(60.dp), // 버튼 높이 고정
-//                colors = ButtonDefaults.buttonColors(containerColor = colorResource(R.color.contentcolorgreen))
-//            ) {
-//                Image(
-//                    painter = painterResource(R.drawable.scan_reciept),
-//                    contentDescription = "영수증 스캔",
-//                    contentScale = ContentScale.Fit,
-//                    modifier = Modifier.size(15.dp)
-//                )
-//                Spacer(modifier = Modifier.width(8.dp))
-//                Text(
-//                    text = "영수증 스캔",
-//                    fontSize = 14.sp,
-//                    modifier = Modifier.weight(1f) // 텍스트에 더 많은 공간 할당
-//                )
-//            }
-//
-//            Spacer(modifier = Modifier.width(10.dp))
-//
-//            Button(
-//                onClick = {
-//                    ingreidentsSelected = selectedIngredients
-//                    // navController.navigate("selectRecipeScreen")
-//                },
-//                shape = RoundedCornerShape(10.dp), // 모서리를 둥글게 설정
-//                modifier = Modifier
-//                    .weight(1f) // 버튼 균등 배치
-//                    .border(3.dp, Color.LightGray, RoundedCornerShape(10.dp)) // 둥근 외곽선
-//                    .height(60.dp), // 버튼 높이 고정
-//                colors = ButtonDefaults.buttonColors(containerColor = colorResource(R.color.contentcolorgreen))
-//            ) {
-//                Image(
-//                    painter = painterResource(R.drawable.scan_reciept),
-//                    contentDescription = "자동 추천",
-//                    contentScale = ContentScale.Fit,
-//                    modifier = Modifier.size(15.dp)
-//                )
-//                Spacer(modifier = Modifier.width(8.dp))
-//                Text(
-//                    text = "자동 추천",
-//                    fontSize = 14.sp,
-//                    modifier = Modifier.weight(1f) // 텍스트에 더 많은 공간 할당
-//                )
-//            }
-//        }
-//        Spacer(modifier = Modifier.height(5.dp))
     }
 }
-//}
+
 
 @Composable
 fun PostIt(text: String) {
@@ -1053,52 +965,56 @@ fun PostIt(text: String) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SmoothGoogleLikeSearchDropdown2(
+fun EnhancedSearchDropdown(
     items: List<String>,
-    ingredientsSelected: List<String>, // 제외할 아이템 리스트
+    selectedItems: List<String>, // 이미 선택된 항목 제외
     placeholderText: String,
     onItemSelected: (String) -> Unit
 ) {
     var inputText by remember { mutableStateOf("") }
     var expanded by remember { mutableStateOf(false) }
-
-    // 필터링된 리스트 (ingredientsSelected에 없는 항목만 포함)
-    val filteredItems = remember(inputText, ingredientsSelected) {
-        items.filter {
-            it.contains(inputText, ignoreCase = true) && it !in ingredientsSelected
-        }
+    val filteredItems = remember(inputText, items, selectedItems) {
+        items.filter { it.contains(inputText, ignoreCase = true) && it !in selectedItems }
+            .take(50) // 최대 50개만 표시
     }
+    val keyboardController = LocalSoftwareKeyboardController.current // 키보드 제어
 
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
+    ExposedDropdownMenuBox(
+        expanded = expanded,
+        onExpandedChange = { expanded = !expanded }
     ) {
-        // 검색창
         OutlinedTextField(
             value = inputText,
             onValueChange = { newValue ->
                 inputText = newValue
-                expanded = newValue.isNotEmpty() // 입력값이 있을 때만 드롭다운 표시
+                expanded = newValue.isNotEmpty() && filteredItems.isNotEmpty() // 삭제 시에도 자연스럽게 동작
             },
             placeholder = { Text(placeholderText) },
-            leadingIcon = { Icon(Icons.Default.Search, contentDescription = "검색") },
-            modifier = Modifier.fillMaxWidth(),
+            leadingIcon = { Icon(Icons.Default.Search, contentDescription = "검색 아이콘") },
             singleLine = true,
+            modifier = Modifier
+                .menuAnchor()
+                .fillMaxWidth(),
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 containerColor = Color.White,
                 focusedBorderColor = Color.Gray,
                 unfocusedBorderColor = Color.LightGray
+            ),
+            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    keyboardController?.hide() // 키보드 숨기기
+                    expanded = false
+                }
             )
         )
 
-        // 드롭다운 메뉴
-        DropdownMenu(
+        ExposedDropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
             modifier = Modifier
                 .fillMaxWidth()
-                .heightIn(max = 240.dp) // 최대 높이 설정 (약 5개 항목)
+                .heightIn(max = 250.dp) // 드롭다운 높이를 250dp로 제한
         ) {
             if (filteredItems.isEmpty()) {
                 DropdownMenuItem(
@@ -1108,11 +1024,12 @@ fun SmoothGoogleLikeSearchDropdown2(
             } else {
                 filteredItems.forEach { item ->
                     DropdownMenuItem(
-                        text = { Text(text = item) },
+                        text = { Text(item) },
                         onClick = {
-                            inputText = item // 선택된 항목을 검색창에 반영
-                            expanded = false // 드롭다운 닫기
-                            onItemSelected(item) // 선택된 항목 전달
+                            inputText = item
+                            onItemSelected(item)
+                            expanded = false
+                            keyboardController?.hide() // 선택 후 키보드 숨기기
                         }
                     )
                 }
