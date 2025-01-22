@@ -30,11 +30,6 @@ import androidx.compose.ui.unit.sp
 import coil3.compose.rememberAsyncImagePainter
 import com.google.firebase.firestore.FirebaseFirestore
 
-
-
-
-
-
 @Composable
 fun RecipeDetailScreen(title: String) {
     val recipeDetail = remember { mutableStateOf<RecipeDetailData?>(null) }
@@ -138,7 +133,7 @@ fun RecipeDetailContent(recipe: RecipeDetailData) {
                     modifier = Modifier.size(16.dp) // 아이콘 크기 설정
                 )
                 Spacer(modifier = Modifier.width(1.dp)) // 텍스트와 이미지 간 간격
-                Text(text = "${recipe.servings}")
+                Text(text = recipe.servings)
             }
 
             // Time Required
@@ -149,7 +144,7 @@ fun RecipeDetailContent(recipe: RecipeDetailData) {
                     modifier = Modifier.size(16.dp) // 아이콘 크기 설정
                 )
                 Spacer(modifier = Modifier.width(1.dp))
-                Text(text = "${recipe.time_required}")
+                Text(text = recipe.time_required)
             }
 
 
@@ -160,7 +155,7 @@ fun RecipeDetailContent(recipe: RecipeDetailData) {
                     modifier = Modifier.size(16.dp)
                 )
                 Spacer(modifier = Modifier.width(1.dp))
-                Text(text = "${recipe.difficulty}")
+                Text(text = recipe.difficulty)
             }
         }
 
