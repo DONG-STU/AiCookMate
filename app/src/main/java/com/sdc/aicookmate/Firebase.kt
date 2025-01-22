@@ -26,6 +26,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import coil3.compose.rememberAsyncImagePainter
 import com.google.firebase.firestore.FieldPath
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 
 data class RecipeData(
     val title: String = "",
@@ -41,6 +43,12 @@ class RecipeViewModel : ViewModel() {
     // StateFlow로 데이터를 관리
     private val _recipes = MutableStateFlow<List<RecipeData>>(emptyList())
     val recipes: StateFlow<List<RecipeData>> = _recipes
+
+    private val _searchResults = MutableStateFlow<List<RecipeData>>(emptyList())
+    val searchResults: StateFlow<List<RecipeData>> = _searchResults
+
+    private var searchJob: Job? = null
+
 
     init {
         fetchRecipes()
@@ -66,7 +74,31 @@ class RecipeViewModel : ViewModel() {
                 }
         }
     }
+    // 드롭다운용 검색 쿼리
+    fun fetchRecipes2(query: String) {
+        searchJob?.cancel()
+        searchJob = viewModelScope.launch {
+            delay(300) // Debounce 처리
+            firestore.collection("aicookmaterecipe")
+                .orderBy("title") // 제목 기준 정렬
+                .startAt(query)
+                .endAt(query + "\uf8ff") // Firestore의 범위 검색
+                .limit(50) // 최대 50개의 결과 반환
+                .get()
+                .addOnSuccessListener { result ->
+                    val recipeList = result.documents.mapNotNull { document ->
+                        document.toObject(RecipeData::class.java)
+                    }.distinctBy { it.title } // 중복 제거
+                    _searchResults.value = recipeList
+                }
+                .addOnFailureListener {
+                    _searchResults.value = emptyList()
+                }
+        }
+    }
+
 }
+
 
 @Composable
 fun RecipeList(recipes: List<RecipeData>, navController: NavController) {

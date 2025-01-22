@@ -10,11 +10,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -33,28 +35,34 @@ var ingredientsSelected = mutableStateListOf<String>()
 @Composable
 fun RecipeRecommendScreen(navController: NavController) {
     val viewModel: RecipeRecommendViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+
+
+    LaunchedEffect(Unit) {
+        ingredientsSelected.clear()
+        ingredientsSelected.add("대파")
+        viewModel.fetchFilteredRecipes()
+    }
+
     val recipes = viewModel.recipes.collectAsState(initial = emptyList()).value
-    RecipeList(recipes = recipes, navController = navController)
+
+    RecommendRecipeList(recipes = recipes, navController = navController)
 }
 
-@IgnoreExtraProperties
+
+//@IgnoreExtraProperties
 data class RecipeRecommendData(
     val title: String = "",
     val thumbnail: String = "",
     val servings: String = "",
     val time_required: String = "",
     val difficulty: String = "",
-    val ingredients: List<String> = emptyList() // Firestore 데이터 형식: 문자열 리스트
+    val ingredients: List<Map<String, String>> = emptyList()
 )
 
 class RecipeRecommendViewModel : ViewModel() {
     private val firestore = FirebaseFirestore.getInstance()
     private val _recipes = MutableStateFlow<List<RecipeRecommendData>>(emptyList())
     val recipes: StateFlow<List<RecipeRecommendData>> = _recipes
-
-    init {
-        fetchFilteredRecipes()
-    }
 
     fun fetchFilteredRecipes() {
         viewModelScope.launch {
@@ -64,14 +72,24 @@ class RecipeRecommendViewModel : ViewModel() {
                 .addOnSuccessListener { result ->
                     val filteredRecipes = result.documents.mapNotNull { document ->
                         try {
-                            document.toObject(RecipeRecommendData::class.java)
+
+                            val ingredients =
+                                document.get("ingredients") as? List<Map<String, String>>
+                            if (ingredients != null) {
+                                val recipeIngredients = ingredients.mapNotNull { it["name"] }
+                                if (recipeIngredients.any { it in ingredientsSelected }) {
+                                    document.toObject(RecipeRecommendData::class.java)
+                                } else {
+                                    null
+                                }
+                            } else {
+                                null
+                            }
                         } catch (e: Exception) {
                             println("Mapping error: ${e.message}")
                             null
                         }
-                    }.filter { recipe ->
-                        recipe.ingredients.count { it in ingredientsSelected } >= 1
-                    }.take(5) // 최대 5개 레시피
+                    }.take(5) // 레시피 5개만 가져오기로 설정해놓음 숫자 바꾸면 더 늘어남.
                     _recipes.value = filteredRecipes
 
                     if (filteredRecipes.isEmpty()) {
@@ -86,8 +104,9 @@ class RecipeRecommendViewModel : ViewModel() {
     }
 }
 
-@Composable
-fun RecipeList(recipes: List<RecipeRecommendData>, navController: NavController) {
+
+    @Composable
+fun RecommendRecipeList(recipes: List<RecipeRecommendData>, navController: NavController) {
     val scrollState = rememberScrollState()
 
     if (recipes.isEmpty()) {
@@ -96,7 +115,7 @@ fun RecipeList(recipes: List<RecipeRecommendData>, navController: NavController)
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            Text(text = "No recipes found.", modifier = Modifier.padding(16.dp))
+            Text(text = "Recipe Loading...", modifier = Modifier.padding(16.dp))
         }
     } else {
         Column(
@@ -106,7 +125,7 @@ fun RecipeList(recipes: List<RecipeRecommendData>, navController: NavController)
                 .verticalScroll(scrollState)
         ) {
             recipes.forEach { recipe ->
-                RecipeItem(item = recipe) { encodedTitle ->
+                RecommendRecipeItem(item = recipe) { encodedTitle ->
                     navController.navigate("recipeDetail/$encodedTitle")
                 }
                 Spacer(modifier = Modifier.height(8.dp))
@@ -115,8 +134,9 @@ fun RecipeList(recipes: List<RecipeRecommendData>, navController: NavController)
     }
 }
 
+
 @Composable
-fun RecipeItem(item: RecipeRecommendData, onClick: (String) -> Unit) {
+fun RecommendRecipeItem(item: RecipeRecommendData, onClick: (String) -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -143,10 +163,12 @@ fun RecipeItem(item: RecipeRecommendData, onClick: (String) -> Unit) {
                 horizontalArrangement = Arrangement.spacedBy(60.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = "Servings: ${item.servings}")
-                Text(text = "Time: ${item.time_required}")
-                Text(text = "Difficulty: ${item.difficulty}")
+                InfoRow(iconRes = R.drawable.ic_person, text = item.servings)
+                InfoRow(iconRes = R.drawable.ic_time, text = item.time_required)
+                InfoRow(iconRes = R.drawable.ic_star, text = item.difficulty)
             }
         }
     }
 }
+
+
