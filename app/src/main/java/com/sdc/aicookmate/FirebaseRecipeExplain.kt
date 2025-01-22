@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -43,7 +44,8 @@ fun RecipeDetailScreen(title: String) {
             .get()
             .addOnSuccessListener { querySnapshot ->
                 if (!querySnapshot.isEmpty) {
-                    recipeDetail.value = querySnapshot.documents.firstOrNull()?.toObject(RecipeDetailData::class.java)
+                    recipeDetail.value = querySnapshot.documents.firstOrNull()
+                        ?.toObject(RecipeDetailData::class.java)
                     Log.d("Firestore", "Recipe found: ${recipeDetail.value}")
                 } else {
                     Log.e("Firestore", "No document found for title: $title")
@@ -64,8 +66,6 @@ fun RecipeDetailScreen(title: String) {
         Text(text = "Loading...")
     }
 }
-
-
 
 
 data class RecipeDetailData(
@@ -106,7 +106,7 @@ fun RecipeDetailContent(recipe: RecipeDetailData) {
     ) {
         // Title
         Text(text = recipe.title, fontSize = 24.sp, fontWeight = FontWeight.Bold)
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(25.dp))
 
         // Thumbnail
         Image(
@@ -163,8 +163,12 @@ fun RecipeDetailContent(recipe: RecipeDetailData) {
 
 
         Text(text = "Tips:" + recipe.description)
+
         Spacer(modifier = Modifier.height(16.dp))
 
+        Divider()
+
+        Spacer(modifier = Modifier.height(10.dp))
 
         Text(text = "재료:")
         recipe.ingredients.forEach {
@@ -172,18 +176,22 @@ fun RecipeDetailContent(recipe: RecipeDetailData) {
         }
         Spacer(modifier = Modifier.height(16.dp))
 
+        Divider()
 
-        Text(text = "조리방법:")
+        Spacer(modifier = Modifier.height(10.dp))
+
+
+        Text(text = "조리방법: ")
         recipe.steps.forEachIndexed { index, step ->
             Text(text = "${index + 1}. ${step.description}")
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(10.dp))
             Image(
                 painter = rememberAsyncImagePainter(step.image),
                 contentDescription = null,
-                contentScale = ContentScale.Crop,
+                contentScale = ContentScale.FillWidth,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(250.dp)
+                    .height(300.dp)
                     .padding(bottom = 8.dp)
             )
         }

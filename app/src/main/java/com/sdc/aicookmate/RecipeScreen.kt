@@ -116,8 +116,9 @@ fun RecipeScreen(navController: NavController) {
 @Composable
 fun FoodCategories(navController: NavController) {
     Column(
-        modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(0.dp)
+        modifier = Modifier.fillMaxWidth()
+        .padding(vertical = 4.dp),
+        verticalArrangement = Arrangement.SpaceEvenly
     ) {
         Row(
             modifier = Modifier

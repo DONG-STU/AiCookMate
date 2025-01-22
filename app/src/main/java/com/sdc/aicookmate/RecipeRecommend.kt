@@ -2,6 +2,7 @@ package com.sdc.aicookmate
 
 import android.net.Uri
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -15,8 +16,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -105,7 +108,7 @@ class RecipeRecommendViewModel : ViewModel() {
 }
 
 
-    @Composable
+@Composable
 fun RecommendRecipeList(recipes: List<RecipeRecommendData>, navController: NavController) {
     val scrollState = rememberScrollState()
 
@@ -143,29 +146,40 @@ fun RecommendRecipeItem(item: RecipeRecommendData, onClick: (String) -> Unit) {
             .padding(vertical = 8.dp),
         shape = RoundedCornerShape(12.dp)
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Image(
-                painter = rememberAsyncImagePainter(item.thumbnail),
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp)
-                    .clickable {
-                        onClick(Uri.encode(item.title))
-                    }
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-            Text(text = item.title, modifier = Modifier.padding(bottom = 12.dp))
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color(0xFFF5F5F5))
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Image(
+                    painter = rememberAsyncImagePainter(item.thumbnail),
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp)
+                        .clickable {
+                            onClick(Uri.encode(item.title))
+                        }
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+                Text(
+                    text = item.title,
+                    modifier = Modifier.padding(bottom = 12.dp),
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(60.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                InfoRow(iconRes = R.drawable.ic_person, text = item.servings)
-                InfoRow(iconRes = R.drawable.ic_time, text = item.time_required)
-                InfoRow(iconRes = R.drawable.ic_star, text = item.difficulty)
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(60.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    InfoRow(iconRes = R.drawable.ic_person, text = item.servings)
+                    InfoRow(iconRes = R.drawable.ic_time, text = item.time_required)
+                    InfoRow(iconRes = R.drawable.ic_star, text = item.difficulty)
+                }
             }
         }
     }

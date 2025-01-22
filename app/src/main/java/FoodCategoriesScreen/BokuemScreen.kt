@@ -2,6 +2,7 @@ package FoodCategoriesScreen
 
 import android.net.Uri
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -13,8 +14,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -25,6 +28,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import com.sdc.aicookmate.R
 
 
 @Composable
@@ -89,6 +93,7 @@ fun BokuemRecipeList(recipes: List<BokuemRecipeData>, navController: NavControll
             .fillMaxWidth()
             .padding(horizontal = 4.dp)
             .verticalScroll(scrollState)
+            .background(Color.White),
     ) {
         recipes.forEach { item ->
             BokuemRecipeItem(item = item) { encodedTitle ->
@@ -105,32 +110,45 @@ fun BokuemRecipeItem(item: BokuemRecipeData, onClick: (String) -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp),
+            .padding(vertical = 8.dp)
+            .background(Color.White),
+
         shape = RoundedCornerShape(12.dp)
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Image(
-                painter = rememberAsyncImagePainter(item.thumbnail),
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp)
-                    .clickable {
-                        onClick(Uri.encode(item.title))
-                    }
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-            Text(text = item.title, modifier = Modifier.padding(bottom = 12.dp))
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.White),
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Image(
+                    painter = rememberAsyncImagePainter(item.thumbnail),
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(250.dp)
+                        .clickable {
+                            onClick(Uri.encode(item.title))
+                        }
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+                Text(
+                    text = item.title,
+                    modifier = Modifier.padding(bottom = 12.dp),
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(60.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-//                BokuemInfoRow(iconRes = R.drawable.ic_person, text = item.servings)
-//                BokuemInfoRow(iconRes = R.drawable.ic_time, text = item.time_required)
-//                BokuemInfoRow(iconRes = R.drawable.ic_star, text = item.difficulty)
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(60.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    BokuemInfoRow(iconRes = R.drawable.ic_person, text = item.servings)
+                    BokuemInfoRow(iconRes = R.drawable.ic_time, text = item.time_required)
+                    BokuemInfoRow(iconRes = R.drawable.ic_star, text = item.difficulty)
+                }
             }
         }
     }
@@ -148,6 +166,6 @@ fun BokuemInfoRow(iconRes: Int, text: String) {
             modifier = Modifier.size(16.dp)
         )
         Spacer(modifier = Modifier.width(8.dp))
-        Text(text = text)
+        Text(text = text, fontWeight = FontWeight.Bold, color = Color.Black)
     }
 }
