@@ -11,4 +11,5 @@
     <color name="contentcolorgreen">#FF82BB92</color>
     <color name="refrigeratorPostIt">#FFFFF677</color>
     <color name="refrigeratorPost">#FFFF8F8F</color>
+    <color name="titleColor">#FFFF9151</color>
 </resources>
