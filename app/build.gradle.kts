@@ -17,8 +17,7 @@ val localFile = rootProject.file("local.properties")
 if (localFile.exists()) {
     localProps.load(FileInputStream(localFile))
 }
-
-val openAiKey = project.findProperty("OPENAI_API_KEY")?.toString() ?: ""
+val openAiKey = localProps.getProperty("OPENAI_API_KEY", "")
 android {
     namespace = "com.sdc.aicookmate"
     compileSdk = 35
@@ -31,16 +30,14 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-
     }
     buildTypes {
         debug {
             // BuildConfig.OPENAI_API_KEY 에 local.properties 키 값 주입
-            buildConfigField("String", "OPENAI_API_KEY", "\"${openAiKey}\"")
+            buildConfigField("String", "OPENAI_API_KEY", "\"$openAiKey\"")
         }
         release {
-            buildConfigField("String", "OPENAI_API_KEY", "\"${openAiKey}\"")
+            buildConfigField("String", "OPENAI_API_KEY", "\"$openAiKey\"")
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
