@@ -37,10 +37,10 @@ android {
     buildTypes {
         debug {
             // BuildConfig.OPENAI_API_KEY 에 local.properties 키 값 주입
-            buildConfigField("String", "OPENAI_API_KEY", "\"$openAiKey\"")
+            buildConfigField("String", "OPENAI_API_KEY", "\"${openAiKey}\"")
         }
         release {
-            buildConfigField("String", "OPENAI_API_KEY", "\"$openAiKey\"")
+            buildConfigField("String", "OPENAI_API_KEY", "\"${openAiKey}\"")
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
