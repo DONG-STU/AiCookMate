@@ -170,7 +170,7 @@ fun GptScreen(
                             }
                             item {
                                 Text(
-                                    "방법: $recipeMethod",
+                                    "조리방법: \n $recipeMethod",
                                     modifier = Modifier.padding(8.dp)
                                 )
                             }
@@ -197,7 +197,10 @@ fun GptScreen(
 
                             출력포맷은 다음과 같습니다.
 
-                            요리명: <요리명>, 재료: <재료> ,요리과정: 1: <요리순서1>,\n 2: <요리순서2>,\n ...
+                            요리명: <요리명>, 재료: <재료> ,
+                             요리과정: 1: <요리순서1>, 
+                             2: <요리순서2>, 
+                             3: <요리순서3> ...
 
                             
                         """.trimIndent()
@@ -271,7 +274,8 @@ fun fetchRecipe(
     val api = retrofit.create(SimpleApi::class.java)
 
     val requestBody = GptRequest(
-        model = "gpt-3.5-turbo",
+        model = "gpt-4o",
+//        model = "gpt-3.5-turbo",
         messages = listOf(
             Message("user", prompt)
         ),
