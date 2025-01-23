@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.TabRowDefaults.Divider
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -15,10 +16,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
@@ -91,18 +95,37 @@ fun DietRecipeList(recipes: List<DietRecipeData>, navController: NavController) 
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 4.dp)
             .verticalScroll(scrollState)
             .background(Color.White),
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.ic_arrowback),
-            contentDescription = "Back button",
+        Box(
             modifier = Modifier
-                .padding(16.dp)
-                .clickable {
-                    navController.popBackStack()
-                })
+                .fillMaxWidth()
+                .height(70.dp)
+                .background(color = colorResource(R.color.titleColor))
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.ic_arrowback),
+                contentDescription = "Back button",
+                modifier = Modifier
+                    .padding(start = 9.dp)
+                    .align(Alignment.CenterStart)
+                    .clickable {
+                        navController.popBackStack()
+                    },
+                colorFilter = ColorFilter.tint(Color.White)
+            )
+
+            Text(
+                text = "다이어트",
+                fontWeight = FontWeight.Bold,
+                color = Color.White,
+                fontSize = 25.sp,
+                modifier = Modifier
+                    .align(Alignment.Center)
+//                    .padding(bottom = 5.dp)
+            )
+        }
         recipes.forEach { item ->
             DietRecipeItem(item = item) { encodedTitle ->
                 // NavController를 사용하여 다음 화면으로 이동
@@ -122,6 +145,13 @@ fun DietRecipeItem(item: DietRecipeData, onClick: (String) -> Unit) {
             .background(Color.White),
         shape = RoundedCornerShape(12.dp)
     ) {
+        Divider(
+            color = Color.Gray, // 선의 색상
+            thickness = 0.5.dp,   // 선의 두께
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+        )
         Box(
             modifier = Modifier
                 .fillMaxSize()

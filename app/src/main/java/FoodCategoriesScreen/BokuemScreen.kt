@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.TabRowDefaults.Divider
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -15,11 +16,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
@@ -93,19 +97,36 @@ fun BokuemRecipeList(recipes: List<BokuemRecipeData>, navController: NavControll
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 4.dp)
             .verticalScroll(scrollState)
             .background(Color.White),
     ) {
-        Row {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(70.dp)
+                .background(color = colorResource(R.color.titleColor))
+        ) {
             Image(
                 painter = painterResource(id = R.drawable.ic_arrowback),
                 contentDescription = "Back button",
                 modifier = Modifier
-                    .padding(16.dp)
+                    .padding(start = 9.dp)
+                    .align(Alignment.CenterStart)
                     .clickable {
                         navController.popBackStack()
-                    })
+                    },
+                colorFilter = ColorFilter.tint(Color.White)
+            )
+
+            Text(
+                text = "볶음/구이",
+                fontWeight = FontWeight.Bold,
+                color = Color.White,
+                fontSize = 25.sp,
+                modifier = Modifier
+                    .align(Alignment.Center)
+//                    .padding(bottom = 5.dp)
+            )
         }
 
         recipes.forEach { item ->
@@ -120,20 +141,31 @@ fun BokuemRecipeList(recipes: List<BokuemRecipeData>, navController: NavControll
 
 @Composable
 fun BokuemRecipeItem(item: BokuemRecipeData, onClick: (String) -> Unit) {
+
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp)
-            .background(Color.White),
+            .background(Color.White)
+            .clickable {
+                onClick(Uri.encode(item.title))
+            },
 
         shape = RoundedCornerShape(12.dp)
     ) {
+        Divider(
+            color = Color.Gray, // 선의 색상
+            thickness = 0.5.dp,   // 선의 두께
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+        )
+
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .clickable {
-                    onClick(Uri.encode(item.title))
-                }
+
                 .background(Color.White),
         ) {
             Row(

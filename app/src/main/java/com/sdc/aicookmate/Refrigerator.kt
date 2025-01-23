@@ -63,6 +63,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.boundsInWindow
@@ -782,13 +783,33 @@ fun Refrigerator(navController: NavController) {
                 .background(color = colorResource(R.color.titleColor))
                 .padding(vertical = 5.dp)
         ) {
-            Text(
-                "가지고 있는 재료를 한 번에 봐요!",
-                color = Color.White,
-                fontSize = 25.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(start = 10.dp)
-            )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(70.dp)
+                    .background(color = colorResource(R.color.titleColor))
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_arrowback),
+                    contentDescription = "Back button",
+                    modifier = Modifier
+                        .padding(start = 9.dp)
+                        .align(Alignment.CenterStart)
+                        .clickable {
+                            navController.popBackStack()
+                        },
+                    colorFilter = ColorFilter.tint(Color.White)
+                )
+                Text(
+                    text = "가지고 있는 재료를 보여드릴게요!",
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White,
+                    fontSize = 20.sp,
+                    modifier = Modifier
+                        .align(Alignment.Center)
+//                    .padding(bottom = 5.dp)
+                )
+            }
             EnhancedSearchDropdown(
                 items = ingredients,
                 selectedItems = selectedIngredients, // 여기서 매개변수 이름을 맞춤

@@ -112,9 +112,19 @@ fun MyPageScreen(navController: NavController) {
 
             Spacer(modifier = Modifier.height(32.dp))
 
+
+            Text(
+                text = "알림",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier
+                    .padding(horizontal = 16.dp),
+                color = Color.Black
+            )
+
             Divider(
-                color = Color.Black, // 선의 색상
-                thickness = 1.dp,   // 선의 두께
+                color = Color.Gray, // 선의 색상
+                thickness = 0.5.dp,   // 선의 두께
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
@@ -129,8 +139,8 @@ fun MyPageScreen(navController: NavController) {
                 )
             )
             Divider(
-                color = Color.Black, // 선의 색상
-                thickness = 1.dp,   // 선의 두께
+                color = Color.Gray, // 선의 색상
+                thickness = 0.5.dp,   // 선의 두께
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
@@ -148,8 +158,8 @@ fun MyPageScreen(navController: NavController) {
             )
 
             Divider(
-                color = Color.Black, // 선의 색상
-                thickness = 1.dp,   // 선의 두께
+                color = Color.Gray, // 선의 색상
+                thickness = 0.5.dp,   // 선의 두께
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
@@ -256,8 +266,8 @@ fun RecentRecipeSection(recipes: List<Recipe>) {
 
 
     Divider(
-        color = Color.Black, // 선의 색상
-        thickness = 1.dp,   // 선의 두께
+        color = Color.Gray, // 선의 색상
+        thickness = 0.5.dp,   // 선의 두께
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp)// 전체 너비를 채움
@@ -288,8 +298,8 @@ fun RecentRecipeSection(recipes: List<Recipe>) {
     }
 
     Divider(
-        color = Color.Black, // 선의 색상
-        thickness = 1.dp,   // 선의 두께
+        color = Color.Gray, // 선의 색상
+        thickness = 0.5.dp,   // 선의 두께
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp)// 전체 너비를 채움
