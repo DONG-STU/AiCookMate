@@ -94,6 +94,7 @@ fun RiceRecipeList(recipes: List<RiceRecipeData>, navController: NavController) 
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .padding(horizontal = 4.dp)
             .verticalScroll(scrollState)
             .background(Color.White),
     ) {
