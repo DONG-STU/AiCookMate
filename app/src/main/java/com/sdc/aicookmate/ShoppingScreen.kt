@@ -184,12 +184,12 @@ fun CategorySection() {
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            CategoryItem("정육", R.drawable.ic_sallad)
-            CategoryItem("채소", R.drawable.ic_sallad)
+            CategoryItem("정육", R.drawable.ic_bokuem)
+            CategoryItem("채소", R.drawable.ic_gook)
             CategoryItem("생선", R.drawable.ic_japanese)
-            CategoryItem("과일", R.drawable.ic_apple)
-            CategoryItem("김치류", R.drawable.ic_sallad)
-            CategoryItem("가공식품", R.drawable.ic_sallad)
+            CategoryItem("과일", R.drawable.ic_houseparty)
+            CategoryItem("김치류", R.drawable.ic_diet)
+            CategoryItem("가공식품", R.drawable.ic_fried)
         }
     }
 }
@@ -231,6 +231,7 @@ fun HotDealsSection() {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.fillMaxWidth()
+                .padding(10.dp)
         ) {
             Column {
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -269,17 +270,17 @@ fun HotDealsSection() {
         ) {
             HotDealItem(
                 modifier = Modifier.weight(1f),
-                name = "동그랑땡",
+                name = "닭볶음탕 밀키트",
                 description = "신선한 국내산",
-                price = "12,900원",
-                imageRes = R.drawable.ic_sallad2
+                price = "13,900원",
+                imageRes = R.drawable.ic_recipe8
             )
             HotDealItem(
                 modifier = Modifier.weight(1f),
-                name = "두부찌개",
+                name = "백종원 떡볶이 밀키트",
                 description = "맛있는 국내산",
-                price = "15,900원",
-                imageRes = R.drawable.ic_sallad2
+                price = "8,900원",
+                imageRes = R.drawable.recipe3
             )
         }
 
