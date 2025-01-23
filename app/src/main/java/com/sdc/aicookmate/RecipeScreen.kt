@@ -226,36 +226,6 @@ fun FoodCategoryItem(navController: NavController, title: String, iconRes: Int) 
     }
 }
 
-
-@Composable
-fun FoodItems(navController: NavController) {
-    val foodItems = listOf(
-        FoodItem(
-            "맛있는 미역국",
-            "30분",
-            R.drawable.ic_sallad1
-        ),
-        FoodItem(
-            "매콤달콤 불고기",
-            "45분",
-            R.drawable.ic_sallad2
-        ),
-        FoodItem(
-            "일품한 김치찌개",
-            "40분",
-            R.drawable.ic_sallad3
-        )
-    )
-
-    LazyColumn(
-        verticalArrangement = Arrangement.spacedBy(1.dp)
-    ) {
-        items(foodItems.size) { index ->
-            FoodItemCard(navController, foodItems[index])
-        }
-    }
-}
-
 @Composable
 fun FoodItemCard(navController: NavController, foodItem: FoodItem) {
     Column(
