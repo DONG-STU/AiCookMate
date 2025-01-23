@@ -325,13 +325,13 @@ fun ScanReceiptImage(navController: NavController) {
                 }
                 Column(modifier = Modifier.padding(horizontal = 5.dp, vertical = 3.dp)) {
                     Text(
-                        "재료 탐지",
+                        "뒤로가기",
                         fontSize = 24.sp,
                         modifier = Modifier,
                         fontWeight = FontWeight.Bold
                     )
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text("카메라를 재료에 대보면 무슨 재료인지 알려드려요",fontSize = 12.sp)
+                    Text("돌아가서 레시피를 추천받아보세요",fontSize = 12.sp)
                 }
             }
         }
