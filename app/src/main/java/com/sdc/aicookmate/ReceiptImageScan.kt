@@ -131,22 +131,13 @@ fun ScanReceiptImage(navController: NavController) {
         Spacer(modifier = Modifier.height(10.dp))
 
         // 검색 필드
-        OutlinedTextField(
-            value = inputText,
-            onValueChange = { inputText = it },
-            trailingIcon = { Icon(Icons.Default.Search, contentDescription = "검색") },
-            maxLines = 1,
-            colors = TextFieldDefaults.colors(
-                focusedContainerColor = Color.White,
-                unfocusedContainerColor = Color.White,
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp)
-                .height(60.dp) // 검색 필드 높이 고정
-                .border(3.dp, Color.LightGray, RoundedCornerShape(10.dp)),
-            shape = RoundedCornerShape(10.dp)
-        )
+        EnhancedSearchDropdown(
+            items = ingredients,
+            selectedItems = ingreidentsSelected, // 여기서 매개변수 이름을 맞춤
+            placeholderText = "재료를 검색하세요"
+        ) { selectedItem ->
+            println("선택된 항목: $selectedItem")
+        }
 
         Spacer(modifier = Modifier.height(10.dp))
 

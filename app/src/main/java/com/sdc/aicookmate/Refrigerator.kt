@@ -812,7 +812,7 @@ fun Refrigerator(navController: NavController) {
             }
             EnhancedSearchDropdown(
                 items = ingredients,
-                selectedItems = selectedIngredients, // 여기서 매개변수 이름을 맞춤
+                selectedItems = ingreidentsSelected, // 여기서 매개변수 이름을 맞춤
                 placeholderText = "재료를 검색하세요"
             ) { selectedItem ->
                 println("선택된 항목: $selectedItem")
