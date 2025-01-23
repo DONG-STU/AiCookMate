@@ -292,7 +292,7 @@ fun FoodItemCard(navController: NavController, foodItem: FoodItem) {
                                 text = foodItem.duration,
                                 style = TextStyle(
                                     fontSize = 16.sp,
-                                    color = Color.Gray
+                                    color = Color.Gray,
                                 )
                             )
                             DifficultyStars(DifficultyLevel.BEGINNER)
