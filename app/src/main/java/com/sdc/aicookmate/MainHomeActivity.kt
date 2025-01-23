@@ -303,17 +303,17 @@ fun CategoryItem(
 @Composable
 fun BestListCard() {
     Row(
-
         modifier = Modifier
             .fillMaxWidth()
             .horizontalScroll(rememberScrollState())
-            .padding(horizontal = 16.dp),
+            .padding(horizontal = 16.dp)
+            .height(210.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        BestCard(imageRes = R.drawable.recipe1, description = "")
-        BestCard(imageRes = R.drawable.recipe2, description = "")
-        BestCard(imageRes = R.drawable.recipe3, description = "")
-        BestCard(imageRes = R.drawable.recipe4, description = "")
+        BestCard(imageRes = R.drawable.recipe1, description = "5분 뚝딱 콩나물 불고기 간단 레시피")
+        BestCard(imageRes = R.drawable.recipe2, description = "아침에 간단하게 계란국")
+        BestCard(imageRes = R.drawable.recipe3, description = "백종원 떡볶이 황금 레시피")
+        BestCard(imageRes = R.drawable.recipe4, description = "매콤한 어묵볶음 레시피")
     }
 }
 
@@ -322,8 +322,8 @@ fun BestListCard() {
 fun BestCard(imageRes: Int, description: String) {
     Column(
         modifier = Modifier
-            .width(150.dp)
-            .height(130.dp)
+            .width(190.dp)
+            .height(190.dp)
 
     ) {
         Image(
@@ -337,9 +337,9 @@ fun BestCard(imageRes: Int, description: String) {
         )
         Text(
             text = description,
-            fontSize = 12.sp,
+            fontSize = 13.sp,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(8.dp),
+            modifier = Modifier.padding(2.dp),
             color = Color.Black
         )
     }
