@@ -231,23 +231,23 @@ fun RefrigeratorImageScanScreen(navController: NavController) {
     ) {
         Spacer(modifier = Modifier.height(10.dp))
 
-    // 검색 필드
-    OutlinedTextField(
-        value = inputText,
-        onValueChange = { inputText = it },
-        trailingIcon = { Icon(Icons.Default.Search, contentDescription = "검색") },
-        maxLines = 1,
-        colors = TextFieldDefaults.colors(
-            focusedContainerColor = Color.White,
-            unfocusedContainerColor = Color.White,
-        ),
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 20.dp)
-            .height(60.dp) // 검색 필드 높이 고정
-            .border(3.dp, Color.LightGray, RoundedCornerShape(10.dp)),
-        shape = RoundedCornerShape(10.dp)
-    )
+            // 검색 필드
+            OutlinedTextField(
+                value = inputText,
+                onValueChange = { inputText = it },
+                trailingIcon = { Icon(Icons.Default.Search, contentDescription = "검색") },
+                maxLines = 1,
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.White,
+                    unfocusedContainerColor = Color.White,
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp)
+                    .height(60.dp) // 검색 필드 높이 고정
+                    .border(3.dp, Color.LightGray, RoundedCornerShape(10.dp)),
+                shape = RoundedCornerShape(10.dp)
+            )
 
         Spacer(modifier = Modifier.height(10.dp))
 
@@ -285,7 +285,7 @@ fun RefrigeratorImageScanScreen(navController: NavController) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(color = Color(0xFFF5F5F5))
+                    .background(color = Color(0x80F5F5F5))
                     .weight(3f)
             ) {
                 Text(
@@ -333,7 +333,7 @@ fun RefrigeratorImageScanScreen(navController: NavController) {
                     ) {
                         Text(
                             "확인",
-                            fontSize = 16.sp,
+                            fontSize = 24.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color.Black
                         )
@@ -373,11 +373,11 @@ fun RefrigeratorImageScanScreen(navController: NavController) {
                 }
                 Column(modifier = Modifier.padding(horizontal = 10.dp,vertical = 3.dp)) {
                     Text("사진 넣기",
-                        fontSize = 18.sp,
+                        fontSize = 24.sp,
                         modifier = Modifier,
                         fontWeight = FontWeight.Bold)
-                    Spacer(modifier = Modifier.height(9.dp))
-                    Text("갤러리에 있는 사진을 등록해보세요")
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text("갤러리에 있는 사진을 등록해보세요",fontSize = 12.sp)
                 }
             }
             Spacer(modifier = Modifier.height(25.dp))
@@ -414,12 +414,12 @@ fun RefrigeratorImageScanScreen(navController: NavController) {
                 Column(modifier = Modifier.padding(horizontal = 10.dp, vertical = 3.dp)) {
                     Text(
                         "카메라 촬영",
-                        fontSize = 18.sp,
+                        fontSize = 24.sp,
                         modifier = Modifier,
                         fontWeight = FontWeight.Bold
                     )
-                    Spacer(modifier = Modifier.height(9.dp))
-                    Text("냉장고를 촬영하고 사진을 넣어보세요")
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text("냉장고를 촬영하고 사진을 넣어보세요",fontSize = 12.sp)
                 }
             }
             Spacer(modifier = Modifier.height(25.dp))
@@ -469,7 +469,7 @@ fun RefrigeratorImageScanScreen(navController: NavController) {
 
                         .size(70.dp)
                 ) {
-//                    Text("탐지 시작")
+
                     Image(
                         painter = painterResource(id = R.drawable.ic_plus),
                         contentDescription = "사진 버튼 이미지",
@@ -477,15 +477,15 @@ fun RefrigeratorImageScanScreen(navController: NavController) {
                     )
 
                 }
-                Column(modifier = Modifier.padding(horizontal = 10.dp, vertical = 3.dp)) {
+                Column(modifier = Modifier.padding(horizontal = 5.dp, vertical = 3.dp)) {
                     Text(
                         "재료 탐지",
-                        fontSize = 18.sp,
+                        fontSize = 24.sp,
                         modifier = Modifier,
                         fontWeight = FontWeight.Bold
                     )
-                    Spacer(modifier = Modifier.height(1.dp))
-                    Text("카메라를 재료에 대보면 무슨 재료인지 알려드려요")
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text("카메라를 재료에 대보면 무슨 재료인지 알려드려요",fontSize = 12.sp)
                 }
             }
         }

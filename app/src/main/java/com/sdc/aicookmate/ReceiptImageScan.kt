@@ -14,12 +14,14 @@ import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -41,6 +43,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -49,10 +52,21 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.korean.KoreanTextRecognizerOptions
 import java.io.IOException
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewScanReceiptImageScreen() {
+    // Fake NavController for preview purposes
+    val fakeNavController = rememberNavController()
+
+    ScanReceiptImage(navController = fakeNavController)
+}
+
 
 @Composable
 fun ScanReceiptImage(navController: NavController) {
@@ -112,7 +126,7 @@ fun ScanReceiptImage(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Color(0xFFFCF6E0))
+            .background(color = Color.White)
     ) {
         Spacer(modifier = Modifier.height(10.dp))
 
@@ -120,7 +134,7 @@ fun ScanReceiptImage(navController: NavController) {
         OutlinedTextField(
             value = inputText,
             onValueChange = { inputText = it },
-            leadingIcon = { Icon(Icons.Default.Search, "검색") },
+            trailingIcon = { Icon(Icons.Default.Search, contentDescription = "검색") },
             maxLines = 1,
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = Color.White,
@@ -136,38 +150,17 @@ fun ScanReceiptImage(navController: NavController) {
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        // 즐겨찾기 박스
         Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(180.dp) // 즐겨찾기 박스 높이 고정
-                .padding(horizontal = 20.dp)
-                .border(1.dp, Color.Black, RoundedCornerShape(10.dp))
-                .background(Color(0xFFFFFCCB))
+                .fillMaxSize()
+                .padding(10.dp)
+                .weight(1f)
         ) {
-            Text("즐겨찾기", fontSize = 15.sp, modifier = Modifier.padding(10.dp))
             Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color.Black)
-                    .height(1.dp)
-            )
-            Row() {
-
-            }
-        }
-        Spacer(modifier = Modifier.height(10.dp))
-        Box(
-            modifier = Modifier
-                .weight(1f)
-                .padding(horizontal = 10.dp)
-                .fillMaxSize()
-                .background(Color.White)
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(10.dp)
+                    .weight(3f)
+                    .padding(horizontal = 10.dp)
+                    .background(color = Color(0x80F5F5F5))
             ) {
                 Text(
                     "영수증",
@@ -178,115 +171,195 @@ fun ScanReceiptImage(navController: NavController) {
                         .padding(3.dp)
                         .fillMaxWidth()
                 )
-                Text("[매장명] : AI CookMate")
-                Text("[매출일] : 20XX.XX.XX")
 
-                Spacer(modifier = Modifier.height(10.dp))
-
-                Box(
+                Column(
                     modifier = Modifier
+                        .padding(vertical = 10.dp)
+                        .verticalScroll(scrollState)
                         .fillMaxWidth()
-                        .background(Color.Black)
-                        .padding(horizontal = 3.dp)
-                        .height(1.dp)
-                )
-                Spacer(modifier = Modifier.height(10.dp))
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(Color.Black)
-                        .padding(horizontal = 3.dp)
-                        .height(1.dp)
-                )
-                Column(modifier = Modifier.padding(vertical = 10.dp)
-                    .verticalScroll(scrollState)
-                    .weight(3f)) {
+                ) {
                     for (ingredient in foundIngredients) {
                         ListOfIngredientsUI(ingredient)
                     }
                 }
-                Button(onClick = {
-                    ingreidentsSelected.addAll(foundIngredients.distinct())
-                    navController.navigateUp()
-                    Toast.makeText(context, "재료를 추가했어요!", Toast.LENGTH_SHORT).show()
-                },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xffFF5D5D)),
-                    modifier = Modifier.align(Alignment.End)
-                        .weight(1f)) {
-                    Text("확인")
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                ) {
+                    Button(
+                        onClick = {
+                            ingreidentsSelected.addAll(foundIngredients.distinct())
+                            navController.navigateUp()
+                            Toast.makeText(context, "재료를 추가했어요!", Toast.LENGTH_SHORT).show()
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = colorResource(id = R.color.titleColor) // XML 색상 적용
+                        ),
+                        shape = RoundedCornerShape(12.dp),
+                        contentPadding = PaddingValues(0.dp),
+                        modifier = Modifier
+                            .size(100.dp)
+                            .align(Alignment.BottomEnd) // 버튼을 오른쪽 아래로 배치
+                            .padding(10.dp)
+                    ) {
+                        Text(
+                            "확인",
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.Black
+                        )
+                    }
                 }
             }
         }
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
+        Spacer(modifier = Modifier.padding(vertical = 20.dp))
+
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(80.dp) // 버튼 Row 높이 고정
                 .padding(horizontal = 10.dp)
+                .weight(0.7f)
+
         ) {
-            Button(
-                onClick = {
-                    pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-                },
-                modifier = Modifier.weight(1f)
-            ) {
-                Text("사진 넣기")
+            Row {
+                Button(
+                    onClick = {
+                        pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                    },
+                    shape = RoundedCornerShape(12.dp),
+                    contentPadding = PaddingValues(0.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = colorResource(id = R.color.titleColor) // XML 색상 적용
+                    ),
+
+                    modifier = Modifier
+                        .size(70.dp)
+                )
+                {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_plus),
+                        contentDescription = "사진 버튼 이미지",
+                        modifier = Modifier.size(40.dp)
+                    )
+                }
+                Column(modifier = Modifier.padding(horizontal = 10.dp, vertical = 3.dp)) {
+                    Text(
+                        "사진 넣기",
+                        fontSize = 24.sp,
+                        modifier = Modifier,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text("갤러리에 있는 사진을 등록해보세요", fontSize = 12.sp)
+                }
             }
-            Button(
-                onClick = {
-                    if (ContextCompat.checkSelfPermission(
-                            context,
-                            android.Manifest.permission.CAMERA
-                        ) ==
-                        PackageManager.PERMISSION_GRANTED
-                    ) {
-                        // 권한이 허용된 경우 카메라 실행
-                        val uri = createImageUri(context)
-                        cameraLauncher.launch(uri)
-                        imageUri = uri
-                    } else {
-                        // 권한 요청
-                        permissionLauncher.launch(android.Manifest.permission.CAMERA)
-                    }
-                },
-                modifier = Modifier.weight(1f)
-            ) {
-                Text("카메라 촬영")
+
+            Spacer(modifier = Modifier.height(25.dp))
+            Row {
+                Button(
+                    onClick = {
+                        if (ContextCompat.checkSelfPermission(
+                                context,
+                                android.Manifest.permission.CAMERA
+                            ) ==
+                            PackageManager.PERMISSION_GRANTED
+                        ) {
+                            // 권한이 허용된 경우 카메라 실행
+                            val uri = createImageUri(context)
+                            cameraLauncher.launch(uri)
+                            imageUri = uri
+                        } else {
+                            // 권한 요청
+                            permissionLauncher.launch(android.Manifest.permission.CAMERA)
+                        }
+                    },
+                    shape = RoundedCornerShape(12.dp),
+                    contentPadding = PaddingValues(0.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = colorResource(id = R.color.titleColor) // XML 색상 적용
+                    ),
+
+                    modifier = Modifier
+                        .size(70.dp)
+                )
+                {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_plus),
+                        contentDescription = "사진 버튼 이미지",
+                        modifier = Modifier.size(40.dp)
+                    )
+                }
+                Column(modifier = Modifier.padding(horizontal = 10.dp, vertical = 3.dp)) {
+                    Text(
+                        "카메라 촬영",
+                        fontSize = 24.sp,
+                        modifier = Modifier,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text("냉장고를 촬영하고 사진을 넣어보세요", fontSize = 12.sp)
+                }
             }
-            Button(
-                onClick = {
-                    navController.navigateUp()
-                },
-                modifier = Modifier.weight(1f)
-            ) {
-                Text("뒤로 가기")
+
+            Spacer(modifier = Modifier.height(25.dp))
+            Row {
+                Button(
+                    onClick = {
+                        navController.navigateUp()
+                    },
+                    shape = RoundedCornerShape(12.dp),
+                    contentPadding = PaddingValues(0.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = colorResource(id = R.color.titleColor) // XML 색상 적용
+                    ),
+
+                    modifier = Modifier
+                        .size(70.dp)
+                )
+                {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_plus),
+                        contentDescription = "사진 버튼 이미지",
+                        modifier = Modifier.size(40.dp)
+                    )//냉장고로 돌아가기
+                }
+                Column(modifier = Modifier.padding(horizontal = 5.dp, vertical = 3.dp)) {
+                    Text(
+                        "재료 탐지",
+                        fontSize = 24.sp,
+                        modifier = Modifier,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text("카메라를 재료에 대보면 무슨 재료인지 알려드려요",fontSize = 12.sp)
+                }
             }
         }
     }
 }
 
+
 @Composable
 fun ListOfIngredientsUI(text: String) {
-        Box(modifier = Modifier.height(6.dp))
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color.LightGray)
-                .height(1.dp)
+    Box(modifier = Modifier.height(6.dp))
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color.LightGray)
+            .height(1.dp)
+    )
+    Row(
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 5.dp)
+    ) {
+        Text(text)
+        Image(
+            painter = painterResource(R.drawable.postit_close_btn),
+            contentDescription = "닫기 버튼",
         )
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 5.dp)
-        ) {
-            Text(text)
-            Image(
-                painter = painterResource(R.drawable.postit_close_btn),
-                contentDescription = "닫기 버튼",
-            )
-        }
+    }
 
 }
