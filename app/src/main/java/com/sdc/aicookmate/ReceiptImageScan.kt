@@ -70,7 +70,6 @@ fun PreviewScanReceiptImageScreen() {
 
 @Composable
 fun ScanReceiptImage(navController: NavController) {
-    var inputText by remember { mutableStateOf("") }
     var imageUri by remember { mutableStateOf<Uri?>(null) }
     val context = LocalContext.current
     val pickMedia =
@@ -130,17 +129,6 @@ fun ScanReceiptImage(navController: NavController) {
     ) {
         Spacer(modifier = Modifier.height(10.dp))
 
-        // 검색 필드
-        EnhancedSearchDropdown(
-            items = ingredients,
-            selectedItems = ingreidentsSelected, // 여기서 매개변수 이름을 맞춤
-            placeholderText = "재료를 검색하세요"
-        ) { selectedItem ->
-            println("선택된 항목: $selectedItem")
-        }
-
-        Spacer(modifier = Modifier.height(10.dp))
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -151,26 +139,28 @@ fun ScanReceiptImage(navController: NavController) {
                 modifier = Modifier
                     .weight(3f)
                     .padding(horizontal = 10.dp)
-                    .background(color = Color(0x80F5F5F5))
+                    .background(color = Color(0xffECECEC))
             ) {
-                Text(
-                    "영수증",
-                    fontSize = 30.sp,
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .padding(3.dp)
-                        .fillMaxWidth()
-                )
+                Column {
+                    Text(
+                        "영수증",
+                        fontSize = 30.sp,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .padding(3.dp)
+                            .fillMaxWidth()
+                    )
 
-                Column(
-                    modifier = Modifier
-                        .padding(vertical = 10.dp)
-                        .verticalScroll(scrollState)
-                        .fillMaxWidth()
-                ) {
-                    for (ingredient in foundIngredients) {
-                        ListOfIngredientsUI(ingredient)
+                    Column(
+                        modifier = Modifier
+                            .padding(vertical = 10.dp)
+                            .verticalScroll(scrollState)
+                            .fillMaxWidth()
+                    ) {
+                        for (ingredient in foundIngredients) {
+                            ListOfIngredientsUI(ingredient)
+                        }
                     }
                 }
                 Box(
@@ -179,8 +169,10 @@ fun ScanReceiptImage(navController: NavController) {
                 ) {
                     Button(
                         onClick = {
-                            ingreidentsSelected.addAll(foundIngredients.distinct())
-                            navController.navigateUp()
+                            val newIngredients =
+                                foundIngredients.filter { it !in ingreidentsSelected }
+                            ingreidentsSelected.addAll(newIngredients.distinct())
+                            navController.navigate("refigeratorScreen")
                             Toast.makeText(context, "재료를 추가했어요!", Toast.LENGTH_SHORT).show()
                         },
                         colors = ButtonDefaults.buttonColors(
@@ -296,7 +288,7 @@ fun ScanReceiptImage(navController: NavController) {
             Row {
                 Button(
                     onClick = {
-                        navController.navigateUp()
+                        navController.navigate("refigeratorScreen")
                     },
                     shape = RoundedCornerShape(12.dp),
                     contentPadding = PaddingValues(0.dp),
@@ -310,7 +302,7 @@ fun ScanReceiptImage(navController: NavController) {
                 {
                     Image(
                         painter = painterResource(id = R.drawable.ic_plus),
-                        contentDescription = "사진 버튼 이미지",
+                        contentDescription = "뒤로가기",
                         modifier = Modifier.size(40.dp)
                     )//냉장고로 돌아가기
                 }
@@ -322,7 +314,7 @@ fun ScanReceiptImage(navController: NavController) {
                         fontWeight = FontWeight.Bold
                     )
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text("돌아가서 레시피를 추천받아보세요",fontSize = 12.sp)
+                    Text("돌아가서 레시피를 추천받아보세요", fontSize = 12.sp)
                 }
             }
         }
@@ -352,5 +344,4 @@ fun ListOfIngredientsUI(text: String) {
             contentDescription = "닫기 버튼",
         )
     }
-
 }

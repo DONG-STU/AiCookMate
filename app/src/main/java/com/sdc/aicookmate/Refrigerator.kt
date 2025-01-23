@@ -798,7 +798,7 @@ fun Refrigerator(navController: NavController) {
                         .padding(start = 9.dp)
                         .align(Alignment.CenterStart)
                         .clickable {
-                            navController.popBackStack()
+                            navController.navigate("MainScreen")
                         },
                     colorFilter = ColorFilter.tint(Color.White)
                 )

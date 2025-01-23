@@ -30,6 +30,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
@@ -185,10 +186,8 @@ fun RefrigeratorImageScanScreen(navController: NavController) {
 
     // 이미지 URI
     var imageUri by remember { mutableStateOf<Uri?>(null) }
-
     // 모델 검출 결과
     var detectionList by remember { mutableStateOf<List<DetectionItem>>(emptyList()) }
-
     // 로딩 상태
     var isLoading by remember { mutableStateOf(false) }
 
@@ -229,118 +228,52 @@ fun RefrigeratorImageScanScreen(navController: NavController) {
             .fillMaxSize()
             .background(color = Color.White)
     ) {
-        Spacer(modifier = Modifier.height(10.dp))
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .weight(0.7f)
+                .background(color = colorResource(R.color.titleColor))
+        ) {
+            Box(modifier = Modifier.fillMaxSize()) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_arrowback),
+                    contentDescription = "Back button",
+                    colorFilter = ColorFilter.tint(Color.White),
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .wrapContentWidth()
+                        .align(Alignment.CenterStart)
+                        .clickable {
+                            navController.navigate("refigeratorScreen")
+                        })
 
-            // 검색 필드
-        EnhancedSearchDropdown(
-            items = ingredients,
-            selectedItems = ingreidentsSelected, // 여기서 매개변수 이름을 맞춤
-            placeholderText = "재료를 검색하세요"
-        ) { selectedItem ->
-            println("선택된 항목: $selectedItem")
+                Text(
+                    "AI 냉장고 스캔",
+                    textAlign = TextAlign.Center,
+                    fontSize = 25.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.Center)
+                )
+            }
+
         }
-
-        Spacer(modifier = Modifier.height(10.dp))
-
-//        // 즐겨찾기 박스
-//        Column(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .weight(1f) // 즐겨찾기 박스 높이 고정
-//                .padding(horizontal = 20.dp)
-//                .border(1.dp, Color.Black, RoundedCornerShape(10.dp))
-//                .background(Color(0xFFFFFCCB))
-//        ) {
-//            // 선택된 이미지 표시
-//            imageUri?.let { uri ->
-//                Image(
-//                    painter = rememberAsyncImagePainter(uri),
-//                    contentDescription = "selected image",
-//                    modifier = Modifier
-//                        .fillMaxSize()
-//                        .border(2.dp, Color.Gray),
-//                    contentScale = ContentScale.Fit
-//                )
-//            }
-//        }
-
-//        Spacer(modifier = Modifier.height(10.dp))
 
         Column(
             modifier = Modifier
                 .background(color = Color.White)
+                .border(2.dp, Color.Gray, RoundedCornerShape(10.dp))
                 .fillMaxSize()
                 .padding(10.dp)
-                .weight(1f)
+                .weight(3f)
         ) {
             Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .background(color = Color(0x80F5F5F5))
                     .weight(3f)
+                    .fillMaxSize()
             ) {
-                Text(
-                    "추가된 재료",
-                    fontSize = 30.sp,
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .padding(3.dp)
-                        .fillMaxWidth()
-                )
-
-
-                Column(
-                    modifier = Modifier
-                        .padding(vertical = 10.dp)
-                        .verticalScroll(scrollState)
-                        .fillMaxWidth()
-                ) {
-                    for (ingredient in selectedIngredients) {
-                        ListOfIngredientsUI(ingredient)
-                    }
-                }
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                ) {
-                    Button(
-                        onClick = {
-                            val newIngredients =
-                                selectedIngredients.filter { it !in ingreidentsSelected }
-                            ingreidentsSelected.addAll(newIngredients.distinct())
-                            navController.navigateUp()
-                            Toast.makeText(context, "재료를 추가했어요!", Toast.LENGTH_SHORT).show()
-                        },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = colorResource(id = R.color.titleColor) // XML 색상 적용
-                        ),
-                        shape = RoundedCornerShape(12.dp),
-                        contentPadding = PaddingValues(0.dp),
-                        modifier = Modifier
-                            .size(100.dp)
-                            .align(Alignment.BottomEnd) // 버튼을 오른쪽 아래로 배치
-                            .padding(10.dp)
-                    ) {
-                        Text(
-                            "확인",
-                            fontSize = 24.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.Black
-                        )
-                    }
-                }
-            }
-        }
-        Spacer(modifier = Modifier . padding(vertical = 20.dp))
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 10.dp)
-                .weight(0.7f)
-
-        ) {
-            Row {
                 Button(
                     onClick = {
                         val permission = android.Manifest.permission.CAMERA
@@ -360,133 +293,184 @@ fun RefrigeratorImageScanScreen(navController: NavController) {
                         containerColor = colorResource(id = R.color.titleColor) // XML 색상 적용
                     ),
                     modifier = Modifier
-
-                        .size(70.dp)
+                        .align(Alignment.TopEnd)
+                        .size(50.dp)
                 ) {
-
                     Image(
-                        painter = painterResource(id = R.drawable.ic_plus),
+                        painter = painterResource(id = R.drawable.camera_btn),
                         contentDescription = "카메라 버튼 이미지",
-                        modifier = Modifier.size(40.dp)
+                        modifier = Modifier.size(30.dp)
                     )
                 }
-                Column(modifier = Modifier.padding(horizontal = 10.dp, vertical = 3.dp)) {
-                    Text(
-                        "카메라 촬영",
-                        fontSize = 24.sp,
-                        modifier = Modifier,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text("냉장고를 촬영하고 사진을 넣어보세요",fontSize = 12.sp)
-                }
-            }
-
-            Spacer(modifier = Modifier.height(25.dp))
-
-            Row {
-                Button(
-                    onClick = {
-                        pickLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-                    },
-                    shape = RoundedCornerShape(12.dp),
-                    contentPadding = PaddingValues(0.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = colorResource(id = R.color.titleColor) // XML 색상 적용
-                    ),
-
-                    modifier = Modifier
-
-                        .size(70.dp)
-                ) {
+                if (imageUri == null) {
+                    Text("사진이 없습니다.", modifier = Modifier.align(Alignment.Center))
+                } else {
 
                     Image(
-                        painter = painterResource(id = R.drawable.ic_plus),
-                        contentDescription = "사진 버튼 이미지",
-                        modifier = Modifier.size(40.dp)
+                        painter = rememberAsyncImagePainter(imageUri),
+                        contentDescription = "selected image",
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        contentScale = ContentScale.Fit
                     )
-                }
-                Column(modifier = Modifier.padding(horizontal = 10.dp,vertical = 3.dp)) {
-                    Text("사진 넣기",
-                        fontSize = 24.sp,
-                        modifier = Modifier,
-                        fontWeight = FontWeight.Bold)
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text("갤러리에 있는 사진을 등록해보세요",fontSize = 12.sp)
-                }
-            }
-
-            Spacer(modifier = Modifier.height(25.dp))
-            Row {
-                Button(
-                    onClick = {
-                        if (imageUri == null) {
-                            Toast.makeText(context, "이미지를 먼저 선택하세요", Toast.LENGTH_SHORT).show()
-                            return@Button
-                        }
-                        // 코루틴 스코프에서 suspend 함수 호출
-                        scope.launch {
-                            isLoading = true
-                            resultText = ""
-                            detectionList = emptyList()
-
-                            val res = uploadRefrigeratorImage(imageUri!!, context)
-                            isLoading = false
-                            if (res.isSuccess) {
-                                val list = res.getOrNull().orEmpty()
-                                detectionList = list
-                                val sb = StringBuilder()
-                                sb.append("감지된 객체: ${list.size}개\n")
-                                for (item in list) {
-                                    sb.append("${item.name} : ${"%.2f".format(item.confidence)}\n")
-                                }
-                                resultText = sb.toString()
-                            } else {
-                                resultText = "업로드 실패: ${res.exceptionOrNull()?.message}"
-                            }
-                            when {
-                                "onion" in resultText -> selectedIngredients.add("양파")
-                                "egg" in resultText -> selectedIngredients.add("계란")
-                                "garlic" in resultText -> selectedIngredients.add("마늘")
-                                "green onion" in resultText -> selectedIngredients.add("대파")
-                                "pepper" in resultText -> selectedIngredients.add("고추")
-                                "potato" in resultText -> selectedIngredients.add("감자")
-                            }
-                        }
-                    },
-                    shape = RoundedCornerShape(12.dp),
-                    contentPadding = PaddingValues(0.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = colorResource(id = R.color.titleColor) // XML 색상 적용
-                    ),
-                    modifier = Modifier
-
-                        .size(70.dp)
-                ) {
-
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_plus),
-                        contentDescription = "사진 버튼 이미지",
-                        modifier = Modifier.size(40.dp)
-                    )
-
-                }
-                Column(modifier = Modifier.padding(horizontal = 5.dp, vertical = 3.dp)) {
-                    Text(
-                        "재료 탐지",
-                        fontSize = 24.sp,
-                        modifier = Modifier,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text("카메라를 재료에 대보면 무슨 재료인지 알려드려요",fontSize = 12.sp)
                 }
             }
         }
-        // 로딩 표시
-        if (isLoading) {
-            CircularProgressIndicator()
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .border(2.dp, Color.Gray, RoundedCornerShape(10.dp))
+                .background(color = Color(0x80F5F5F5))
+                .weight(3f)
+        ) {
+            Column {
+                Text(
+                    "재료 목록",
+                    fontSize = 30.sp,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .padding(3.dp)
+                        .fillMaxWidth()
+                )
+                Column(
+                    modifier = Modifier
+                        .padding(vertical = 10.dp)
+                        .verticalScroll(scrollState)
+                        .fillMaxWidth()
+                ) {
+                    for (ingredient in selectedIngredients) {
+                        ListOfIngredientsUI(ingredient)
+                    }
+                }
+            }
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
+                Button(
+                    onClick = {
+                        val newIngredients =
+                            selectedIngredients.filter { it !in ingreidentsSelected }
+                        ingreidentsSelected.addAll(newIngredients.distinct())
+                        navController.navigate("refigeratorScreen")
+                        Toast.makeText(context, "재료를 추가했어요!", Toast.LENGTH_SHORT).show()
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = colorResource(id = R.color.titleColor) // XML 색상 적용
+                    ),
+                    shape = RoundedCornerShape(12.dp),
+                    contentPadding = PaddingValues(0.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.BottomEnd) // 버튼을 오른쪽 아래로 배치
+                        .padding(10.dp)
+                ) {
+                    Text(
+                        "My냉장고에 넣기",
+                        fontSize = 15.sp,
+                        textAlign = TextAlign.Center,
+                        color = Color.White,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+            }
         }
+        Row(
+            modifier = Modifier
+                .weight(1f)
+                .padding(top = 10.dp)
+                .fillMaxSize()
+        ) {
+            Spacer(modifier = Modifier.weight(0.1f))
 
+            Button(
+                onClick = {
+                    pickLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                },
+                shape = RoundedCornerShape(12.dp),
+                contentPadding = PaddingValues(0.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = colorResource(id = R.color.titleColor) // XML 색상 적용
+                ),
+
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxSize()
+            ) {
+                Column (
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.fillMaxSize()
+                ){
+                    Image(
+                        painter = painterResource(id = R.drawable.photo_picker_btn),
+                        contentDescription = "포토피커",
+                        modifier = Modifier.size(40.dp)
+                    )
+                    Text("사진 추가")
+                }
+            }
+            Spacer(modifier = Modifier.weight(0.1f))
+            Button(
+                onClick = {
+                    if (imageUri == null) {
+                        Toast.makeText(context, "이미지를 먼저 선택하세요", Toast.LENGTH_SHORT).show()
+                        return@Button
+                    }
+                    // 코루틴 스코프에서 suspend 함수 호출
+                    scope.launch {
+                        isLoading = true
+                        resultText = ""
+                        detectionList = emptyList()
+
+                        val res = uploadRefrigeratorImage(imageUri!!, context)
+                        isLoading = false
+                        if (res.isSuccess) {
+                            val list = res.getOrNull().orEmpty()
+                            detectionList = list
+                            val sb = StringBuilder()
+                            sb.append("감지된 객체: ${list.size}개\n")
+                            for (item in list) {
+                                sb.append("${item.name} : ${"%.2f".format(item.confidence)}\n")
+                            }
+                            resultText = sb.toString()
+                        } else {
+                            resultText = "업로드 실패: ${res.exceptionOrNull()?.message}"
+                        }
+                        when {
+                            "onion" in resultText -> selectedIngredients.add("양파")
+                            "egg" in resultText -> selectedIngredients.add("계란")
+                            "garlic" in resultText -> selectedIngredients.add("마늘")
+                            "green onion" in resultText -> selectedIngredients.add("대파")
+                            "pepper" in resultText -> selectedIngredients.add("고추")
+                            "potato" in resultText -> selectedIngredients.add("감자")
+                        }
+                    }
+                },
+                shape = RoundedCornerShape(12.dp),
+                contentPadding = PaddingValues(0.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = colorResource(id = R.color.titleColor) // XML 색상 적용
+                ),
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxSize()
+            ) {
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.ai_thinking_btn),
+                        contentDescription = "사진 버튼 이미지",
+                        modifier = Modifier.size(40.dp)
+                    )
+                    Text("재료 탐지")
+                }
+            }
+            Spacer(modifier = Modifier.weight(0.1f))
+        }
     }
 }
