@@ -155,7 +155,7 @@ fun RecommendRecipeItem(item: RecipeRecommendData, onClick: (String) -> Unit) {
                 Image(
                     painter = rememberAsyncImagePainter(item.thumbnail),
                     contentDescription = null,
-                    contentScale = ContentScale.Crop,
+                    contentScale = ContentScale.Fit,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(200.dp)

@@ -769,6 +769,7 @@ val ingredients = listOf(
 @Composable
 fun Refrigerator(navController: NavController) {
     val selectedIngredients = remember { mutableStateListOf<String>() }
+    val markedIngredients = remember { mutableStateListOf<String>() }
 
     Column(
         modifier = Modifier

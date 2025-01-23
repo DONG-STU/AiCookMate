@@ -120,7 +120,6 @@ fun RecipeList(recipes: List<RecipeData>, navController: NavController) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 4.dp)
-            .verticalScroll(scrollState)
     ) {
 
         recipes.forEach { item ->
@@ -163,7 +162,7 @@ fun RecipeItem(item: RecipeData, onClick: (String) -> Unit) {
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(
                     text = item.title,
-                    modifier = Modifier.padding(bottom = 12.dp),
+                    modifier = Modifier.padding(bottom = 12.dp, start = 5.dp),
                     fontWeight = FontWeight.Bold,
                     color = Color.Black
                 )

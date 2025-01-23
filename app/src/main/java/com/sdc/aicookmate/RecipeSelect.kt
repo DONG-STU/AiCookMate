@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -87,10 +88,13 @@ fun GPTFoodCategories(navController: NavController) {
                 modifier = Modifier.align(Alignment.CenterHorizontally))
         }
 
+        Spacer(modifier = Modifier.height(40.dp))
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(8.dp),
+                .padding(horizontal = 16.dp)
+                .padding(bottom = 8.dp),
             horizontalArrangement = Arrangement.SpaceBetween
 
         ) {
@@ -114,7 +118,7 @@ fun GPTFoodCategories(navController: NavController) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(8.dp),
+                .padding(horizontal = 16.dp, vertical = 8.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             GPTFoodCategoryItem(
@@ -137,7 +141,7 @@ fun GPTFoodCategories(navController: NavController) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(8.dp),
+                .padding(horizontal = 16.dp, vertical = 8.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             GPTFoodCategoryItem(
@@ -160,7 +164,7 @@ fun GPTFoodCategories(navController: NavController) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(8.dp),
+                .padding(horizontal = 16.dp, vertical = 8.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             GPTFoodCategoryItem(
@@ -183,7 +187,7 @@ fun GPTFoodCategories(navController: NavController) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(8.dp),
+                .padding(horizontal = 16.dp, vertical = 8.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             GPTFoodCategoryItem(

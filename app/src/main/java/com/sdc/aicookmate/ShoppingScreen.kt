@@ -48,6 +48,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.motionEventSpy
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -73,9 +74,11 @@ fun FoodShoppingScreen(navController: NavController) {
                 modifier = Modifier
                     .fillMaxWidth(),
             ) {
-                Spacer(modifier = Modifier.height(16.dp))
 
-                Row (verticalAlignment = Alignment.CenterVertically){
+                Row (verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .height(90.dp)
+                        .background(color = colorResource(R.color.titleColor))){
                     OutlinedTextField(
                         value = "",
                         onValueChange = {},

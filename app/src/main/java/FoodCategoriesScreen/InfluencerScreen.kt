@@ -124,36 +124,37 @@ fun InfluencerRecipeItem(item: InfluencerRecipeData, onClick: (String) -> Unit) 
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.White)
+                .clickable {
+                    onClick(Uri.encode(item.title))
+                }
+                .background(Color.White),
         ) {
-            Column(modifier = Modifier.padding(16.dp)) {
+            Row(modifier = Modifier.padding(16.dp)) {
                 Image(
                     painter = rememberAsyncImagePainter(item.thumbnail),
                     contentDescription = null,
-                    contentScale = ContentScale.Crop,
+                    contentScale = ContentScale.FillHeight,
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .height(250.dp)
-                        .clickable {
-                            onClick(Uri.encode(item.title))
-                        }
-                )
-                Spacer(modifier = Modifier.height(12.dp))
-                Text(
-                    text = item.title,
-                    modifier = Modifier.padding(bottom = 12.dp),
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Black
-                )
+                        .fillMaxSize()
+                        .align(Alignment.CenterVertically)
+                        .weight(1f)
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(60.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                )
+                Spacer(modifier = Modifier.weight(0.1f))
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .weight(1f)
                 ) {
-                InfluencerInfoRow(iconRes = R.drawable.ic_person, text = item.servings)
-                InfluencerInfoRow(iconRes = R.drawable.ic_time, text = item.time_required)
-                InfluencerInfoRow(iconRes = R.drawable.ic_star, text = item.difficulty)
+                    Text(
+                        text = item.title,
+                        modifier = Modifier.padding(bottom = 12.dp),
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black
+                    )
+                    InfluencerInfoRow(iconRes = R.drawable.ic_person, text = item.servings)
+                    InfluencerInfoRow(iconRes = R.drawable.ic_time, text = item.time_required)
+                    InfluencerInfoRow(iconRes = R.drawable.ic_star, text = item.difficulty)
                 }
             }
         }
