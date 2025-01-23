@@ -97,14 +97,16 @@ fun BokuemRecipeList(recipes: List<BokuemRecipeData>, navController: NavControll
             .verticalScroll(scrollState)
             .background(Color.White),
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.ic_arrowback),
-            contentDescription = "Back button",
-            modifier = Modifier
-                .padding(16.dp)
-                .clickable {
-                    navController.popBackStack()
-                })
+        Row {
+            Image(
+                painter = painterResource(id = R.drawable.ic_arrowback),
+                contentDescription = "Back button",
+                modifier = Modifier
+                    .padding(16.dp)
+                    .clickable {
+                        navController.popBackStack()
+                    })
+        }
 
         recipes.forEach { item ->
             BokuemRecipeItem(item = item) { encodedTitle ->
@@ -134,7 +136,10 @@ fun BokuemRecipeItem(item: BokuemRecipeData, onClick: (String) -> Unit) {
                 }
                 .background(Color.White),
         ) {
-            Row(modifier = Modifier.padding(16.dp)) {
+            Row(
+                modifier = Modifier.padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Image(
                     painter = rememberAsyncImagePainter(item.thumbnail),
                     contentDescription = null,
