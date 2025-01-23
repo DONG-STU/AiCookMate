@@ -97,7 +97,7 @@ interface FlaskApi {
  *    baseUrl : Flask 서버 IP:PORT
  */
 object FlaskClient {
-    private const val BASE_URL = "http://192.168.45.42:9400 "
+    private const val BASE_URL = "http://192.168.45.141:9400 "
     // ↑ 예시 IP. 실제 서버IP:PORT로 변경.
 
     private val logging = HttpLoggingInterceptor().apply {

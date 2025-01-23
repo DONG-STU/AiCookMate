@@ -132,6 +132,7 @@ dependencies {
 
     implementation ("com.google.mlkit:text-recognition-korean:16.0.1")
 
+
     implementation ("org.tensorflow:tensorflow-lite:2.11.0")
     implementation ("org.tensorflow:tensorflow-lite-support:0.4.0")
 

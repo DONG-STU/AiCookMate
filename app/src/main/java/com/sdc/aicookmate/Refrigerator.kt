@@ -3,6 +3,7 @@ package com.sdc.aicookmate
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -68,6 +69,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -816,7 +818,9 @@ fun Refrigerator(navController: NavController) {
                 placeholderText = "재료를 검색하세요"
             ) { selectedItem ->
                 println("선택된 항목: $selectedItem")
-            }        }
+            }
+
+        }
         // 검색 필드
         Spacer(modifier = Modifier.height(10.dp))
 
@@ -878,7 +882,10 @@ fun Refrigerator(navController: NavController) {
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier
-                            .background(color = Color(0xff76D290), RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp))
+                            .background(
+                                color = Color(0xff76D290),
+                                RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp)
+                            )
                             .padding(horizontal = 20.dp, vertical = 10.dp)
                     )
                     Text(
@@ -887,7 +894,10 @@ fun Refrigerator(navController: NavController) {
                         fontSize = 15.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier
-                            .background(color = Color(0xffD9958F), RoundedCornerShape(topEnd = 10.dp))
+                            .background(
+                                color = Color(0xffD9958F),
+                                RoundedCornerShape(topEnd = 10.dp)
+                            )
                             .padding(horizontal = 10.dp, vertical = 5.dp)
                     )
                 }
@@ -925,7 +935,7 @@ fun Refrigerator(navController: NavController) {
         }
 
         Button(
-            onClick = {navController.navigate("ShowHowRecommend")},
+            onClick = { navController.navigate("ShowHowRecommend") },
             shape = RoundedCornerShape(10.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xffFF9E66)),
             modifier = Modifier
@@ -995,6 +1005,7 @@ fun EnhancedSearchDropdown(
 ) {
     var inputText by remember { mutableStateOf("") }
     var expanded by remember { mutableStateOf(false) }
+    val context = LocalContext.current
     val filteredItems = remember(inputText, items, selectedItems) {
         items.filter { it.contains(inputText, ignoreCase = true) && it !in selectedItems }
             .take(50) // 최대 50개만 표시
@@ -1005,31 +1016,69 @@ fun EnhancedSearchDropdown(
         expanded = expanded,
         onExpandedChange = { expanded = !expanded }
     ) {
-        OutlinedTextField(
-            value = inputText,
-            onValueChange = { newValue ->
-                inputText = newValue
-                expanded = newValue.isNotEmpty() && filteredItems.isNotEmpty() // 삭제 시에도 자연스럽게 동작
-            },
-            placeholder = { Text(placeholderText) },
-            leadingIcon = { Icon(Icons.Default.Search, contentDescription = "검색 아이콘") },
-            singleLine = true,
-            modifier = Modifier
-                .menuAnchor()
-                .fillMaxWidth(),
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                containerColor = Color.White,
-                focusedBorderColor = Color.Gray,
-                unfocusedBorderColor = Color.LightGray
-            ),
-            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
-            keyboardActions = KeyboardActions(
-                onDone = {
-                    keyboardController?.hide() // 키보드 숨기기
-                    expanded = false
-                }
+        Row (modifier = Modifier.padding(5.dp),
+            verticalAlignment = Alignment.CenterVertically){
+            OutlinedTextField(
+                value = inputText,
+                onValueChange = { newValue ->
+                    inputText = newValue
+                    expanded =
+                        newValue.isNotEmpty() && filteredItems.isNotEmpty() // 삭제 시에도 자연스럽게 동작
+                },
+                placeholder = { Text(placeholderText) },
+                leadingIcon = { Icon(Icons.Default.Search, contentDescription = "검색 아이콘") },
+                singleLine = true,
+                modifier = Modifier
+                    .menuAnchor()
+                    .weight(6f)
+                    .fillMaxWidth(),
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    containerColor = Color.White,
+                    focusedBorderColor = Color.Gray,
+                    unfocusedBorderColor = Color.LightGray
+                ),
+                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        keyboardController?.hide() // 키보드 숨기기
+                        expanded = false
+                    }
+                )
             )
-        )
+
+
+
+            Text(
+                "추가",
+                color = Color.White,
+                fontSize = 15.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier
+                    .background(color = Color(0xffE85D3A), RoundedCornerShape(10.dp))
+                    .padding(horizontal = 10.dp, vertical = 10.dp)
+                    .wrapContentWidth()
+                    .weight(1f)
+                    .clickable {
+                        if (inputText in ingredients) {
+                            if (!ingreidentsSelected.contains(inputText)) {
+                                ingreidentsSelected.add(inputText)
+                                inputText = ""
+                                Toast
+                                    .makeText(context, "추가되었어요!", Toast.LENGTH_SHORT)
+                                    .show()
+                            } else {
+                                Toast
+                                    .makeText(context, "이미 들어있습니다!", Toast.LENGTH_SHORT)
+                                    .show()
+                            }
+                        } else {
+                            Toast
+                                .makeText(context, "입력한 재료가 없습니다.", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                    }
+            )
+        }
 
         ExposedDropdownMenu(
             expanded = expanded,
