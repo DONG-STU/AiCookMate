@@ -17,7 +17,8 @@ val localFile = rootProject.file("local.properties")
 if (localFile.exists()) {
     localProps.load(FileInputStream(localFile))
 }
-val openAiKey = localProps.getProperty("OPENAI_API_KEY", "")
+
+val openAiKey = project.findProperty("OPENAI_API_KEY")?.toString() ?: ""
 android {
     namespace = "com.sdc.aicookmate"
     compileSdk = 35
@@ -30,6 +31,8 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+
     }
     buildTypes {
         debug {
