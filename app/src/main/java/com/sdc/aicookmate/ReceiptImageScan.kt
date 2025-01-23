@@ -224,40 +224,6 @@ fun ScanReceiptImage(navController: NavController) {
             Row {
                 Button(
                     onClick = {
-                        pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-                    },
-                    shape = RoundedCornerShape(12.dp),
-                    contentPadding = PaddingValues(0.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = colorResource(id = R.color.titleColor) // XML 색상 적용
-                    ),
-
-                    modifier = Modifier
-                        .size(70.dp)
-                )
-                {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_plus),
-                        contentDescription = "사진 버튼 이미지",
-                        modifier = Modifier.size(40.dp)
-                    )
-                }
-                Column(modifier = Modifier.padding(horizontal = 10.dp, vertical = 3.dp)) {
-                    Text(
-                        "사진 넣기",
-                        fontSize = 24.sp,
-                        modifier = Modifier,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text("갤러리에 있는 사진을 등록해보세요", fontSize = 12.sp)
-                }
-            }
-
-            Spacer(modifier = Modifier.height(25.dp))
-            Row {
-                Button(
-                    onClick = {
                         if (ContextCompat.checkSelfPermission(
                                 context,
                                 android.Manifest.permission.CAMERA
@@ -298,6 +264,40 @@ fun ScanReceiptImage(navController: NavController) {
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text("냉장고를 촬영하고 사진을 넣어보세요", fontSize = 12.sp)
+                }
+            }
+
+            Spacer(modifier = Modifier.height(25.dp))
+            Row {
+                Button(
+                    onClick = {
+                        pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                    },
+                    shape = RoundedCornerShape(12.dp),
+                    contentPadding = PaddingValues(0.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = colorResource(id = R.color.titleColor) // XML 색상 적용
+                    ),
+
+                    modifier = Modifier
+                        .size(70.dp)
+                )
+                {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_plus),
+                        contentDescription = "사진 버튼 이미지",
+                        modifier = Modifier.size(40.dp)
+                    )
+                }
+                Column(modifier = Modifier.padding(horizontal = 10.dp, vertical = 3.dp)) {
+                    Text(
+                        "사진 넣기",
+                        fontSize = 24.sp,
+                        modifier = Modifier,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text("갤러리에 있는 사진을 등록해보세요", fontSize = 12.sp)
                 }
             }
 
