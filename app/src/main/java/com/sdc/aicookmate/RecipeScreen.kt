@@ -52,6 +52,7 @@ fun RecipeScreen(navController: NavController) {
         Column(
             modifier = Modifier
                 .padding(paddingValues)
+                .verticalScroll(rememberScrollState())
                 .background(Color.White)
         ) {
             Box(
